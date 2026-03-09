@@ -1,0 +1,10 @@
+<% @vinyls.each do |vinyl| %>
+  <div class="d-flex">
+    <img src="<%= vinyl.artwork_url %>" alt="">
+    <div>
+      <p><%= vinyl.title %></p>
+      <p><%= vinyl.artist %></p>
+      <p><%= vinyl.year %></p>
+    </div>
+  </div>
+<% end %>
