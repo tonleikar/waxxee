@@ -10,9 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_09_123933) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_09_145658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "folder_vinyls", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "folder_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_vinyl_id", null: false
+    t.index ["folder_id"], name: "index_folder_vinyls_on_folder_id"
+    t.index ["user_vinyl_id"], name: "index_folder_vinyls_on_user_vinyl_id"
+  end
+
+  create_table "folders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "personas", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.string "url"
+  end
+
+  create_table "user_vinyls", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "vinyl_id", null: false
+    t.index ["user_id"], name: "index_user_vinyls_on_user_id"
+    t.index ["vinyl_id"], name: "index_user_vinyls_on_vinyl_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,4 +58,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_09_123933) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "vinyls", force: :cascade do |t|
+    t.string "artist"
+    t.string "artwork_url"
+    t.datetime "created_at", null: false
+    t.string "format"
+    t.string "genre"
+    t.string "title"
+    t.json "tracks"
+    t.datetime "updated_at", null: false
+    t.integer "year"
+  end
+
+  add_foreign_key "folder_vinyls", "folders"
+  add_foreign_key "folder_vinyls", "user_vinyls"
+  add_foreign_key "folders", "users"
+  add_foreign_key "user_vinyls", "users"
+  add_foreign_key "user_vinyls", "vinyls"
 end
