@@ -1,2 +1,34 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<section class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Homepage</h1>
+    <%= link_to "Randomizer", root_path(persona: "randomizer"), class: "btn btn-dark" %>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <% @personas.each do |persona| %>
+      <%= link_to persona[:title], root_path(persona: persona[:key]), class: "btn #{persona[:key] == @persona_key ? "btn-primary" : "btn-outline-primary"}" %>
+    <% end %>
+  </div>
+
+  <% if @vinyl.present? %>
+    <article class="card">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="<%= @vinyl.artwork_url %>" class="img-fluid rounded-start" alt="<%= @vinyl.title %> cover">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h2 class="h4 card-title"><%= @vinyl.title %></h2>
+            <p class="card-text mb-1"><strong>Artist:</strong> <%= @vinyl.artist %></p>
+            <p class="card-text mb-1"><strong>Year:</strong> <%= @vinyl.year %></p>
+            <p class="card-text mb-0"><strong>Genre:</strong> <%= @vinyl.genre %></p>
+          </div>
+        </div>
+      </div>
+    </article>
+  <% else %>
+    <div class="alert alert-secondary mb-0">
+      Choose a category or click Randomizer to get your first record.
+    </div>
+  <% end %>
+</section>

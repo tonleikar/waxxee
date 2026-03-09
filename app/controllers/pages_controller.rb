@@ -2,6 +2,9 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:home]
 
   PERSONA_RULES = {
+    "randomizer" => {
+      title: "Randomizer"
+    },
     "grungie" => {
       title: "Grungie",
       min_year: 1988,
@@ -35,15 +38,17 @@ class PagesController < ApplicationController
   }
 
   def home
+    @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
     @persona_key = selected_persona_key
     @persona = PERSONA_RULES.fetch(@persona_key)
-    @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
     @vinyl = random_vinyl_for_persona(@persona)
   end
 
   private
 
   def random_vinyl_for_persona(persona)
+    return Vinyl.all.sample if persona[:title] == "Randomizer"
+
     Vinyl.where(
       year: persona[:min_year]..persona[:max_year],
       genre: persona[:genres]
@@ -51,6 +56,6 @@ class PagesController < ApplicationController
   end
 
   def selected_persona_key
-    params[:persona].downcase
+    params[:persona] || "randomizer"
   end
 end
