@@ -2,7 +2,10 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:home]
   PERSONA_RULES = {
     "randomizer" => {
-      title: "Randomizer"
+      title: "Randomizer",
+      min_year: 1900,
+      max_year: 2100,
+      genres: [""]
     },
     "grungie" => {
       title: "Grungie",
@@ -45,12 +48,12 @@ class PagesController < ApplicationController
   private
 
   def random_vinyl_for_persona(persona)
-    return Vinyl.all.sample if persona[:title] == "Randomizer"
-
-    scope = Vinyl.where(year: persona[:min_year]..persona[:max_year])
-    patterns = persona[:genres].map { |genre| "%#{genre}%" }
-    genre_sql = Array.new(patterns.length, "genre ILIKE ?").join(" OR ")
-    scope.where(genre_sql, *patterns).sample
+    Vinyl
+      .where(year: persona[:min_year]..persona[:max_year])
+      .where(
+        persona[:genres].map { "genre ILIKE ?" }.join(" OR "),
+        *persona[:genres].map { |genre| "%#{genre}%" }
+      ).sample
   end
 
   def selected_persona_key
