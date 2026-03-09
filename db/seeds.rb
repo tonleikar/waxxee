@@ -23,7 +23,7 @@ data = JSON.parse(response)
 
 puts "adding records"
 
-data.releases.each do |line|
+data["releases"].each do |line|
   record = Vinyl.new
   record.title = line["basic_information"]["title"]
   record.artist = line["basic_information"]["artists"][0]["name"]
