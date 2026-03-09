@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:home]
-
   PERSONA_RULES = {
     "randomizer" => {
       title: "Randomizer"
@@ -9,34 +8,33 @@ class PagesController < ApplicationController
       title: "Grungie",
       min_year: 1988,
       max_year: 1999,
-      genres: ["Grunge", "Alternative Rock", "Post-Grunge"]
+      genres: ["Rock"]
     },
     "emo" => {
       title: "Emo",
       min_year: 1995,
       max_year: 2010,
-      genres: ["Emo", "Pop Punk", "Post-Hardcore"]
+      genres: ["Rock", "Pop"]
     },
     "dreamy" => {
       title: "Dreamy",
       min_year: 1983,
       max_year: 2025,
-      genres: ["Dream Pop", "Shoegaze", "Indie Pop"]
+      genres: ["Electronic", "Pop", "Rock"]
     },
     "throwback" => {
       title: "Throwback",
       min_year: 1965,
       max_year: 1989,
-      genres: ["Soul", "Funk", "Disco", "Classic Rock"]
+      genres: ["Funk / Soul", "Jazz", "Blues", "Rock"]
     },
     "midnight" => {
       title: "Midnight",
       min_year: 1990,
       max_year: 2025,
-      genres: ["Trip Hop", "Ambient", "Downtempo", "Lo-Fi"]
+      genres: ["Electronic", "Hip Hop", "Funk / Soul"]
     }
   }
-
   def home
     @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
     @persona_key = selected_persona_key
@@ -49,13 +47,13 @@ class PagesController < ApplicationController
   def random_vinyl_for_persona(persona)
     return Vinyl.all.sample if persona[:title] == "Randomizer"
 
-    Vinyl.where(
-      year: persona[:min_year]..persona[:max_year],
-      genre: persona[:genres]
-    ).sample
+    scope = Vinyl.where(year: persona[:min_year]..persona[:max_year])
+    patterns = persona[:genres].map { |genre| "%#{genre}%" }
+    genre_sql = Array.new(patterns.length, "genre ILIKE ?").join(" OR ")
+    scope.where(genre_sql, *patterns).sample
   end
 
   def selected_persona_key
-    params[:persona] || "randomizer"
+    (params[:persona] || "randomizer").downcase
   end
 end
