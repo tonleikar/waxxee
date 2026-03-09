@@ -1,20 +1,43 @@
 <section class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Homepage</h1>
-    <%= link_to "Randomizer", root_path(persona: "randomizer"), class: "btn btn-dark" %>
   </div>
-
   <div class="d-flex flex-wrap gap-2 mb-4">
     <% @personas.each do |persona| %>
-      <%= link_to persona[:title], root_path(persona: persona[:key]), class: "btn #{persona[:key] == @persona_key ? "btn-primary" : "btn-outline-primary"}" %>
+      <% next if persona[:key] == "randomizer" %>
+      <%= link_to persona[:title],
+                  root_path(persona: persona[:key]),
+                  class: "btn #{persona[:key] == @persona_key ? "btn-primary" : "btn-outline-primary"}" %>
     <% end %>
   </div>
 
+  <div class="d-flex justify-content-center mb-4">
+    <%= link_to root_path(persona: "randomizer"),
+                class: "randomizer-btn",
+                "aria-label": "Randomizer record",
+                data: {
+                  controller: "randomizer",
+                  action: "click->randomizer#start",
+                  randomizer_loading_value: 1200,
+                  randomizer_success_value: 900,
+                  randomizer_dissipate_value: 700
+                } do %>
+      <div class="record-container">
+        <div class="record">
+          <div class="record-label">
+            <div class="record-hole"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
   <% if @vinyl.present? %>
     <article class="card">
       <div class="row g-0">
         <div class="col-md-4">
-          <img src="<%= @vinyl.artwork_url %>" class="img-fluid rounded-start" alt="<%= @vinyl.title %> cover">
+          <img src="<%= @vinyl.artwork_url %>"
+               class="img-fluid rounded-start"
+               alt="<%= @vinyl.title %> cover">
         </div>
         <div class="col-md-8">
           <div class="card-body">
