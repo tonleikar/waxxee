@@ -1,1 +1,4 @@
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+# waxxee
+
+
+waxxee is a music discovery app that re creates the crate digging experience digitally. Pulling from the Discogs API to help you find obscure and forgotton gems. Tinder for records!
