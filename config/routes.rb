@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#home"
+
+  authenticated :user do
+    root to: "pages#home_logged_in", as: :authenticated_root
+  end
+
+  devise_scope :user do
+    unauthenticated do
+      root to: "devise/sessions#new", as: :unauthenticated_root
+    end
+  end
 
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]

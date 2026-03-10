@@ -18,35 +18,36 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-<div class="waxxee-banner">
-  <div class="waxxee-track">
-    <span>
-      WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE
-      WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE
-    </span>
-  </div>
-</div>
-
   <body>
+    <% show_ticker_tape = devise_controller? && controller_name == "sessions" && action_name == "new" %>
+
+    <% if show_ticker_tape %>
+      <div class="waxxee-banner waxxee-banner-top">
+        <div class="waxxee-track">
+          <span>
+            WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE
+            WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE
+          </span>
+        </div>
+      </div>
+    <% end %>
+
     <% if user_signed_in? %>
       <%= render "shared/navbar" %>
     <% end %>
-    <%= render "shared/flashes" %>
-    <%= yield %>
-     <div class="waxxee-banner">
-    <div class="waxxee-track">
-      <span>WAXXEE  WAXXEE  WAXXEE  WAXXEE  WAXXEE WAXXEE WAXXEE WAXXEE </span>
-    </div>
-  </div>
 
-</body>
-  <body>
-    <%= render "shared/navbar" %>
     <%= render "shared/flashes" %>
 
-    <main class="app-shell">
+    <main class="app-shell <%= "app-shell-auth" if show_ticker_tape %>">
       <%= yield %>
     </main>
+
+    <% if show_ticker_tape %>
+      <div class="waxxee-banner waxxee-banner-bottom">
+        <div class="waxxee-track">
+          <span>WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE</span>
+        </div>
+      </div>
+    <% end %>
   </body>
 </html>
