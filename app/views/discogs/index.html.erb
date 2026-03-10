@@ -1,0 +1,40 @@
+<section class="container py-4">
+  <h1 class="h3 mb-4">Search Discogs</h1>
+
+  <%= form_with url: discogs_path, method: :get, local: true do %>
+    <div class="mb-3">
+      <%= label_tag :query, "Search for a release", class: "form-label" %>
+      <%= text_field_tag :query, @query, class: "form-control" %>
+    </div>
+
+    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <% end %>
+
+  <div class="mt-4">
+    <% if @results.any? %>
+      <p><%= @results.count %> results</p>
+    <% else %>
+      <p>No results yet.</p>
+    <% end %>
+  </div>
+</section>
+<div class="mt-4">
+  <% if @results.any? %>
+    <p><%= @results.count %> results</p>
+
+    <% @results.each do |result| %>
+      <div class="card mb-3 p-3">
+        <% if result["thumb"].present? %>
+          <img src="<%= result["thumb"] %>" alt="<%= result["title"] %>" class="img-fluid mb-2" style="max-width: 150px;">
+        <% end %>
+
+        <h2 class="h5 mb-1"><%= result["title"] %></h2>
+        <p class="mb-1"><strong>Year:</strong> <%= result["year"] %></p>
+        <p class="mb-1"><strong>Country:</strong> <%= result["country"] %></p>
+        <p class="mb-0"><strong>Discogs ID:</strong> <%= result["id"] %></p>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No results yet.</p>
+  <% end %>
+</div>
