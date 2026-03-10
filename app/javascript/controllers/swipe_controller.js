@@ -1,15 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { vinyls: Array, url: String }
-  static targets = ["form", "vinylId", "vinylWrapper"]
+  static values = { vinyls: Array, url: String, imageUrl: String }
+  static targets = ["form", "vinylId", "vinylWrapper", "backButton"]
 
   connect() {
     this.index = 0
     this.startX = 0
     this.currentX = 0
     this.dragging = false
-    this.threshold = 120
+    this.threshold = 300
 
     this.renderCard()
   }
@@ -24,7 +24,19 @@ export default class extends Controller {
 
     this.vinylWrapperTarget.innerHTML = `
       <div class="vinyl-card" data-id="${vinyl.id}">
-        <img src="${vinyl.artwork_url}">
+        <div class="vinyl-card-inner">
+          <div class="vinyl-card-front">
+            <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
+            <img src="${vinyl.artwork_url}">
+            </div>
+            <div class="vinyl-card-back">
+            <div class="vinyl-info">
+              <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
+              <h2>${vinyl.title}</h2>
+              <p>${vinyl.artist}</p>
+            </div>
+          </div>
+        </div>
       </div>
     `
 
@@ -32,7 +44,7 @@ export default class extends Controller {
 
     setTimeout(() => {
       card.classList.add("active")
-    }, 50)
+    }, 100)
 
     this.attachSwipe(card)
   }
@@ -40,11 +52,13 @@ export default class extends Controller {
   attachSwipe(card) {
 
     const start = (e) => {
+      e.preventDefault()
       this.dragging = true
       this.startX = e.touches ? e.touches[0].clientX : e.clientX
     }
 
     const move = (e) => {
+      e.preventDefault()
       if (!this.dragging) return
 
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
@@ -58,44 +72,53 @@ export default class extends Controller {
 
       const diff = this.currentX - this.startX
 
-      if (Math.abs(diff) > this.threshold) {
+      if (Math.abs(diff) > 25) {
+        if (Math.abs(diff) > this.threshold) {
 
-        const direction = diff > 0 ? "right" : "left"
+          const direction = diff > 0 ? "right" : "left"
 
-        card.style.transform =
-          `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
+          card.style.transform =
+            `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 
-        card.style.opacity = 0
+          card.style.opacity = 0
 
-        if (direction === "right") {
-          const id = card.dataset.id
-          console.log("Save vinyl:", id)
-          console.log(this.urlValue)
-          console.log(this.c)
-          this.vinylIdTarget.value = id;
+          if (direction === "right") {
+            const id = card.dataset.id
+            console.log("Save vinyl:", id)
+            console.log(this.urlValue)
+            console.log(this.c)
+            this.vinylIdTarget.value = id;
 
-          fetch(this.urlValue, {
-            method: "POST",
-            headers: {"X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content, "Accept": "application/json" },
-            body: new FormData(this.formTarget)
-          })
-            .then(response => response.json())
-            .then((data) => {
-              console.log(data)
+            fetch(this.urlValue, {
+              method: "POST",
+              headers: {"X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content, "Accept": "application/json" },
+              body: new FormData(this.formTarget)
             })
+              .then(response => response.json())
+              .then((data) => {
+                console.log(data)
+              })
 
+          }
+
+          setTimeout(() => {
+            this.index++
+            this.renderCard()
+          }, 150)
+
+        } else {
+          card.style.transform = ""
         }
-
-        setTimeout(() => {
-          this.index++
-          this.renderCard()
-        }, 150)
-
-      } else {
-        card.style.transform = ""
       }
 
       this.dragging = false
+    }
+
+    const flipCard = (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      const inner = card.querySelector(".vinyl-card-inner")
+      inner.classList.toggle("flipped")
     }
 
     card.addEventListener("mousedown", start)
@@ -105,5 +128,12 @@ export default class extends Controller {
     card.addEventListener("touchstart", start)
     card.addEventListener("touchmove", move)
     card.addEventListener("touchend", end)
+
+    this.backButtonTargets.forEach((btn) => {
+      btn.addEventListener("click", flipCard)
+      btn.addEventListener("touchend", flipCard)
+      btn.addEventListener("mousedown", (e) => e.stopPropagation())
+      btn.addEventListener("touchstart", (e) => e.stopPropagation())
+    })
   }
 }
