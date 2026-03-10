@@ -14,6 +14,41 @@
 html, body {
   height: 100%;
 }
+.waxxee-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  background: black;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.waxxee-track {
+  white-space: nowrap;
+  animation: waxxee-scroll 20s linear infinite;
+}
+
+.waxxee-track span {
+    font-family: 'Syne', sans-serif;
+  font-size: 82px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: white;
+  display: inline-block;
+  line-height: 0.5;
+  height: 60px
+}
+
+@keyframes waxxee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 
 body {
   padding-bottom: 112px;
