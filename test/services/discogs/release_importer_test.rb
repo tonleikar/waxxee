@@ -1,0 +1,38 @@
+require "test_helper"
+
+class Discogs::ReleaseImporterTest < ActiveSupport::TestCase
+  class FakeClient
+    def initialize(payload)
+      @payload = payload
+    end
+
+    def find_release(_release_id)
+      @payload
+    end
+  end
+
+  test "imports a discogs release into a vinyl record" do
+    payload = {
+      "title" => "Discovery",
+      "year" => 2001,
+      "artists" => [{ "name" => "Daft Punk" }],
+      "genres" => ["Electronic"],
+      "formats" => [{ "name" => "Vinyl" }],
+      "tracklist" => [{ "title" => "One More Time" }, { "title" => "Aerodynamic" }],
+      "images" => [{ "type" => "primary", "uri" => "https://img.example/discovery.jpg" }]
+    }
+
+    importer = Discogs::ReleaseImporter.new(client: FakeClient.new(payload))
+
+    vinyl = importer.import!(release_id: 42)
+
+    assert_equal "Discovery", vinyl.title
+    assert_equal "Daft Punk", vinyl.artist
+    assert_equal 2001, vinyl.year
+    assert_equal "Vinyl", vinyl.format
+    assert_equal "Electronic", vinyl.genre
+    assert_equal ["One More Time", "Aerodynamic"], vinyl.tracks
+    assert_equal "https://img.example/discovery.jpg", vinyl.artwork_url
+    assert vinyl.persisted?
+  end
+end

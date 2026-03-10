@@ -2,12 +2,14 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "pages#home"
 
-
-  resources :feed, only: [:show, :index]
+  resources :feed, only: [:index], controller: :followers
+  resources :followers, only: [:index, :create, :destroy]
   resources :collections, only: [:show, :index, :new, :create, :destroy, :edit, :update]
   resources :swiper, only: [:index]
   resources :profile, only: [:show, :edit, :update, :destroy]
   resources :user_vinyls, only: [:create, :destroy]
+  resources :vinyls, only: [:index, :show]
+
 
 
 
@@ -30,5 +32,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   #
-  resources :vinyls, only: [:index, :show]
+
 end
