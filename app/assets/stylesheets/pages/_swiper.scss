@@ -1,0 +1,24 @@
+.tinder-container {
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.vinyl-card {
+  width: 350px;
+  position: absolute;
+  bottom: -500px;
+  transition: transform 0.1s ease, bottom 0.1s ease, opacity 0.1s;
+}
+
+.vinyl-card img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vinyl-card.active {
+  bottom: 50%
+}
