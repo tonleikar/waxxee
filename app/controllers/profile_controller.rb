@@ -7,8 +7,6 @@ class ProfileController < ApplicationController
 
   def edit
     @user = current_user
-    @favorite_vinyl = current_user.favorite_vinyl
-    @vinyls = current_user.vinyls
     @genres = Vinyl.distinct.order(:genre).pluck(:genre)
   end
 
