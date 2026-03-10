@@ -4,20 +4,13 @@ Rails.application.routes.draw do
 
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]
-  resources :collections, only: [:show, :index, :new, :create, :destroy, :edit, :update]
+  resources :collections, controller: :folders, only: [:create, :destroy]
+  resources :folder_vinyls, only: [:create, :destroy]
   resources :swiper, only: [:index]
   resources :profile, only: [:show, :edit, :update, :destroy]
   resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show]
-
-
-
-
-
-
-
-
-
+  resources :discogs, only: [:index]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

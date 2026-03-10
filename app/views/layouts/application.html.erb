@@ -41,4 +41,12 @@
   </div>
 
 </body>
+  <body>
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
+
+    <main class="app-shell">
+      <%= yield %>
+    </main>
+  </body>
 </html>
