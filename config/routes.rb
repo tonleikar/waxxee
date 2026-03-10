@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :profile, only: [:show, :edit, :update, :destroy]
   resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show]
-  resources :discogs, only: [:index]
+  resources :discogs, only: [:index, :create]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
