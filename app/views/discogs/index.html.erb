@@ -10,25 +10,35 @@
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %>
 
-<div class="mt-4">
+<<div class="mt-4">
   <% if @query.present? && @results.any? %>
     <p><%= @results.count %> results</p>
 
     <% @results.each do |result| %>
       <article class="card mb-3">
         <div class="card-body">
-          <% if result["thumb"].present? %>
+          <% if result[:thumb].present? %>
             <img
-              src="<%= result["thumb"] %>"
-              alt="<%= result["title"] %>"
-              class="img-fluid rounded mb-3"
-            >
+              src="<%= result[:thumb] %>"
+              alt="<%= result[:title] %>"
+              class="img-fluid rounded mb-3">
           <% end %>
 
-          <h2 class="h5 mb-2"><%= result["title"] %></h2>
-          <p class="mb-1"><strong>Year:</strong> <%= result["year"].presence || "Unknown" %></p>
-          <p class="mb-1"><strong>Country:</strong> <%= result["country"].presence || "Unknown" %></p>
-          <p class="mb-0"><strong>Discogs ID:</strong> <%= result["id"] %></p>
+          <h2 class="h5 mb-2"><%= result[:title] %></h2>
+          <p class="mb-1"><strong>Artist:</strong> <%= result[:artist].presence || "Unknown" %></p>
+          <p class="mb-1"><strong>Year:</strong> <%= result[:year].positive? ? result[:year] : "Unknown" %></p>
+          <p class="mb-1"><strong>Country:</strong> <%= result[:country].presence || "Unknown" %></p>
+          <p class="mb-0"><strong>Discogs ID:</strong> <%= result[:id] %></p>
+
+          <% if result[:saved] %>
+            <%= button_tag "Saved in your collection", class: "btn btn-secondary mt-3", disabled: true %>
+          <% else %>
+            <%= form_with url: discogs_path, method: :post, local: true do %>
+              <%= hidden_field_tag :release_id, result[:id] %>
+              <%= hidden_field_tag :query, @query %>
+              <%= submit_tag "Save to my collection", class: "btn btn-primary mt-3" %>
+            <% end %>
+          <% end %>
         </div>
       </article>
     <% end %>
