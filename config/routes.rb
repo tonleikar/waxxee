@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :collections, only: [:show, :index, :new, :create, :destroy, :edit, :update]
   resources :swiper, only: [:index]
   resources :profile, only: [:show, :edit, :update, :destroy]
+  resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show]
 
 

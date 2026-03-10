@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { vinyls: Array }
+  static values = { vinyls: Array, url: String }
+  static targets = ["form", "vinylId", "vinylWrapper"]
 
   connect() {
     this.index = 0
@@ -15,13 +16,13 @@ export default class extends Controller {
 
   renderCard() {
     if (this.index >= this.vinylsValue.length) {
-      this.element.innerHTML = "<p>No more records</p>"
+      this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
       return
     }
 
     const vinyl = this.vinylsValue[this.index]
 
-    this.element.innerHTML = `
+    this.vinylWrapperTarget.innerHTML = `
       <div class="vinyl-card" data-id="${vinyl.id}">
         <img src="${vinyl.artwork_url}">
       </div>
@@ -49,7 +50,7 @@ export default class extends Controller {
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
       const diff = this.currentX - this.startX
 
-      card.style.transform = `translateX(${diff}px) rotate(${diff * 0.05}deg)`
+      card.style.transform = `translateX(${diff}px) rotate(${diff * -0.01}deg)`
     }
 
     const end = () => {
@@ -69,24 +70,26 @@ export default class extends Controller {
         if (direction === "right") {
           const id = card.dataset.id
           console.log("Save vinyl:", id)
+          console.log(this.urlValue)
+          console.log(this.c)
+          this.vinylIdTarget.value = id;
 
-          // Future Rails POST
-          /*
-          fetch("/likes", {
+          fetch(this.urlValue, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRF-Token": document.querySelector("[name='csrf-token']").content
-            },
-            body: JSON.stringify({ vinyl_id: id })
+            headers: {"X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content, "Accept": "application/json" },
+            body: new FormData(this.formTarget)
           })
-          */
+            .then(response => response.json())
+            .then((data) => {
+              console.log(data)
+            })
+
         }
 
         setTimeout(() => {
           this.index++
           this.renderCard()
-        }, 300)
+        }, 150)
 
       } else {
         card.style.transform = ""
