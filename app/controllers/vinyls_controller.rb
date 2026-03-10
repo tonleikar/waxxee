@@ -3,7 +3,7 @@ class VinylsController < ApplicationController
     @query = params[:query].to_s.strip
     @sort = permitted_sort
 
-    @vinyls = Vinyl.all
+    @vinyls = Vinyl.where(id: current_user.user_vinyls.select(:vinyl_id))
     if @query.present?
       @vinyls = @vinyls.where("title ILIKE :query OR artist ILIKE :query OR genre ILIKE :query", query: "%#{@query}%")
     end
@@ -14,7 +14,7 @@ class VinylsController < ApplicationController
   end
 
   def show
-    @vinyl = Vinyl.find(params[:id])
+    @vinyl = Vinyl.where(id: current_user.user_vinyls.select(:vinyl_id)).find(params[:id])
   end
 
   def create

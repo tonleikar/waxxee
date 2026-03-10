@@ -3,9 +3,9 @@
     <div class="card-body p-4">
       <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-4">
         <div>
-          <p class="text-uppercase small text-muted mb-1">Library</p>
-          <h1 class="display-6 mb-2">All vinyls</h1>
-          <p class="text-muted mb-0">Search the full database, sort the list, and drop records straight into your folders.</p>
+          <p class="text-uppercase small text-muted mb-1">Collection</p>
+          <h1 class="display-6 mb-2">Your saved vinyls</h1>
+          <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
         </div>
 
         <div class="vinyl-library-controls">
@@ -101,9 +101,17 @@
                     <h3 class="h4 mb-1"><%= vinyl.title %></h3>
                     <p class="text-muted mb-0"><%= vinyl.artist %></p>
                   </div>
-                  <% if vinyl.year.present? %>
-                    <span class="badge text-bg-light"><%= vinyl.year %></span>
-                  <% end %>
+                  <div class="d-flex flex-column align-items-end gap-2">
+                    <% if vinyl.year.present? %>
+                      <span class="badge text-bg-light"><%= vinyl.year %></span>
+                    <% end %>
+                    <% if user_vinyl.present? %>
+                      <%= button_to "Remove",
+                        user_vinyl_path(user_vinyl),
+                        method: :delete,
+                        class: "btn btn-sm btn-outline-danger" %>
+                    <% end %>
+                  </div>
                 </div>
 
                 <p class="small text-muted mb-3"><%= vinyl.genre.presence || "Genre unknown" %></p>
