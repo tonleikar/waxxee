@@ -41,6 +41,8 @@ class PagesController < ApplicationController
   def home
     @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
     @persona_key = selected_persona_key
+    return if @persona_key.blank?
+
     @persona = PERSONA_RULES.fetch(@persona_key)
     @vinyl = random_vinyl_for_persona(@persona)
   end
@@ -57,6 +59,6 @@ class PagesController < ApplicationController
   end
 
   def selected_persona_key
-    (params[:persona] || "randomizer").downcase
+    params[:persona]&.downcase
   end
 end
