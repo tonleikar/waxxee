@@ -9,7 +9,7 @@
         <%= link_to "Back", profile_path(@user), class: "btn btn-outline-dark" %>
       </div>
 
-      <%= form_with model: @user, url: profile_path(@user), method: :patch, class: "row g-4", data: { controller: "vinyl-picker" } do |form| %>
+      <%= form_with model: @user, url: profile_path(@user), method: :patch, class: "row g-4" do |form| %>
         <div class="col-12 col-lg-4">
           <div class="profile-edit-sidebar">
             <img
@@ -40,82 +40,8 @@
               <%= form.select :favorite_genre, options_for_select(@genres, @user.favorite_genre), {}, class: "form-select" %>
             </div>
 
-            <div class="col-12">
-              <%= form.label :favorite_vinyl_id, "Favorite vinyl", class: "form-label" %>
-              <%= form.hidden_field :favorite_vinyl_id, data: { vinyl_picker_target: "input" } %>
-
-              <button
-                type="button"
-                class="btn btn-dark w-100 profile-vinyl-picker-trigger"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#favoriteVinylPicker"
-                aria-controls="favoriteVinylPicker"
-              >
-                Pick favorite vinyl
-              </button>
-
-              <div class="profile-picked-vinyl mt-3" data-vinyl-picker-target="preview">
-                <% if @favorite_vinyl.present? %>
-                  <img src="<%= @favorite_vinyl.artwork_url %>" alt="<%= @favorite_vinyl.title %>" class="profile-picked-vinyl-image">
-                  <div>
-                    <h2 class="h6 mb-1"><%= @favorite_vinyl.title %></h2>
-                    <p class="mb-0 small text-muted"><%= @favorite_vinyl.artist %> • <%= @favorite_vinyl.year %></p>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-
             <div class="col-12 d-flex justify-content-end">
               <%= form.submit "Save profile", class: "btn btn-primary px-4" %>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="offcanvas offcanvas-bottom profile-vinyl-offcanvas"
-          tabindex="-1"
-          id="favoriteVinylPicker"
-          aria-labelledby="favoriteVinylPickerLabel"
-        >
-          <div class="offcanvas-header">
-            <div>
-              <p class="text-uppercase small text-muted mb-1">Favorite vinyl</p>
-              <h2 class="h4 mb-0" id="favoriteVinylPickerLabel">Choose a record</h2>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-
-          <div class="offcanvas-body">
-            <input
-              type="text"
-              class="form-control mb-3"
-              placeholder="Search title or artist"
-              data-action="input->vinyl-picker#filter"
-              data-vinyl-picker-target="search"
-            >
-
-            <div class="profile-vinyl-picker-results">
-              <% @vinyls.each do |vinyl| %>
-                <button
-                  type="button"
-                  class="profile-vinyl-result"
-                  data-action="click->vinyl-picker#select"
-                  data-vinyl-picker-id-param="<%= vinyl.id %>"
-                  data-vinyl-picker-title-param="<%= vinyl.title %>"
-                  data-vinyl-picker-artist-param="<%= vinyl.artist %>"
-                  data-vinyl-picker-year-param="<%= vinyl.year %>"
-                  data-vinyl-picker-image-param="<%= vinyl.artwork_url %>"
-                  data-vinyl-picker-search="<%= [vinyl.title, vinyl.artist].join(" ").downcase %>"
-                  data-bs-dismiss="offcanvas"
-                >
-                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="profile-vinyl-result-image">
-                  <span class="profile-vinyl-result-copy">
-                    <strong><%= vinyl.title %></strong>
-                    <span><%= vinyl.artist %></span>
-                    <span><%= vinyl.year %> • <%= vinyl.genre %></span>
-                  </span>
-                </button>
-              <% end %>
             </div>
           </div>
         </div>

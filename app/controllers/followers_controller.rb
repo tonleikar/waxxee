@@ -1,6 +1,6 @@
 class FollowersController < ApplicationController
   def index
-    @users = User.where.not(id: current_user.id).includes(user_vinyls: :vinyl)
+    @users = User.where.not(id: current_user.id).includes(:favorite_vinyl, user_vinyls: :vinyl)
     @users = @users.where("username ILIKE ?", "%#{params[:query]}%")
     @users = @users.sample(5) if params[:query].blank?
     @vinyls = @users.flat_map(&:vinyls)
