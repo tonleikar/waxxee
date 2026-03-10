@@ -1,52 +1,39 @@
 <section class="container py-4 vinyl-library-page">
   <div class="card border-0 shadow-sm vinyl-library-hero">
     <div class="card-body p-4">
-      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-4">
-        <div>
-          <p class="text-uppercase small text-muted mb-1">Collection</p>
-          <h1 class="display-6 mb-2">Your saved vinyls</h1>
-          <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
-        </div>
-
-        <div class="vinyl-library-controls">
-          <%= form_with url: vinyls_path, method: :get, local: true, class: "row g-2 mb-2" do |form| %>
-            <%= form.hidden_field :sort, value: @sort %>
-            <div class="col-12 col-md-6">
-              <%= form.text_field :query, value: @query, placeholder: "Search title, artist, or genre", class: "form-control" %>
-            </div>
-            <div class="col-6 col-md-3">
-              <%= form.submit "Search", class: "btn btn-dark w-100" %>
-            </div>
-            <div class="col-6 col-md-3">
-              <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100" %>
-            </div>
-          <% end %>
-
-          <%= form_with url: vinyls_path, method: :get, local: true do |form| %>
-            <%= form.hidden_field :query, value: @query %>
-            <%= form.select :sort,
-              options_for_select(
-                [
-                  ["Title Z-A", "title_desc"],
-                  ["Title A-Z", "title_asc"],
-                  ["Artist A-Z", "artist_asc"],
-                  ["Artist Z-A", "artist_desc"],
-                  ["Year newest", "year_desc"],
-                  ["Year oldest", "year_asc"]
-                ],
-                @sort
-              ),
-              {},
-              class: "form-select",
-              onchange: "this.form.requestSubmit()" %>
-          <% end %>
-        </div>
+      <div>
+        <p class="text-uppercase small text-muted mb-1">Collection</p>
+        <h1 class="display-6 mb-2">Your saved vinyls</h1>
+        <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
       </div>
     </div>
   </div>
 
-  <div class="row g-4 mt-1">
+  <div class="row g-4 mt-1 align-items-stretch">
     <div class="col-12 col-xl-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <p class="text-uppercase small text-muted mb-1">Folders</p>
+              <h2 class="h4 mb-0">Create folder</h2>
+            </div>
+            <span class="badge text-bg-light"><%= @folders.count %></span>
+          </div>
+
+          <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form" do |form| %>
+            <div>
+              <%= form.text_field :name, class: "form-control", placeholder: "Create a folder", required: true %>
+            </div>
+            <div>
+              <%= form.submit "Create", class: "btn btn-outline-dark w-100" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-8">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -56,16 +43,6 @@
             </div>
             <span class="badge text-bg-light"><%= @folders.count %></span>
           </div>
-
-          <%= form_with model: Folder.new, url: collections_path, local: true, class: "row g-2 mb-4" do |form| %>
-            <div class="col-8">
-              <%= form.text_field :name, class: "form-control", placeholder: "Create a folder" %>
-            </div>
-            <div class="col-4">
-              <%= form.submit "Create", class: "btn btn-outline-dark w-100" %>
-            </div>
-          <% end %>
-
           <div class="vinyl-folder-list">
             <% if @folders.any? %>
               <% @folders.each do |folder| %>
@@ -85,13 +62,53 @@
       </div>
     </div>
 
-    <div class="col-12 col-xl-8">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="vinyl-library-toolbar">
+            <div class="vinyl-library-toolbar-search">
+              <%= form_with url: vinyls_path, method: :get, local: true, class: "vinyl-library-search-form" do |form| %>
+                <%= form.hidden_field :sort, value: @sort %>
+                <%= form.text_field :query, value: @query, placeholder: "Search title, artist, or genre", class: "form-control vinyl-library-search-input" %>
+                <div class="vinyl-library-search-actions">
+                  <%= form.submit "Search", class: "btn btn-dark w-100" %>
+                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100" %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="vinyl-library-toolbar-sort">
+              <%= form_with url: vinyls_path, method: :get, local: true do |form| %>
+                <%= form.hidden_field :query, value: @query %>
+                <%= form.select :sort,
+                  options_for_select(
+                    [
+                      ["Title Z-A", "title_desc"],
+                      ["Title A-Z", "title_asc"],
+                      ["Artist A-Z", "artist_asc"],
+                      ["Artist Z-A", "artist_desc"],
+                      ["Year newest", "year_desc"],
+                      ["Year oldest", "year_asc"]
+                    ],
+                    @sort
+                  ),
+                  {},
+                  class: "form-select vinyl-library-sort-select",
+                  onchange: "this.form.requestSubmit()" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-12">
       <div class="row g-3">
         <% @vinyls.each do |vinyl| %>
           <% user_vinyl = @user_vinyls_by_vinyl_id[vinyl.id] %>
           <% vinyl_folder_ids = user_vinyl ? user_vinyl.folders.map(&:id) : [] %>
 
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-md-6 col-xl-4">
             <article class="card border-0 shadow-sm h-100 vinyl-library-card">
               <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
 
