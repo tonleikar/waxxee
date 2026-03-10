@@ -1,25 +1,19 @@
-<h1>Welcome back <%= current_user.name %></h1>
-
-<%= link_to "Feed", feed_index_path %>
-<%= link_to "Profile", profile_path(current_user) %>
-
 <section class="container py-4">
-
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Homepage</h1>
+    <h1 class="h3 mb-0">Randomizer</h1>
   </div>
 
   <div class="d-flex flex-wrap gap-2 mb-4">
     <% @personas.each do |persona| %>
       <% next if persona[:key] == "randomizer" %>
       <%= link_to persona[:title],
-                  root_path(persona: persona[:key]),
+                  authenticated_root_path(persona: persona[:key]),
                   class: "btn #{persona[:key] == @persona_key ? "btn-primary" : "btn-outline-primary"}" %>
     <% end %>
   </div>
 
   <div class="d-flex justify-content-center mb-4">
-    <%= link_to root_path(persona: "randomizer"),
+    <%= link_to authenticated_root_path(persona: "randomizer"),
                 class: "randomizer-btn",
                 "aria-label": "Randomizer record",
                 data: {

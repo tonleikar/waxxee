@@ -18,7 +18,7 @@ class ProfileController < ApplicationController
 
   def destroy
     current_user.destroy!
-    redirect_to root_path
+    redirect_to authenticated_root_path
   end
 
   private

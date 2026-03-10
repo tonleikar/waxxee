@@ -21,7 +21,13 @@
           </div>
         </div>
 
-        <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-dark profile-edit-button" %>
+        <div class="d-flex flex-wrap gap-2 profile-actions">
+          <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-dark profile-edit-button" %>
+          <%= link_to "Log out",
+                      destroy_user_session_path,
+                      data: { turbo_method: :delete },
+                      class: "btn btn-outline-dark profile-logout-button" %>
+        </div>
       </div>
     </div>
   </div>

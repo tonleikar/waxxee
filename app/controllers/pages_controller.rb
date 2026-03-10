@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
   PERSONA_RULES = {
     "randomizer" => {
       title: "Randomizer",
@@ -38,7 +37,7 @@ class PagesController < ApplicationController
       genres: ["Electronic", "Hip Hop", "Funk / Soul"]
     }
   }
-  def home
+  def home_logged_in
     @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
     @persona_key = selected_persona_key
     return if @persona_key.blank?

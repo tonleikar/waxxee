@@ -1,11 +1,6 @@
 <% if user_signed_in? %>
   <nav class="navbar-lewagon fixed-bottom">
-
-    <%= link_to root_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-house"></i>
-<nav class="navbar-lewagon fixed-bottom">
-  <% if user_signed_in? %>
-    <%= link_to root_path, class: ["nav-icon", ("is-active" if current_page?(root_path))].compact.join(" ") do %>
+    <%= link_to authenticated_root_path, class: ["nav-icon", ("is-active" if current_page?(authenticated_root_path))].compact.join(" ") do %>
       <%= image_tag "nav/home.svg", alt: "Home", class: "nav-icon-image" %>
     <% end %>
 
@@ -20,15 +15,5 @@
     <%= link_to profile_path(current_user), class: ["nav-icon", ("is-active" if current_page?(profile_path(current_user)) || current_page?(edit_profile_path(current_user)))].compact.join(" ") do %>
       <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
     <% end %>
-
-    <%= link_to destroy_user_session_path,
-      data: { turbo_method: :delete },
-      class: "nav-icon" do %>
-      <i class="fa-solid fa-right-from-bracket"></i>
-  <% else %>
-    <%= link_to new_user_session_path, class: ["nav-icon", ("is-active" if current_page?(new_user_session_path))].compact.join(" ") do %>
-      <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
-    <% end %>
-
   </nav>
 <% end %>
