@@ -1,5 +1,6 @@
-<nav class="navbar-lewagon fixed-bottom">
-  <% if user_signed_in? %>
+<% if user_signed_in? %>
+  <nav class="navbar-lewagon fixed-bottom">
+
     <%= link_to root_path, class: "nav-icon" do %>
       <i class="fa-solid fa-house"></i>
     <% end %>
@@ -15,9 +16,12 @@
     <%= link_to profile_path(current_user), class: "nav-icon" do %>
       <i class="fa-solid fa-user"></i>
     <% end %>
-  <% else %>
-    <%= link_to new_user_session_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-user"></i>
+
+    <%= link_to destroy_user_session_path,
+      data: { turbo_method: :delete },
+      class: "nav-icon" do %>
+      <i class="fa-solid fa-right-from-bracket"></i>
     <% end %>
-  <% end %>
-</nav>
+
+  </nav>
+<% end %>
