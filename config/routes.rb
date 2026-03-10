@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :collections, only: [:show, :index, :new, :create, :destroy, :edit, :update]
   resources :swiper, only: [:show]
   resources :profile, only: [:show, :edit, :update, :destroy]
-
+  
 
 
 
