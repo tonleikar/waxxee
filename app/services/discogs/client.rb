@@ -4,6 +4,7 @@ require "net/http"
 module Discogs
   class Error < StandardError; end
   class ConfigurationError < Error; end
+
   class ApiError < Error
     attr_reader :status, :body
 
