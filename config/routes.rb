@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :feed, only: [:show, :index]
   resources :collections, only: [:show, :index, :new, :create, :destroy, :edit, :update]
-  resources :swiper, only: [:show]
+  resources :swiper, only: [:index]
   resources :profile, only: [:show, :edit, :update, :destroy]
 
 

@@ -10,4 +10,8 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
-@import "record_player.css";
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
