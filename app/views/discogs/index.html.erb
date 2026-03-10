@@ -10,31 +10,31 @@
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %>
 
-  <div class="mt-4">
-    <% if @results.any? %>
-      <p><%= @results.count %> results</p>
-    <% else %>
-      <p>No results yet.</p>
-    <% end %>
-  </div>
-</section>
 <div class="mt-4">
-  <% if @results.any? %>
+  <% if @query.present? && @results.any? %>
     <p><%= @results.count %> results</p>
 
     <% @results.each do |result| %>
-      <div class="card mb-3 p-3">
-        <% if result["thumb"].present? %>
-          <img src="<%= result["thumb"] %>" alt="<%= result["title"] %>" class="img-fluid mb-2" style="max-width: 150px;">
-        <% end %>
+      <article class="card mb-3">
+        <div class="card-body">
+          <% if result["thumb"].present? %>
+            <img
+              src="<%= result["thumb"] %>"
+              alt="<%= result["title"] %>"
+              class="img-fluid rounded mb-3"
+            >
+          <% end %>
 
-        <h2 class="h5 mb-1"><%= result["title"] %></h2>
-        <p class="mb-1"><strong>Year:</strong> <%= result["year"] %></p>
-        <p class="mb-1"><strong>Country:</strong> <%= result["country"] %></p>
-        <p class="mb-0"><strong>Discogs ID:</strong> <%= result["id"] %></p>
-      </div>
+          <h2 class="h5 mb-2"><%= result["title"] %></h2>
+          <p class="mb-1"><strong>Year:</strong> <%= result["year"].presence || "Unknown" %></p>
+          <p class="mb-1"><strong>Country:</strong> <%= result["country"].presence || "Unknown" %></p>
+          <p class="mb-0"><strong>Discogs ID:</strong> <%= result["id"] %></p>
+        </div>
+      </article>
     <% end %>
+  <% elsif @query.present? %>
+    <p>No results found for "<%= @query %>".</p>
   <% else %>
-    <p>No results yet.</p>
+    <p>Search for a record to explore Discogs.</p>
   <% end %>
 </div>
