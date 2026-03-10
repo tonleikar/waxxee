@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_122100) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_130500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,15 +57,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_122100) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "avatar_url"
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "favorite_genre"
+    t.bigint "favorite_vinyl_id"
+    t.string "name"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
     t.datetime "updated_at", null: false
     t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["favorite_vinyl_id"], name: "index_users_on_favorite_vinyl_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username"
   end
@@ -89,4 +94,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_122100) do
   add_foreign_key "followers", "users", column: "follower_id"
   add_foreign_key "user_vinyls", "users"
   add_foreign_key "user_vinyls", "vinyls"
+  add_foreign_key "users", "vinyls", column: "favorite_vinyl_id"
 end
