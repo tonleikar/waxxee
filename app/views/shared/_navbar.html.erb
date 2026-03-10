@@ -1,23 +1,23 @@
 <nav class="navbar-lewagon fixed-bottom">
   <% if user_signed_in? %>
-    <%= link_to root_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-house"></i>
+    <%= link_to root_path, class: ["nav-icon", ("is-active" if current_page?(root_path))].compact.join(" ") do %>
+      <%= image_tag "nav/home.svg", alt: "Home", class: "nav-icon-image" %>
     <% end %>
 
-    <%= link_to feed_index_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-newspaper"></i>
+    <%= link_to feed_index_path, class: ["nav-icon", ("is-active" if current_page?(feed_index_path))].compact.join(" ") do %>
+      <%= image_tag "nav/feed.svg", alt: "Feed", class: "nav-icon-image" %>
     <% end %>
 
-    <%= link_to vinyls_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-folder"></i>
+    <%= link_to vinyls_path, class: ["nav-icon", ("is-active" if current_page?(vinyls_path))].compact.join(" ") do %>
+      <%= image_tag "nav/collections.svg", alt: "Collections", class: "nav-icon-image" %>
     <% end %>
 
-    <%= link_to profile_path(current_user), class: "nav-icon" do %>
-      <i class="fa-solid fa-user"></i>
+    <%= link_to profile_path(current_user), class: ["nav-icon", ("is-active" if current_page?(profile_path(current_user)) || current_page?(edit_profile_path(current_user)))].compact.join(" ") do %>
+      <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
     <% end %>
   <% else %>
-    <%= link_to new_user_session_path, class: "nav-icon" do %>
-      <i class="fa-solid fa-user"></i>
+    <%= link_to new_user_session_path, class: ["nav-icon", ("is-active" if current_page?(new_user_session_path))].compact.join(" ") do %>
+      <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
     <% end %>
   <% end %>
 </nav>
