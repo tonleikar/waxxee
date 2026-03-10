@@ -1,0 +1,51 @@
+<section class="container py-4 profile-page">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <p class="text-uppercase small text-muted mb-1">Settings</p>
+          <h1 class="h2 mb-0">Edit Profile</h1>
+        </div>
+        <%= link_to "Back", profile_path(@user), class: "btn btn-outline-dark" %>
+      </div>
+
+      <%= form_with model: @user, url: profile_path(@user), method: :patch, class: "row g-4" do |form| %>
+        <div class="col-12 col-lg-4">
+          <div class="profile-edit-sidebar">
+            <img
+              src="<%= @user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(@user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
+              alt="<%= @user.username %>"
+              class="profile-avatar profile-avatar-large mb-3"
+              data-vinyl-picker-target="avatar"
+            >
+            <%= form.label :avatar_url, class: "form-label" %>
+            <%= form.text_field :avatar_url, class: "form-control", placeholder: "Paste an image URL" %>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-8">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <%= form.label :name, class: "form-label" %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <%= form.label :username, class: "form-label" %>
+              <%= form.text_field :username, class: "form-control" %>
+            </div>
+
+            <div class="col-12">
+              <%= form.label :favorite_genre, class: "form-label" %>
+              <%= form.select :favorite_genre, options_for_select(@genres, @user.favorite_genre), {}, class: "form-select" %>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+              <%= form.submit "Save profile", class: "btn btn-primary px-4" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

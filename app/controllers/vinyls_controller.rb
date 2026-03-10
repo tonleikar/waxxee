@@ -1,6 +1,7 @@
 class VinylsController < ApplicationController
   def index
     @vinyls = Vinyl.all
+    @vinyls = @vinyls.where("title ILIKE ? OR artist ILIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") if params[:query].present?
   end
 
   def show
