@@ -4,15 +4,14 @@ class UserVinylsController < ApplicationController
   end
 
   def create
-    p params
-    @user_vinyl = UserVinyl.new(vinyl_params)
-    @user_vinyl.user = current_user
-    @user_vinyl.save
+    @user_vinyl = UserVinyl.find_or_create_by!(user: current_user, vinyl_id: vinyl_params[:vinyl_id])
     render json: { message: "Success!" }
   end
 
   def destroy
-    @user_vinyl = UserVinyl.find(params[:id])
+    @user_vinyl = current_user.user_vinyls.find(params[:id])
+    @user_vinyl.destroy!
+    redirect_back fallback_location: vinyls_path, notice: "Vinyl removed from collection."
   end
 
   private
