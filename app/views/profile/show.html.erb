@@ -1,0 +1,64 @@
+<section class="container py-4 profile-page">
+  <div class="card border-0 shadow-sm profile-hero">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
+        <div class="d-flex align-items-center gap-4">
+          <img
+            src="<%= @user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(@user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
+            alt="<%= @user.username %>"
+            class="profile-avatar"
+          >
+          <div>
+            <p class="text-uppercase small text-muted mb-1">Profile</p>
+            <h1 class="display-6 mb-1"><%= @user.name.presence || @user.username %></h1>
+            <p class="mb-2 text-muted">@<%= @user.username %></p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge text-bg-light">Favorite genre: <%= @user.favorite_genre %></span>
+              <span class="badge text-bg-light"><%= @vinyls.count %> saved vinyls</span>
+              <span class="badge text-bg-light"><%= @user.followers.count %> followers</span>
+              <span class="badge text-bg-light"><%= @user.following.count %> following</span>
+            </div>
+          </div>
+        </div>
+
+        <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-dark profile-edit-button" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <div class="col-12 col-lg-5">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-uppercase small text-muted mb-2">Favorite Vinyl</p>
+          <% if @favorite_vinyl.present? %>
+            <img src="<%= @favorite_vinyl.artwork_url %>" alt="<%= @favorite_vinyl.title %>" class="img-fluid rounded mb-3">
+            <h2 class="h4 mb-1"><%= @favorite_vinyl.title %></h2>
+            <p class="mb-1"><strong>Artist:</strong> <%= @favorite_vinyl.artist %></p>
+            <p class="mb-1"><strong>Year:</strong> <%= @favorite_vinyl.year %></p>
+            <p class="mb-0"><strong>Genre:</strong> <%= @favorite_vinyl.genre %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <p class="text-uppercase small text-muted mb-3">Collection Preview</p>
+          <div class="row g-3">
+            <% @vinyls.first(6).each do |vinyl| %>
+              <div class="col-6 col-md-4">
+                <article class="profile-vinyl-tile">
+                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-2">
+                  <h3 class="h6 mb-1"><%= vinyl.title %></h3>
+                  <p class="small text-muted mb-0"><%= vinyl.artist %></p>
+                </article>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
