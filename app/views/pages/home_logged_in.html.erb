@@ -1,56 +1,93 @@
-<section class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Randomizer</h1>
+<section class="home-page container py-4 py-lg-5"
+         data-controller="randomizer"
+         data-randomizer-url-value="<%= authenticated_root_path(format: :json, persona: @persona_key) %>"
+         data-randomizer-save-url-value="<%= user_vinyls_path %>"
+         data-randomizer-loading-value="1200"
+         data-randomizer-success-value="900"
+         data-randomizer-dissipate-value="700">
+  <div class="page-backdrop"
+       data-action="click->randomizer#close"
+       data-randomizer-target="backdrop"></div>
+
+  <div class="home-hero text-center">
+    <p class="home-eyebrow mb-2">Home</p>
+    <h1 class="home-title mb-3">Randomizer</h1>
+    <p class="home-subtitle mx-auto mb-4">
+      Spin for a record, or jump into a mood card below.
+    </p>
+
+    <div class="randomizer-stage mx-auto mb-5">
+      <button type="button"
+              class="randomizer-btn home-randomizer-btn"
+              aria-label="Randomizer record"
+              data-action="click->randomizer#start"
+              data-randomizer-target="trigger">
+        <div class="record-container">
+          <div class="record">
+            <div class="record-label">
+              <div class="record-hole"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <article class="randomizer-sleeve" data-randomizer-target="sleeve" aria-live="polite">
+        <button type="button"
+                class="randomizer-sleeve__close"
+                aria-label="Close result"
+                data-action="click->randomizer#close">
+          ×
+        </button>
+
+        <div class="randomizer-sleeve__artwork-wrap">
+          <img src=""
+               alt=""
+               class="randomizer-sleeve__artwork"
+               data-randomizer-target="artwork">
+        </div>
+
+        <div class="randomizer-sleeve__content">
+          <p class="randomizer-sleeve__kicker mb-2">Now spinning</p>
+          <h2 class="randomizer-sleeve__title mb-1" data-randomizer-target="title"></h2>
+          <p class="randomizer-sleeve__artist mb-2" data-randomizer-target="artist"></p>
+          <p class="randomizer-sleeve__meta mb-0" data-randomizer-target="meta"></p>
+
+          <div class="randomizer-sleeve__actions">
+            <button type="button"
+                    class="btn btn-light"
+                    data-action="click->randomizer#saveToCollection"
+                    data-randomizer-target="saveButton">
+              Save to collection
+            </button>
+            <button type="button"
+                    class="btn btn-outline-light"
+                    data-action="click->randomizer#tryAgain">
+              Try again
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
   </div>
 
-  <div class="d-flex flex-wrap gap-2 mb-4">
+  <div class="persona-grid mb-5">
     <% @personas.each do |persona| %>
-      <% next if persona[:key] == "randomizer" %>
-      <%= link_to persona[:title],
-                  authenticated_root_path(persona: persona[:key]),
-                  class: "btn #{persona[:key] == @persona_key ? "btn-primary" : "btn-outline-primary"}" %>
-    <% end %>
-  </div>
+      <%= link_to swiper_index_path(persona: persona[:key]),
+                  class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
+        <div class="persona-card__thumbnail persona-card__thumbnail--<%= persona[:key] %>">
+          <span class="persona-card__years"><%= persona[:min_year] %>-<%= persona[:max_year] %></span>
+        </div>
 
-  <div class="d-flex justify-content-center mb-4">
-    <%= link_to authenticated_root_path(persona: "randomizer"),
-                class: "randomizer-btn",
-                "aria-label": "Randomizer record",
-                data: {
-                  controller: "randomizer",
-                  action: "click->randomizer#start",
-                  randomizer_loading_value: 1200,
-                  randomizer_success_value: 900,
-                  randomizer_dissipate_value: 700
-                } do %>
-      <div class="record-container">
-        <div class="record">
-          <div class="record-label">
-            <div class="record-hole"></div>
+        <div class="persona-card__body">
+          <div>
+            <h2 class="persona-card__title mb-1"><%= persona[:title] %></h2>
+            <p class="persona-card__meta mb-0">
+              <%= persona[:genres].join(" / ") %>
+            </p>
           </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
-
-  <% if @vinyl.present? %>
-    <article class="card">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src="<%= @vinyl.artwork_url %>"
-               class="img-fluid rounded-start"
-               alt="<%= @vinyl.title %> cover">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h2 class="h4 card-title"><%= @vinyl.title %></h2>
-            <p class="card-text mb-1"><strong>Artist:</strong> <%= @vinyl.artist %></p>
-            <p class="card-text mb-1"><strong>Year:</strong> <%= @vinyl.year %></p>
-            <p class="card-text mb-0"><strong>Genre:</strong> <%= @vinyl.genre %></p>
-          </div>
-        </div>
-      </div>
-    </article>
-  <% end %>
 
 </section>
