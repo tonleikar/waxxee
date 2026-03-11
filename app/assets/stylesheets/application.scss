@@ -24,55 +24,49 @@ html, body {
   --wax-blur: blur(18px);
 }
 
-.waxxee-banner {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  height: 180px;
-  background: black;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  z-index: 10;
-}
-
-.waxxee-banner-top {
-  top: 20px;
-}
-
-.waxxee-banner-bottom {
-  bottom: 20px;
-}
-
-.waxxee-track {
-  white-space: nowrap;
-  animation: waxxee-scroll 20s linear infinite;
-}
-
-.waxxee-track span {
-  font-family: 'Syne', sans-serif;
-  font-size: 82px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: white;
-  display: inline-block;
-  line-height: 0.5;
-  height: 60px;
-}
-
-@keyframes waxxee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 body {
   padding-bottom: 112px;
   background: var(--wax-cream);
   color: var(--wax-ink);
+}
+
+.auth-ticker {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.auth-ticker-top {
+  top: 1.25rem;
+}
+
+.auth-ticker-bottom {
+  bottom: 1.25rem;
+}
+
+.auth-ticker__track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  white-space: nowrap;
+  animation: auth-ticker-scroll 26s linear infinite;
+}
+
+.auth-ticker__track--reverse {
+  animation-direction: reverse;
+}
+
+.auth-ticker__track span {
+  display: inline-block;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(3.75rem, 8vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  color: rgba(17, 17, 17, 0.08);
 }
 
 .app-shell {
@@ -80,7 +74,12 @@ body {
 }
 
 .app-shell-auth {
-  padding-top: 160px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 7rem;
+  padding-bottom: 7rem;
 }
 
 .card,
@@ -123,14 +122,39 @@ body {
   color: var(--wax-ink);
 }
 
+@keyframes auth-ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (min-width: 992px) {
-  body {
+  body.is-signed-in {
     padding-bottom: 0;
     padding-left: 112px;
   }
 
-  .app-shell {
+  body.is-signed-in .app-shell {
     padding-bottom: 0;
     padding-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .auth-ticker-top {
+    top: 0.75rem;
+  }
+
+  .auth-ticker-bottom {
+    bottom: 0.75rem;
+  }
+
+  .app-shell-auth {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
   }
 }
