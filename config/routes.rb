@@ -17,7 +17,10 @@ Rails.application.routes.draw do
   resources :collections, controller: :folders, only: [:create, :destroy]
   resources :folder_vinyls, only: [:create, :destroy]
   resources :swiper, only: [:index]
-  resources :profile, only: [:show, :edit, :update, :destroy]
+  resources :profile, only: [:show, :edit, :update, :destroy] do
+    patch :avatar, on: :member
+    get :avatar_preview, on: :member
+  end
   resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show]
   resources :discogs, only: [:index, :create]

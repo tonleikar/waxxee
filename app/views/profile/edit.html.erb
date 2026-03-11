@@ -9,22 +9,61 @@
         <%= link_to "Back", profile_path(@user), class: "btn btn-outline-dark" %>
       </div>
 
-      <%= form_with model: @user, url: profile_path(@user), method: :patch, class: "row g-4" do |form| %>
+      <div class="row g-4">
         <div class="col-12 col-lg-4">
-          <div class="profile-edit-sidebar">
-            <img
-              src="<%= @user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(@user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
-              alt="<%= @user.username %>"
-              class="profile-avatar profile-avatar-large mb-3"
-              data-vinyl-picker-target="avatar"
+          <div class="profile-edit-sidebar d-grid gap-4">
+            <div
+              class="profile-avatar-panel"
+              data-controller="profile-avatar"
+              data-profile-avatar-preview-url-value="<%= avatar_preview_profile_path(@user) %>"
             >
-            <%= form.label :avatar_url, class: "form-label" %>
-            <%= form.text_field :avatar_url, class: "form-control", placeholder: "Paste an image URL" %>
+              <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                <div>
+                  <p class="profile-kicker mb-1">Profile picture</p>
+                  <h2 class="h5 mb-0">Generate a new portrait</h2>
+                </div>
+                <%= button_tag "Regenerate",
+                  type: "button",
+                  class: "btn btn-outline-dark btn-sm",
+                  data: { action: "profile-avatar#regenerate" } %>
+              </div>
+
+              <img
+                src="<%= @user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(@user.username.to_s)}&background=071013&color=F4F4F4&size=320" %>"
+                alt="Generated profile portrait preview"
+                class="profile-avatar profile-avatar-large profile-avatar-generator-preview"
+                data-profile-avatar-target="preview"
+              >
+
+              <p class="small text-muted mb-3">
+                Click regenerate to create a new portrait from thispersondoesnotexist.com, then save it to Cloudinary for this profile.
+              </p>
+
+              <%= form_with model: @user, url: avatar_profile_path(@user), method: :patch, class: "d-grid gap-3" do |avatar_form| %>
+                <div data-profile-avatar-target="status" class="small text-muted d-none"></div>
+                <%= avatar_form.hidden_field :avatar_image_data, data: { profile_avatar_target: "input" } %>
+                <%= avatar_form.submit "Save profile picture",
+                  class: "btn btn-dark",
+                  data: { profile_avatar_target: "saveButton", action: "profile-avatar#save" } %>
+              <% end %>
+
+              <% if @user.avatar_url.present? %>
+                <div>
+                  <p class="profile-kicker mb-2">Current picture</p>
+                  <img
+                    src="<%= @user.avatar_url %>"
+                    alt="<%= @user.username %>"
+                    class="profile-avatar profile-avatar-current"
+                    data-profile-avatar-target="current"
+                  >
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
 
         <div class="col-12 col-lg-8">
-          <div class="row g-3">
+          <%= form_with model: @user, url: profile_path(@user), method: :patch, class: "row g-3" do |form| %>
             <div class="col-12 col-md-6">
               <%= form.label :name, class: "form-label" %>
               <%= form.text_field :name, class: "form-control" %>
@@ -43,9 +82,9 @@
             <div class="col-12 d-flex justify-content-end">
               <%= form.submit "Save profile", class: "btn btn-primary px-4" %>
             </div>
-          </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </section>
