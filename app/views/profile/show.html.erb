@@ -1,5 +1,5 @@
-<section class="container py-4 profile-page" <%= %(data-controller="vinyl-picker") if @own_profile %>>
-  <div class="card border-0 shadow-sm profile-hero">
+<section class="container py-4 profile-page" data-controller="<%= "vinyl-picker" if @own_profile %>">
+  <div class="card profile-hero">
     <div class="card-body p-4">
       <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
         <div class="d-flex align-items-center gap-4">
@@ -9,14 +9,13 @@
             class="profile-avatar"
           >
           <div>
-            <p class="text-uppercase small text-muted mb-1">Profile</p>
             <h1 class="display-6 mb-1"><%= @user.name.presence || @user.username %></h1>
-            <p class="mb-2 text-muted">@<%= @user.username %></p>
-            <div class="d-flex flex-wrap gap-2">
-              <span class="badge text-bg-light">Favorite genre: <%= @user.favorite_genre %></span>
-              <span class="badge text-bg-light"><%= @vinyls.count %> saved vinyls</span>
-              <span class="badge text-bg-light"><%= @user.followers.count %> followers</span>
-              <span class="badge text-bg-light"><%= @user.following.count %> following</span>
+            <p class="mb-3 text-muted">@<%= @user.username %></p>
+            <div class="profile-stat-row">
+              <span class="profile-stat-chip">Favorite genre: <%= @user.favorite_genre.presence || "Unset" %></span>
+              <span class="profile-stat-chip"><%= @vinyls.count %> saved vinyls</span>
+              <span class="profile-stat-chip"><%= @user.followers.count %> followers</span>
+              <span class="profile-stat-chip"><%= @user.following.count %> following</span>
             </div>
           </div>
         </div>
@@ -36,11 +35,11 @@
 
   <div class="row g-4 mt-1">
     <div class="col-12 col-lg-5">
-      <div class="card h-100 border-0 shadow-sm">
+      <div class="card h-100 profile-panel">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
             <div>
-              <p class="text-uppercase small text-muted mb-2">Favorite Vinyl</p>
+              <p class="profile-kicker mb-2">Favorite Vinyl</p>
               <p class="text-muted mb-0 small">This record is shown on your feed card.</p>
             </div>
 
@@ -59,11 +58,15 @@
 
           <div data-vinyl-picker-target="preview">
             <% if @favorite_vinyl.present? %>
-              <img src="<%= @favorite_vinyl.artwork_url %>" alt="<%= @favorite_vinyl.title %>" class="img-fluid rounded mb-3">
-              <h2 class="h4 mb-1"><%= @favorite_vinyl.title %></h2>
-              <p class="mb-1"><strong>Artist:</strong> <%= @favorite_vinyl.artist %></p>
-              <p class="mb-1"><strong>Year:</strong> <%= @favorite_vinyl.year %></p>
-              <p class="mb-0"><strong>Genre:</strong> <%= @favorite_vinyl.genre %></p>
+              <div class="profile-picked-vinyl">
+                <img src="<%= @favorite_vinyl.artwork_url %>" alt="<%= @favorite_vinyl.title %>" class="profile-picked-vinyl-image">
+                <div>
+                  <h2 class="h4 mb-1"><%= @favorite_vinyl.title %></h2>
+                  <p class="mb-1"><strong>Artist:</strong> <%= @favorite_vinyl.artist %></p>
+                  <p class="mb-1"><strong>Year:</strong> <%= @favorite_vinyl.year %></p>
+                  <p class="mb-0"><strong>Genre:</strong> <%= @favorite_vinyl.genre %></p>
+                </div>
+              </div>
             <% else %>
               <div class="profile-empty-state">
                 <%= @own_profile ? "Pick a favorite vinyl from your collection." : "No favorite vinyl picked yet." %>
@@ -81,9 +84,9 @@
     </div>
 
     <div class="col-12 col-lg-7">
-      <div class="card border-0 shadow-sm">
+      <div class="card profile-panel">
         <div class="card-body p-4">
-          <p class="text-uppercase small text-muted mb-3">Collection Preview</p>
+          <p class="profile-kicker mb-3">Collection Preview</p>
           <div class="row g-3">
             <% @vinyls.first(3).each do |vinyl| %>
               <div class="col-6 col-md-4">
@@ -100,11 +103,11 @@
     </div>
   </div>
 
-  <div class="card border-0 shadow-sm mt-4">
+  <div class="card profile-panel mt-4">
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
         <div>
-          <p class="text-uppercase small text-muted mb-1">Following</p>
+          <p class="profile-kicker mb-1">Following</p>
           <p class="text-muted mb-0 small">People this profile follows.</p>
         </div>
         <div class="d-flex align-items-center gap-2">
@@ -122,7 +125,7 @@
 
             <div class="col-12 col-md-6 col-xl-4">
               <%= link_to profile_path(followed_user), class: "text-decoration-none text-reset d-block h-100" do %>
-                <article class="card h-100 shadow-sm">
+                <article class="card h-100 profile-follow-card">
                   <div class="card-body">
                     <div class="d-flex align-items-center gap-3 mb-3">
                       <img
@@ -130,7 +133,7 @@
                         alt="<%= followed_user.username %>"
                         width="56"
                         height="56"
-                        class="rounded-circle"
+                        class="profile-follow-avatar"
                       >
                       <div>
                         <h3 class="h5 mb-0"><%= followed_user.name.presence || followed_user.username %></h3>
@@ -142,14 +145,14 @@
                     </div>
 
                     <% if followed_vinyl.present? %>
-                      <img src="<%= followed_vinyl.artwork_url %>" alt="<%= followed_vinyl.title %>" class="img-fluid rounded mb-3">
+                      <img src="<%= followed_vinyl.artwork_url %>" alt="<%= followed_vinyl.title %>" class="img-fluid profile-follow-artwork mb-3">
 
                       <h4 class="h5 mb-1"><%= followed_vinyl.title %></h4>
                       <p class="mb-1"><strong>Artist:</strong> <%= followed_vinyl.artist %></p>
                       <p class="mb-1"><strong>Year:</strong> <%= followed_vinyl.year %></p>
                       <p class="mb-0"><strong>Genre:</strong> <%= followed_vinyl.genre %></p>
                     <% else %>
-                      <div class="border rounded p-4 text-muted">
+                      <div class="profile-empty-state">
                         No favorite vinyl picked yet.
                       </div>
                     <% end %>
@@ -202,9 +205,9 @@
               data-vinyl-picker-title-param="<%= vinyl.title %>"
               data-vinyl-picker-artist-param="<%= vinyl.artist %>"
               data-vinyl-picker-year-param="<%= vinyl.year %>"
+              data-vinyl-picker-genre-param="<%= vinyl.genre %>"
               data-vinyl-picker-image-param="<%= vinyl.artwork_url %>"
               data-vinyl-picker-search="<%= [vinyl.title, vinyl.artist].join(" ").downcase %>"
-              data-bs-dismiss="offcanvas"
               aria-pressed="<%= @favorite_vinyl&.id == vinyl.id ? "true" : "false" %>"
             >
               <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="profile-vinyl-result-image">

@@ -3,8 +3,8 @@ class ProfileController < ApplicationController
   before_action :ensure_current_user!, only: [:edit, :update, :destroy]
 
   def show
-    @favorite_vinyl = @user.favorite_vinyl
     @vinyls = @user.vinyls
+    @favorite_vinyl = @vinyls.find_by(id: @user.favorite_vinyl_id)
     @following_users = @user.following.order(:username)
     @own_profile = @user == current_user
   end
@@ -16,8 +16,12 @@ class ProfileController < ApplicationController
 
   def update
     @user = current_user
-    @user.update!(profile_params)
-    redirect_to profile_path(@user)
+    @user.update!(normalized_profile_params)
+
+    respond_to do |format|
+      format.html { redirect_to profile_path(@user) }
+      format.json { render json: { success: true, favorite_vinyl_id: @user.favorite_vinyl_id } }
+    end
   end
 
   def destroy
@@ -39,5 +43,18 @@ class ProfileController < ApplicationController
 
   def profile_params
     params.require(:user).permit(:name, :username, :favorite_genre, :avatar_url, :favorite_vinyl_id)
+  end
+
+  def normalized_profile_params
+    attributes = profile_params
+    favorite_id = attributes[:favorite_vinyl_id]
+
+    return attributes if favorite_id.blank?
+
+    unless current_user.vinyls.exists?(id: favorite_id)
+      attributes[:favorite_vinyl_id] = nil
+    end
+
+    attributes
   end
 end
