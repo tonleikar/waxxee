@@ -122,3 +122,15 @@ body {
   background: rgba(255, 252, 247, 0.82);
   color: var(--wax-ink);
 }
+
+@media (min-width: 992px) {
+  body {
+    padding-bottom: 0;
+    padding-left: 112px;
+  }
+
+  .app-shell {
+    padding-bottom: 0;
+    padding-left: 0;
+  }
+}

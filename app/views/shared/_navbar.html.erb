@@ -1,5 +1,5 @@
 <% if user_signed_in? %>
-  <nav class="navbar-lewagon fixed-bottom">
+  <nav class="navbar-lewagon">
     <%= link_to authenticated_root_path, class: ["nav-icon", ("is-active" if current_page?(authenticated_root_path))].compact.join(" ") do %>
       <%= image_tag "nav/home.svg", alt: "Home", class: "nav-icon-image" %>
     <% end %>

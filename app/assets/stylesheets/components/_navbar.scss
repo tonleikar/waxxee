@@ -44,3 +44,22 @@
 .nav-icon:hover .nav-icon-image {
   opacity: 0.82;
 }
+
+@media (min-width: 992px) {
+  .navbar-lewagon {
+    top: 0;
+    bottom: auto;
+    width: 112px;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    border-top: 0;
+    border-right: 1px solid rgba(17, 17, 17, 0.14);
+  }
+
+  .nav-icon {
+    width: 72px;
+    height: 72px;
+  }
+}
