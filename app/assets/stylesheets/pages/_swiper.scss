@@ -40,7 +40,7 @@
   height: 100%;
   transform: rotateY(180deg);
   background: rgba(255, 251, 245, 0.8);
-  border: 1px solid rgba(17, 17, 17, 0.14);
+  border: 0;
   backdrop-filter: blur(18px);
 }
 
@@ -51,7 +51,7 @@
 .vinyl-card img {
   width: 100%;
   border-radius: 0;
-  box-shadow: 0 16px 36px rgba(17, 17, 17, 0.1);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.08);
   backface-visibility: hidden;
 }
 
