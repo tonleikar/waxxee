@@ -1,9 +1,9 @@
 class FollowersController < ApplicationController
   def index
-    @users = current_user.following.includes(:favorite_vinyl, user_vinyls: :vinyl)
-    @users = @users.where("username ILIKE ?", "%#{params[:query]}%") if params[:query].present?
-    @vinyls = @users.flat_map(&:vinyls)
-    @follows = current_user.active_follows.index_by(&:followed_id)
+    @feed_items = UserVinyl
+      .where(user: current_user.following)
+      .includes(:vinyl, :user)
+      .order(created_at: :desc)
   end
 
   def create
