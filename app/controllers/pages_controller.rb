@@ -1,49 +1,31 @@
 class PagesController < ApplicationController
-  PERSONA_RULES = {
-    "randomizer" => {
-      title: "Randomizer",
-      min_year: 1900,
-      max_year: 2100,
-      genres: [""]
-    },
-    "grungie" => {
-      title: "Grungie",
-      min_year: 1988,
-      max_year: 1999,
-      genres: ["Rock"]
-    },
-    "emo" => {
-      title: "Emo",
-      min_year: 1995,
-      max_year: 2010,
-      genres: ["Rock", "Pop"]
-    },
-    "dreamy" => {
-      title: "Dreamy",
-      min_year: 1983,
-      max_year: 2025,
-      genres: ["Electronic", "Pop", "Rock"]
-    },
-    "throwback" => {
-      title: "Throwback",
-      min_year: 1965,
-      max_year: 1989,
-      genres: ["Funk / Soul", "Jazz", "Blues", "Rock"]
-    },
-    "midnight" => {
-      title: "Midnight",
-      min_year: 1990,
-      max_year: 2025,
-      genres: ["Electronic", "Hip Hop", "Funk / Soul"]
-    }
-  }
   def home_logged_in
-    @personas = PERSONA_RULES.map { |key, rule| { key: key, title: rule[:title] } }
-    @persona_key = selected_persona_key
-    return if @persona_key.blank?
+    @personas = Persona::RULES.map do |key, rule|
+      next if key == "randomizer"
 
-    @persona = PERSONA_RULES.fetch(@persona_key)
-    @vinyl = random_vinyl_for_persona(@persona)
+      {
+        key: key,
+        title: rule[:title],
+        min_year: rule[:min_year],
+        max_year: rule[:max_year],
+        genres: rule[:genres]
+      }
+    end.compact
+    @persona_key = selected_persona_key || "randomizer"
+    @persona = Persona::RULES.fetch(@persona_key)
+
+    respond_to do |format|
+      format.html
+      format.json do
+        vinyl = random_vinyl_for_persona(@persona)
+
+        if vinyl.present?
+          render json: vinyl_payload(vinyl)
+        else
+          render json: { error: "No vinyl found." }, status: :not_found
+        end
+      end
+    end
   end
 
   private
@@ -58,6 +40,21 @@ class PagesController < ApplicationController
   end
 
   def selected_persona_key
-    params[:persona]&.downcase
+    key = params[:persona]&.downcase
+    key if key.present? && Persona::RULES.key?(key)
+  end
+
+  def vinyl_payload(vinyl)
+    saved = current_user.user_vinyls.exists?(vinyl_id: vinyl.id)
+
+    {
+      id: vinyl.id,
+      title: vinyl.title,
+      artist: vinyl.artist,
+      year: vinyl.year,
+      genre: vinyl.genre,
+      artwork_url: vinyl.artwork_url,
+      saved: saved
+    }
   end
 end
