@@ -25,7 +25,12 @@ class VinylsController < ApplicationController
   private
 
   def permitted_sort
-    %w[title_desc title_asc artist_asc artist_desc year_desc year_asc].include?(params[:sort]) ? params[:sort] : "title_desc"
+    if %w[title_desc title_asc artist_asc artist_desc year_desc
+          year_asc].include?(params[:sort])
+      params[:sort]
+    else
+      "recent"
+    end
   end
 
   def order_clause_for(sort)
@@ -41,7 +46,7 @@ class VinylsController < ApplicationController
     when "year_asc"
       { year: :asc, title: :asc }
     else
-      { title: :desc }
+      { created_at: :desc }
     end
   end
 end

@@ -69,13 +69,17 @@
             <div class="vinyl-library-toolbar-search">
               <%= form_with url: vinyls_path, method: :get, local: true, class: "vinyl-library-search-form" do |form| %>
                 <%= form.hidden_field :sort, value: @sort %>
+                <div class="vinyl-library-search-input-wrapper">
                 <%= form.text_field :query, value: @query, placeholder: "Search title, artist, or genre", class: "form-control vinyl-library-search-input" %>
+                <i class="fas fa-search vinyl-library-search-icon"></i>
+                </div>
                 <div class="vinyl-library-search-actions">
-                  <%= form.submit "Search", class: "btn btn-dark w-100" %>
-                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100" %>
+  <%= form.submit "Search", class: "btn btn-dark w-100" %>
+  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100 d-none", id: "clear-search-btn" %>
+</div>
                 </div>
               <% end %>
-            </div>
+
 
             <div class="vinyl-library-toolbar-sort">
               <%= form_with url: vinyls_path, method: :get, local: true do |form| %>
@@ -83,6 +87,7 @@
                 <%= form.select :sort,
                   options_for_select(
                     [
+                      ["Recently added", "recent"],
                       ["Title Z-A", "title_desc"],
                       ["Title A-Z", "title_asc"],
                       ["Artist A-Z", "artist_asc"],
@@ -101,7 +106,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-12">
       <div class="row g-3">
         <% @vinyls.each do |vinyl| %>
@@ -169,3 +174,23 @@
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector(".vinyl-library-search-input");
+    const clearButton = document.querySelector("#clear-search-btn");
+
+    if (!searchInput || !clearButton) return;
+
+    function toggleClearButton() {
+      if (searchInput.value.trim() === "") {
+        clearButton.classList.add("d-none");
+      } else {
+        clearButton.classList.remove("d-none");
+      }
+    }
+
+    searchInput.addEventListener("input", toggleClearButton);
+    toggleClearButton();
+  });
+</script>

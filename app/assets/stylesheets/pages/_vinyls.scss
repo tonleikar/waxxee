@@ -29,8 +29,26 @@
   gap: 0.75rem;
 }
 
+.vinyl-library-search-input-wrapper {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
 .vinyl-library-search-input {
   flex: 1 1 auto;
+  width: 100%;
+  padding-right: 2.6rem;
+}
+
+.vinyl-library-search-icon {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(7, 16, 19, 0.55);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .vinyl-library-search-actions {
