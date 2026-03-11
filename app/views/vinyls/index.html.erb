@@ -2,17 +2,7 @@
   <div class="card border-0 shadow-sm vinyl-library-hero">
     <div class="card-body p-4">
       <div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <p class="text-uppercase small text-muted mb-1">Collection</p>
-        <h1 class="display-6 mb-2">Your saved records</h1>
-=======
         <h1 class="display-6 mb-2">Your saved vinyls</h1>
->>>>>>> c677170 (vinyl page cleaned up)
-=======
-        <p class="text-uppercase small text-muted mb-1">Collection</p>
-        <h1 class="display-6 mb-2">Your saved records</h1>
->>>>>>> fca0a78 (frontend -replaced vinyl with record)
         <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
       </div>
     </div>
@@ -48,22 +38,6 @@
               <h2 class="h4 mb-0">Your collections</h2>
             </div>
           </div>
-<<<<<<< HEAD
-          <div class="vinyl-folder-list">
-            <% if @folders.any? %>
-              <% @folders.each do |folder| %>
-                <div class="vinyl-folder-chip">
-                  <span>
-                    <strong><%= folder.name %></strong>
-                    <small><%= pluralize(folder.vinyls.count, "record") %></small>
-                  </span>
-                  <%= button_to "Delete", collection_path(folder), method: :delete, class: "btn btn-sm btn-link text-danger p-0" %>
-                </div>
-              <% end %>
-            <% else %>
-              <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
-            <% end %>
-=======
 
         <div class="vinyl-folder-list">
   <% if @folders.any? %>
@@ -94,7 +68,6 @@
     <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
   <% end %>
 </div>
->>>>>>> c677170 (vinyl page cleaned up)
           </div>
         </div>
       </div>
@@ -208,7 +181,7 @@
                     </div>
                   <% end %>
                 <% else %>
-                  <p class="small text-muted mb-0">Create a folder first to organize this record.</p>
+                  <p class="small text-muted mb-0">Create a folder first to organize this vinyl.</p>
                 <% end %>
               </div>
             </article>
