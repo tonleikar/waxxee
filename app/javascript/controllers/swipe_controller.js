@@ -9,7 +9,7 @@ export default class extends Controller {
     this.startX = 0
     this.currentX = 0
     this.dragging = false
-    this.threshold = 300
+    this.threshold = 100
 
     this.renderCard()
   }
@@ -55,6 +55,7 @@ export default class extends Controller {
       e.preventDefault()
       this.dragging = true
       this.startX = e.touches ? e.touches[0].clientX : e.clientX
+      this.currentX = this.startX
     }
 
     const move = (e) => {
@@ -85,8 +86,6 @@ export default class extends Controller {
           if (direction === "right") {
             const id = card.dataset.id
             console.log("Save vinyl:", id)
-            console.log(this.urlValue)
-            console.log(this.c)
             this.vinylIdTarget.value = id;
 
             fetch(this.urlValue, {
@@ -96,7 +95,8 @@ export default class extends Controller {
             })
               .then(response => response.json())
               .then((data) => {
-                console.log(data)
+                console.log(data.message)
+                this.showToast(data.message)
               })
 
           }
@@ -135,5 +135,24 @@ export default class extends Controller {
       btn.addEventListener("mousedown", (e) => e.stopPropagation())
       btn.addEventListener("touchstart", (e) => e.stopPropagation())
     })
+  }
+
+  showToast(message) {
+    let stack = document.querySelector(".toast-stack")
+    if (!stack) {
+      stack = document.createElement("div")
+      stack.className = "toast-stack"
+      stack.setAttribute("aria-live", "polite")
+      stack.setAttribute("aria-atomic", "true")
+      document.body.appendChild(stack)
+    }
+
+    const toast = document.createElement("div")
+    toast.className = "app-toast app-toast--success"
+    toast.setAttribute("role", "status")
+    toast.textContent = message
+    stack.appendChild(toast)
+
+    toast.addEventListener("animationend", () => toast.remove())
   }
 }

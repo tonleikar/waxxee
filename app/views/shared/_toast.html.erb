@@ -1,0 +1,11 @@
+<% if flash.any? %>
+  <div class="toast-stack" aria-live="polite" aria-atomic="true">
+    <% flash.each do |type, message| %>
+      <% next if message.blank? %>
+      <% tone = %w[notice success].include?(type.to_s) ? "success" : "neutral" %>
+      <div class="app-toast app-toast--<%= tone %>" role="status">
+        <%= message %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -8,13 +8,14 @@
 }
 
 .vinyl-card {
+  transform: translateY(100px);
   perspective: 1000px;
   width: 90vw;
   max-width: 75vh;
   max-width: 500px;
   position: absolute;
   opacity: 0;
-  transition: transform 0.2s ease, opacity 0.3s ease-out;
+  transition: transform 0.5s ease, opacity 0.3s ease-out;
 }
 
 .vinyl-card-inner {
@@ -54,8 +55,8 @@
 }
 
 .vinyl-card.active {
+  transform: translateY(0px);
   bottom: auto;
-  top: 20%;
   opacity: 1;
 }
 
@@ -66,10 +67,14 @@
   width: 60px;
   height: 60px;
   cursor: pointer;
+  backface-visibility: hidden;
+  z-index: 1;
+
   img {
     border-radius: 0;
     box-shadow: none;
     opacity: 0.8;
+
   }
 }
 
