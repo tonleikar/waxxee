@@ -1,8 +1,12 @@
 <section class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Users</h1>
-    <%= form_with url: users_path, method: :get, local: true, class: "d-flex gap-2" do |form| %>
-      <%= form.text_field :query, value: @query, placeholder: "Search username or email", class: "form-control" %>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center gap-3 mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <h1 class="h3 mb-0">Users</h1>
+      <%= link_to "Back to feed", followers_path, class: "btn btn-outline-dark" %>
+    </div>
+
+    <%= form_with url: users_path, method: :get, local: true, class: "d-flex gap-2 flex-grow-1 justify-content-end ms-md-3" do |form| %>
+      <%= form.text_field :query, value: @query, placeholder: "Search username or email", class: "form-control flex-grow-1", style: "max-width: 28rem;" %>
       <%= form.submit "Search", class: "btn btn-primary" %>
     <% end %>
   </div>

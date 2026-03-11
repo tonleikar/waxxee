@@ -10,7 +10,7 @@ class VinylsController < ApplicationController
 
     @vinyls = @vinyls.order(order_clause_for(@sort))
     @folders = current_user.folders.order(name: :asc)
-    @user_vinyls_by_vinyl_id = current_user.user_vinyls.includes(:folders).index_by(&:vinyl_id)
+    @user_vinyls_by_vinyl_id = current_user.user_vinyls.includes(:folders, :folder_vinyls).index_by(&:vinyl_id)
   end
 
   def show
