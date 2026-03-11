@@ -53,6 +53,8 @@ class PagesController < ApplicationController
       artist: vinyl.artist,
       year: vinyl.year,
       genre: vinyl.genre,
+      format: vinyl.format,
+      tracks: Array(vinyl.tracks),
       artwork_url: vinyl.artwork_url,
       saved: saved
     }

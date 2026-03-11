@@ -31,37 +31,77 @@
       </button>
 
       <article class="randomizer-sleeve" data-randomizer-target="sleeve" aria-live="polite">
-        <button type="button"
-                class="randomizer-sleeve__close"
-                aria-label="Close result"
-                data-action="click->randomizer#close">
-          X
-        </button>
-
-        <div class="randomizer-sleeve__artwork-wrap">
-          <img src=""
-               alt=""
-               class="randomizer-sleeve__artwork"
-               data-randomizer-target="artwork">
-        </div>
-
-        <div class="randomizer-sleeve__content">
-          <h2 class="randomizer-sleeve__title mb-1" data-randomizer-target="title"></h2>
-          <p class="randomizer-sleeve__artist mb-2" data-randomizer-target="artist"></p>
-          <p class="randomizer-sleeve__meta mb-0" data-randomizer-target="meta"></p>
-
-          <div class="randomizer-sleeve__actions">
+        <div class="randomizer-sleeve__body">
+          <div class="randomizer-sleeve__face randomizer-sleeve__face--front">
             <button type="button"
-                    class="btn btn-primary"
-                    data-action="click->randomizer#saveToCollection"
-                    data-randomizer-target="saveButton">
-              Save to collection
+                    class="randomizer-sleeve__close randomizer-sleeve__close--front"
+                    aria-label="Close result"
+                    data-action="click->randomizer#close">
+              <span aria-hidden="true">&times;</span>
             </button>
+
+            <div class="randomizer-sleeve__artwork-wrap">
+              <img src=""
+                   alt=""
+                   class="randomizer-sleeve__artwork"
+                   data-randomizer-target="artwork">
+            </div>
+
             <button type="button"
-                    class="btn btn-outline-primary"
-                    data-action="click->randomizer#tryAgain">
-              Try again
+                    class="randomizer-sleeve__flip"
+                    aria-label="Flip to details"
+                    data-action="click->randomizer#flipToBack">
+              <span aria-hidden="true">&#x21bb;</span>
             </button>
+          </div>
+
+          <div class="randomizer-sleeve__face randomizer-sleeve__face--back">
+            <button type="button"
+                    class="randomizer-sleeve__close randomizer-sleeve__close--back"
+                    aria-label="Close result"
+                    data-action="click->randomizer#close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="randomizer-sleeve__back-header">
+              <p class="randomizer-sleeve__eyebrow mb-1">Release details</p>
+              <h2 class="randomizer-sleeve__back-title mb-0" data-randomizer-target="backTitle"></h2>
+            </div>
+
+            <dl class="randomizer-sleeve__details">
+              <div>
+                <dt>Artist</dt>
+                <dd data-randomizer-target="detailArtist"></dd>
+              </div>
+              <div>
+                <dt>Year</dt>
+                <dd data-randomizer-target="detailYear"></dd>
+              </div>
+              <div>
+                <dt>Genre</dt>
+                <dd data-randomizer-target="detailGenre"></dd>
+              </div>
+            </dl>
+
+            <div class="randomizer-sleeve__actions">
+              <button type="button"
+                      class="randomizer-sleeve__flip randomizer-sleeve__flip--back"
+                      aria-label="Flip to cover"
+                      data-action="click->randomizer#flipToFront">
+                <span aria-hidden="true">&#x21ba;</span>
+              </button>
+              <button type="button"
+                      class="randomizer-sleeve__action"
+                      data-action="click->randomizer#saveToCollection"
+                      data-randomizer-target="saveButton">
+                Save
+              </button>
+              <button type="button"
+                      class="randomizer-sleeve__action randomizer-sleeve__action--secondary"
+                      data-action="click->randomizer#tryAgain">
+                Again
+              </button>
+            </div>
           </div>
         </div>
       </article>
