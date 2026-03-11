@@ -10,6 +10,7 @@
 .vinyl-library-controls {
   width: 100%;
   max-width: 34rem;
+
 }
 
 .vinyl-library-toolbar {
@@ -17,6 +18,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+
 }
 
 .vinyl-library-toolbar-search {
@@ -60,10 +62,14 @@
 
 .vinyl-library-toolbar-sort {
   flex: 0 0 auto;
+  align-items: center;
 }
 
 .vinyl-library-sort-select {
-  min-width: 11rem;
+    min-width: 11rem;
+  text-align: center;
+  text-align-last: center;
+  padding: 0.5rem 2rem;
 }
 
 @media (max-width: 767.98px) {
@@ -94,27 +100,6 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-.vinyl-folder-chip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  border: 0;
-  border-radius: 0;
-  background: rgba(255, 251, 245, 0.72);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
-}
-
-.vinyl-folder-chip span {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.vinyl-folder-chip small {
-  color: rgba(7, 16, 19, 0.6);
-}
 
 .vinyl-library-card {
   overflow: hidden;
@@ -133,4 +118,51 @@
   flex-wrap: wrap;
   gap: 0.45rem;
   min-height: 1.75rem;
+}
+
+.vinyl-folder-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(7, 16, 19, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.vinyl-folder-chip-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.vinyl-folder-thumb {
+  width: 85px;
+  height: 85px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #e9e5dc;
+}
+
+.vinyl-folder-thumb-placeholder {
+  border: 1px solid rgba(7, 16, 19, 0.08);
+}
+
+.vinyl-folder-chip span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.vinyl-folder-chip small {
+  color: rgba(7, 16, 19, 0.6);
+}
+
+.vinyl-folder-chip form {
+  margin: 0;
+}
+
+.vinyl-library-card .vinyl-trash-btn i {
+  font-size: 20px;
 }
