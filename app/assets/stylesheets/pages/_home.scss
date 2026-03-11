@@ -25,14 +25,6 @@
   margin-bottom: 0.25rem;
 }
 
-.home-eyebrow {
-  color: rgba(17, 17, 17, 0.58);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
-
 .home-title {
   font-size: clamp(2.4rem, 5vw, 4.4rem);
   font-weight: 800;
@@ -100,18 +92,24 @@
 
 .randomizer-sleeve__close {
   position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  width: 2.2rem;
-  height: 2.2rem;
-  border: 0;
+  top: 0.75rem;
+  right: 0.75rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgba(17, 17, 17, 0.16);
   border-radius: 0;
-  background: rgba(17, 17, 17, 0.06);
+  background: rgba(255, 251, 245, 0.88);
   color: var(--wax-ink);
-  font-size: 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1;
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(17, 17, 17, 0.08);
 }
 
 .randomizer-sleeve.is-visible {
@@ -146,14 +144,6 @@
 .randomizer-sleeve.is-ready .randomizer-sleeve__artwork,
 .randomizer-sleeve.is-ready .randomizer-sleeve__content {
   opacity: 1;
-}
-
-.randomizer-sleeve__kicker {
-  color: rgba(17, 17, 17, 0.52);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 
 .randomizer-sleeve__title {
