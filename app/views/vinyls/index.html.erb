@@ -3,7 +3,7 @@
     <div class="card-body p-4">
       <div>
         <p class="text-uppercase small text-muted mb-1">Collection</p>
-        <h1 class="display-6 mb-2">Your saved vinyls</h1>
+        <h1 class="display-6 mb-2">Your saved records</h1>
         <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
       </div>
     </div>
@@ -49,7 +49,7 @@
                 <div class="vinyl-folder-chip">
                   <span>
                     <strong><%= folder.name %></strong>
-                    <small><%= pluralize(folder.vinyls.count, "vinyl") %></small>
+                    <small><%= pluralize(folder.vinyls.count, "record") %></small>
                   </span>
                   <%= button_to "Delete", collection_path(folder), method: :delete, class: "btn btn-sm btn-link text-danger p-0" %>
                 </div>
@@ -164,7 +164,7 @@
                     </div>
                   <% end %>
                 <% else %>
-                  <p class="small text-muted mb-0">Create a folder first to organize this vinyl.</p>
+                  <p class="small text-muted mb-0">Create a folder first to organize this record.</p>
                 <% end %>
               </div>
             </article>
