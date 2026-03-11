@@ -1,7 +1,7 @@
 /* Base page background */
 body {
   margin: 0;
-  background: #2a2a2a;
+  background: var(--wax-cream);
 }
 /* Fullscreen dark background and centering – crop ripples so no scroll */
 .record-page {
@@ -10,7 +10,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #3a3a3a 0%, #202020 55%, #111111 100%);
+  background:
+    radial-gradient(circle at top, rgba(17, 17, 17, 0.08) 0%, rgba(17, 17, 17, 0.02) 52%, rgba(255, 252, 247, 0) 100%),
+    var(--wax-cream);
   overflow: hidden;
 }
 /* Randomizer button – reset default button styles */

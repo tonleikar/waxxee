@@ -3,7 +3,8 @@
 }
 
 .vinyl-library-hero {
-  background: linear-gradient(135deg, rgba(243, 222, 138, 0.22), rgba(129, 240, 229, 0.16));
+  background: rgba(255, 251, 245, 0.72);
+  backdrop-filter: blur(18px);
 }
 
 .vinyl-library-controls {
@@ -82,8 +83,9 @@
   gap: 1rem;
   padding: 0.85rem 1rem;
   border: 1px solid rgba(7, 16, 19, 0.1);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.7);
+  border-radius: 0;
+  background: rgba(255, 251, 245, 0.72);
+  backdrop-filter: blur(16px);
 }
 
 .vinyl-folder-chip span {
@@ -97,6 +99,7 @@
 
 .vinyl-library-card {
   overflow: hidden;
+  border-radius: 0;
 }
 
 .vinyl-library-card-image {
