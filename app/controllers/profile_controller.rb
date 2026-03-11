@@ -1,8 +1,12 @@
 class ProfileController < ApplicationController
+  before_action :set_profile_user, only: [:show]
+  before_action :ensure_current_user!, only: [:edit, :update, :destroy]
+
   def show
-    @user = current_user
-    @favorite_vinyl = current_user.favorite_vinyl
-    @vinyls = current_user.vinyls
+    @favorite_vinyl = @user.favorite_vinyl
+    @vinyls = @user.vinyls
+    @following_users = @user.following.order(:username)
+    @own_profile = @user == current_user
   end
 
   def edit
@@ -22,6 +26,16 @@ class ProfileController < ApplicationController
   end
 
   private
+
+  def set_profile_user
+    @user = User.find(params[:id])
+  end
+
+  def ensure_current_user!
+    return if params[:id].blank? || params[:id].to_s == current_user.id.to_s
+
+    redirect_to profile_path(current_user)
+  end
 
   def profile_params
     params.require(:user).permit(:name, :username, :favorite_genre, :avatar_url, :favorite_vinyl_id)
