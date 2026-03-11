@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: [:index]
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]
   resources :collections, controller: :folders, only: [:create, :destroy]
