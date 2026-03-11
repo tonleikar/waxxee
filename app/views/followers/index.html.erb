@@ -1,56 +1,53 @@
 <section class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Feed</h1>
-    <%= form_with url: feed_index_path, method: :get, local: true, class: "d-flex gap-2" do |form| %>
-      <%= form.text_field :query, value: params[:query], placeholder: "Search username", class: "form-control" %>
-      <%= form.submit "Search", class: "btn btn-primary" %>
-    <% end %>
+    <div>
+      <h1 class="h3 mb-0">Feed</h1>
+      <p class="text-muted mb-0">Recent saves from the people you follow.</p>
+    </div>
+
+    <%= link_to "Find users", users_path, class: "btn btn-outline-dark" %>
   </div>
 
-  <% if @users.any? %>
+  <% if @feed_items.any? %>
     <div class="row g-4">
-      <% @users.each do |user| %>
-        <% vinyl = user.favorite_vinyl || user.user_vinyls.last&.vinyl %>
-        <% follow = @follows[user.id] %>
+      <% @feed_items.each do |user_vinyl| %>
+        <% user = user_vinyl.user %>
+        <% vinyl = user_vinyl.vinyl %>
 
         <div class="col-12 col-md-6 col-xl-4">
           <article class="card h-100 shadow-sm">
             <div class="card-body">
-              <div class="d-flex align-items-start justify-content-between mb-3 gap-3">
-                <div class="d-flex align-items-center gap-3">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <%= link_to profile_path(user), class: "text-decoration-none flex-shrink-0" do %>
                   <img
-                    src="https://ui-avatars.com/api/?name=<%= user.username %>&background=071013&color=F4F4F4&size=96"
+                    src="<%= user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(user.username.to_s)}&background=071013&color=F4F4F4&size=96" %>"
                     alt="<%= user.username %>"
                     width="56"
                     height="56"
                     class="rounded-circle"
                   >
-                  <div>
-                    <h2 class="h5 mb-0"><%= user.username %></h2>
-                    <p class="text-muted mb-0"><%= user.email %></p>
-                    <% if user.favorite_genre.present? %>
-                      <p class="mb-0 small"><strong>Favorite genre:</strong> <%= user.favorite_genre %></p>
-                    <% end %>
-                  </div>
-                </div>
+                <% end %>
 
-                <div class="d-flex flex-column align-items-stretch gap-2">
-                  <span class="btn btn-outline-dark disabled" aria-disabled="true">Following</span>
-                  <%= button_to "Unfollow", follower_path(follow), method: :delete, class: "btn btn-dark w-100" %>
+                <div>
+                  <p class="mb-0">
+                    <%= link_to profile_path(user), class: "text-decoration-none text-reset fw-semibold" do %>
+                      <%= user.name.presence || user.username %>
+                    <% end %>
+                    saved a record
+                  </p>
+                  <p class="text-muted mb-0 small">
+                    @<%= user.username %> • <%= time_ago_in_words(user_vinyl.created_at) %> ago
+                  </p>
                 </div>
               </div>
 
-              <% if vinyl.present? %>
+              <%= link_to profile_path(user), class: "text-decoration-none text-reset d-block" do %>
                 <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-3">
 
-                <h3 class="h5 mb-1"><%= vinyl.title %></h3>
+                <h2 class="h5 mb-1"><%= vinyl.title %></h2>
                 <p class="mb-1"><strong>Artist:</strong> <%= vinyl.artist %></p>
                 <p class="mb-1"><strong>Year:</strong> <%= vinyl.year %></p>
                 <p class="mb-0"><strong>Genre:</strong> <%= vinyl.genre %></p>
-              <% else %>
-                <div class="border rounded p-4 text-muted">
-                  No favorite vinyl picked yet.
-                </div>
               <% end %>
             </div>
           </article>
@@ -60,7 +57,8 @@
   <% else %>
     <div class="border rounded p-4 text-center text-muted">
       <p class="mb-2">Your feed is empty.</p>
-      <p class="mb-0">Follow users to see them here, or unfollow to remove them from the feed.</p>
+      <p class="mb-3">Follow users to see the records they save to their collection.</p>
+      <%= link_to "Search users", users_path, class: "btn btn-outline-dark" %>
     </div>
   <% end %>
 </section>

@@ -44,12 +44,18 @@ class FollowersControllerTest < ActionDispatch::IntegrationTest
       password: "password123",
       password_confirmation: "password123"
     )
+    followed_vinyl = Vinyl.create!(title: "Discovery", artist: "Daft Punk", year: 2001, genre: "Electronic")
+    unfollowed_vinyl = Vinyl.create!(title: "Dummy", artist: "Test Artist", year: 1999, genre: "Rock")
     Follower.create!(follower: @follower, followed: @followed)
+    UserVinyl.create!(user: @followed, vinyl: followed_vinyl)
+    UserVinyl.create!(user: unfollowed_user, vinyl: unfollowed_vinyl)
 
     get feed_index_path
 
     assert_response :success
     assert_includes response.body, @followed.username
     assert_not_includes response.body, unfollowed_user.username
+    assert_includes response.body, followed_vinyl.title
+    assert_not_includes response.body, unfollowed_vinyl.title
   end
 end
