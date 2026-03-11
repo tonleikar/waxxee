@@ -78,6 +78,14 @@ export default class extends Controller {
 
           const direction = diff > 0 ? "right" : "left"
 
+          const bg = this.element.closest(".circles-bg")
+          if (bg) {
+            bg.classList.remove("swipe-bg-pulse")
+            void bg.offsetWidth
+            bg.classList.add("swipe-bg-pulse")
+            bg.addEventListener("animationend", () => bg.classList.remove("swipe-bg-pulse"), { once: true })
+          }
+
           card.style.transform =
             `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 

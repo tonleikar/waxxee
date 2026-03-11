@@ -79,14 +79,33 @@
 }
 
 .circles-bg {
-  background-attachment: fixed;
+  height: 100vh;
   background-size: cover;
   background-position: center;
   background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="UTF-8"%3F><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.24 277.24"><defs><style> .cls-1 { fill: none; stroke: %23000000; stroke-width: 0.5; stroke-miterlimit: 10; } </style></defs><circle class="cls-1" cx="138.62" cy="138.62" r="138.12"/><circle class="cls-1" cx="138.62" cy="138.62" r="130.24"/><circle class="cls-1" cx="138.62" cy="138.62" r="122.36"/><circle class="cls-1" cx="138.62" cy="138.62" r="114.48"/><circle class="cls-1" cx="138.62" cy="138.62" r="106.6"/><circle class="cls-1" cx="138.62" cy="138.62" r="98.72"/><circle class="cls-1" cx="138.62" cy="138.62" r="90.84"/><circle class="cls-1" cx="138.62" cy="138.62" r="82.96"/><circle class="cls-1" cx="138.62" cy="138.62" r="75.08"/><circle class="cls-1" cx="138.62" cy="138.62" r="67.2"/><circle class="cls-1" cx="138.62" cy="138.62" r="59.32"/><circle class="cls-1" cx="138.62" cy="138.62" r="51.44"/><circle class="cls-1" cx="138.62" cy="138.62" r="43.56"/><circle class="cls-1" cx="138.62" cy="138.62" r="35.68"/><circle class="cls-1" cx="138.62" cy="138.62" r="27.8"/><circle class="cls-1" cx="138.62" cy="138.62" r="19.92"/><circle class="cls-1" cx="138.62" cy="138.62" r="12.04"/></svg>');
   background-color: $light-gray;
+  background-size: 141vmax;
   overflow: hidden;
 }
 
 .flipped {
   transform: rotateY(180deg);
+}
+
+@keyframes swipe-bg-pulse {
+  0% {
+    background-size: 141vmax;
+    animation-timing-function: linear(0, 0.413 20.4%, 1 37.8%, 0.796 44.8%, 0.731 50.8%, 0.785 56.4%, 0.999 65.4%, 0.904 73.4%, 0.999 84.4%, 1);
+  }
+  50% {
+    background-size: 152vmax;
+    animation-timing-function: linear(0, 0.413 20.4%, 1 37.8%, 0.796 44.8%, 0.731 50.8%, 0.785 56.4%, 0.999 65.4%, 0.904 73.4%, 0.999 84.4%, 1);
+  }
+  100% {
+    background-size: 141vmax;
+  }
+}
+
+.swipe-bg-pulse {
+  animation: swipe-bg-pulse 0.6s forwards;
 }

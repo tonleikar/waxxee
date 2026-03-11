@@ -23,6 +23,7 @@
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
   white-space: nowrap;
   animation: toast-lifecycle 4.5s ease forwards;
+  text-align: center;
 }
 
 .app-toast--success {
@@ -45,7 +46,6 @@
 
   .app-toast {
     white-space: normal;
-    text-align: center;
   }
 }
 
