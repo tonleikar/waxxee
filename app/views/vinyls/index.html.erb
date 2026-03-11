@@ -1,73 +1,74 @@
 <section class="container py-4 vinyl-library-page">
-  <div class="card border-0 shadow-sm vinyl-library-hero">
-    <div class="card-body p-4">
-      <div>
-        <h1 class="display-6 mb-2">Your saved vinyls</h1>
-        <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
-      </div>
+  <div class="mb-4">
+    <div>
+      <h1 class="h3 mb-0">Your saved vinyls</h1>
+      <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
     </div>
   </div>
 
   <div class="row g-4 mt-1 align-items-stretch">
-    <div class="col-12 col-xl-4">
+    <div class="col-12">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <h2 class="h4 mb-0">Create crate</h2>
+              <h2 class="h4 mb-0">Your crates</h2>
             </div>
+
+            <button
+              class="btn btn-outline-dark d-md-none vinyl-folder-toggle"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#vinylCratesList"
+              aria-expanded="false"
+              aria-controls="vinylCratesList"
+            >
+              Show crates
+            </button>
           </div>
 
-          <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form" do |form| %>
-            <div>
-              <%= form.text_field :name, class: "form-control", placeholder: "Create a crate", required: true %>
-            </div>
-            <div>
-              <%= form.submit "Add crate", class: "btn btn-outline-dark w-100" %>
+          <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form mb-4" do |form| %>
+            <div class="row g-2">
+              <div class="col-12 col-md-9">
+                <%= form.text_field :name, class: "form-control", placeholder: "Create a crate", required: true %>
+              </div>
+              <div class="col-12 col-md-3">
+                <%= form.submit "Add crate", class: "btn btn-outline-dark w-100" %>
+              </div>
             </div>
           <% end %>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-12 col-xl-8">
-      <div class="card border-0 shadow-sm h-100">
-        <div class="card-body p-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h2 class="h4 mb-0">Your collections</h2>
+          <div class="collapse d-md-block" id="vinylCratesList">
+            <div class="vinyl-folder-list">
+              <% if @folders.any? %>
+                <% @folders.each do |folder| %>
+                  <% latest_vinyl = folder.vinyls.order(created_at: :desc).first %>
+
+                  <div class="vinyl-folder-chip">
+                    <div class="vinyl-folder-chip-main">
+                      <% if latest_vinyl&.artwork_url.present? %>
+                        <img src="<%= latest_vinyl.artwork_url %>" alt="<%= folder.name %>" class="vinyl-folder-thumb">
+                      <% else %>
+                        <div class="vinyl-folder-thumb vinyl-folder-thumb-placeholder"></div>
+                      <% end %>
+
+                      <span>
+                        <strong><%= folder.name %></strong>
+                        <small><%= pluralize(folder.vinyls.count, "record") %></small>
+                      </span>
+                    </div>
+
+                    <%= button_to collection_path(folder),
+                      method: :delete,
+                      class: "btn btn-sm vinyl-trash-btn" do %>
+                      <i class="fas fa-trash"></i>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% else %>
+                <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
+              <% end %>
             </div>
-          </div>
-
-        <div class="vinyl-folder-list">
-  <% if @folders.any? %>
-    <% @folders.each do |folder| %>
-      <% latest_vinyl = folder.vinyls.order(created_at: :desc).first %>
-
-      <div class="vinyl-folder-chip">
-        <div class="vinyl-folder-chip-main">
-          <% if latest_vinyl&.artwork_url.present? %>
-            <img src="<%= latest_vinyl.artwork_url %>" alt="<%= folder.name %>" class="vinyl-folder-thumb">
-          <% else %>
-            <div class="vinyl-folder-thumb vinyl-folder-thumb-placeholder"></div>
-          <% end %>
-
-          <span>
-            <strong><%= folder.name %></strong>
-          </span>
-        </div>
-
-        <%= button_to collection_path(folder),
-          method: :delete,
-          class: "btn btn-sm vinyl-trash-btn" do %>
-          <i class="fas fa-trash"></i>
-        <% end %>
-      </div>
-    <% end %>
-  <% else %>
-    <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
-  <% end %>
-</div>
           </div>
         </div>
       </div>
@@ -127,64 +128,116 @@
 
           <div class="col-12 col-md-6 col-xl-4">
             <article class="card border-0 shadow-sm h-100 vinyl-library-card">
-              <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
+              <div class="vinyl-library-card-media">
+                <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
+                <div class="vinyl-library-card-sheen"></div>
+                <% if vinyl.year.present? %>
+                  <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.year %></span>
+                <% end %>
+                <% if user_vinyl.present? %>
+                  <%= button_to user_vinyl_path(user_vinyl),
+                    method: :delete,
+                    class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
+                    form: { data: { turbo_confirm: "Remove #{vinyl.title} from your collection?" } } do %>
+                    <i class="fas fa-trash"></i>
+                  <% end %>
+                <% end %>
+              </div>
 
               <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                  <div>
-                    <h3 class="h4 mb-1"><%= vinyl.title %></h3>
-                    <p class="text-muted mb-0"><%= vinyl.artist %></p>
-                  </div>
-
-                  <div class="d-flex flex-column align-items-end gap-2">
-                    <% if vinyl.year.present? %>
-                      <span class="badge text-bg-light"><%= vinyl.year %></span>
-                    <% end %>
-
-                    <% if user_vinyl.present? %>
-                      <%= button_to user_vinyl_path(user_vinyl),
-                        method: :delete,
-                        class: "btn btn-sm vinyl-trash-btn" do %>
-                        <i class="fas fa-trash"></i>
-                      <% end %>
-                    <% end %>
-                  </div>
+                <div class="mb-3">
+                  <p class="vinyl-library-card-kicker mb-2"><%= vinyl.genre.presence || "Genre unknown" %></p>
+                  <h3 class="h4 mb-1 vinyl-library-card-title"><%= vinyl.title %></h3>
+                  <p class="text-muted mb-0 vinyl-library-card-artist"><%= vinyl.artist %></p>
                 </div>
 
-                <p class="small text-muted mb-3"><%= vinyl.genre.presence || "Genre unknown" %></p>
+                <div class="vinyl-library-card-section vinyl-folder-membership mb-3">
+                  <div class="vinyl-library-card-section-header mb-3">
+                    <div>
+                      <p class="small text-muted mb-0 vinyl-library-card-label">In crates</p>
+                    </div>
 
-                <div class="vinyl-folder-tags mb-3">
+                    <% if @folders.any? %>
+                      <button
+                        type="button"
+                        class="btn btn-outline-dark vinyl-library-card-manage-pill"
+                        data-bs-toggle="modal"
+                        data-bs-target="#manageCratesModal-<%= vinyl.id %>"
+                      >
+                        Manage crates
+                      </button>
+                    <% end %>
+                  </div>
+
                   <% if vinyl_folder_ids.any? %>
-                    <% user_vinyl.folders.each do |folder| %>
-                      <span class="badge rounded-pill text-bg-dark"><%= folder.name %></span>
-                    <% end %>
+                    <div class="vinyl-folder-tag-list">
+                      <% user_vinyl.folders.each do |folder| %>
+                        <span class="vinyl-folder-tag-display"><%= folder.name %></span>
+                      <% end %>
+                    </div>
                   <% else %>
-                    <span class="text-muted small">Not in any folder yet.</span>
+                    <span class="text-muted small">Not in any crate yet.</span>
                   <% end %>
                 </div>
 
-                <% if @folders.any? %>
-                  <%= form_with url: folder_vinyls_path, method: :post, local: true, class: "row g-2 align-items-end" do |form| %>
-                    <%= form.hidden_field :vinyl_id, name: "folder_vinyl[vinyl_id]", value: vinyl.id %>
-
-                    <div class="col-8">
-                      <label class="form-label small text-muted mb-1">Add to folder</label>
-                      <%= select_tag "folder_vinyl[folder_id]",
-                        options_for_select(@folders.reject { |folder| vinyl_folder_ids.include?(folder.id) }.map { |folder| [folder.name, folder.id] }),
-                        include_blank: vinyl_folder_ids.size == @folders.size ? "Already in all folders" : "Choose folder",
-                        class: "form-select",
-                        disabled: vinyl_folder_ids.size == @folders.size %>
-                    </div>
-
-                    <div class="col-4">
-                      <%= form.submit "Add", class: "btn btn-dark w-100", disabled: vinyl_folder_ids.size == @folders.size %>
-                    </div>
-                  <% end %>
-                <% else %>
+                <% unless @folders.any? %>
                   <p class="small text-muted mb-0">Create a folder first to organize this vinyl.</p>
                 <% end %>
               </div>
             </article>
+
+            <% if @folders.any? %>
+              <div
+                class="modal fade vinyl-crate-modal"
+                id="manageCratesModal-<%= vinyl.id %>"
+                tabindex="-1"
+                aria-labelledby="manageCratesModalLabel-<%= vinyl.id %>"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <div>
+                        <p class="small text-muted mb-1 text-uppercase">Manage crates</p>
+                        <h2 class="h4 mb-0" id="manageCratesModalLabel-<%= vinyl.id %>"><%= vinyl.title %></h2>
+                      </div>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="vinyl-crate-modal-list">
+                        <% @folders.each do |folder| %>
+                          <% folder_vinyl = user_vinyl&.folder_vinyls&.find { |join| join.folder_id == folder.id } %>
+                          <% in_crate = folder_vinyl.present? %>
+
+                          <div class="vinyl-crate-modal-row <%= "is-active" if in_crate %>">
+                            <div class="vinyl-crate-modal-row-copy">
+                              <strong><%= folder.name %></strong>
+                              <small><%= in_crate ? "In this crate" : "Not in this crate" %></small>
+                            </div>
+
+                            <% if in_crate %>
+                              <%= button_to folder_vinyl_path(folder_vinyl),
+                                method: :delete,
+                                class: "btn btn-outline-dark btn-sm",
+                                form: { data: { turbo_confirm: "Remove #{vinyl.title} from #{folder.name}?" } } do %>
+                                Remove
+                              <% end %>
+                            <% else %>
+                              <%= form_with url: folder_vinyls_path, method: :post, local: true do |form| %>
+                                <%= form.hidden_field :vinyl_id, name: "folder_vinyl[vinyl_id]", value: vinyl.id %>
+                                <%= form.hidden_field :folder_id, name: "folder_vinyl[folder_id]", value: folder.id %>
+                                <%= form.submit "Add", class: "btn btn-dark btn-sm" %>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
           </div>
         <% end %>
       </div>
