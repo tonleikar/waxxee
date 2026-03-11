@@ -20,7 +20,7 @@ html, body {
   --wax-cream-strong: #ebe1d1;
   --wax-ink: #111111;
   --wax-border: rgba(17, 17, 17, 0.14);
-  --wax-shadow: 0 18px 40px rgba(17, 17, 17, 0.08);
+  --wax-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
   --wax-blur: blur(18px);
 }
 
@@ -92,7 +92,7 @@ body {
 }
 
 .card {
-  border: 1px solid var(--wax-border);
+  border: 0;
   background: rgba(255, 252, 247, 0.72);
   box-shadow: var(--wax-shadow);
   backdrop-filter: var(--wax-blur);
