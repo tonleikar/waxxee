@@ -1,7 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["trigger", "backdrop", "sleeve", "artwork", "title", "artist", "meta", "saveButton"]
+  static targets = [
+    "trigger",
+    "backdrop",
+    "sleeve",
+    "artwork",
+    "backTitle",
+    "detailArtist",
+    "detailYear",
+    "detailGenre",
+    "saveButton"
+  ]
 
   static values = {
     url: String,
@@ -30,6 +40,8 @@ export default class extends Controller {
       const vinylPromise = this.fetchVinyl()
       await this.wait(this.loadingValue)
       const vinyl = await vinylPromise
+      await this.preloadArtwork(vinyl.artwork_url)
+      this.renderVinyl(vinyl)
 
       this.triggerTarget.classList.remove("is-loading")
       this.triggerTarget.classList.add("is-success")
@@ -39,7 +51,10 @@ export default class extends Controller {
       this.triggerTarget.classList.add("has-result")
       this.backdropTarget.classList.add("is-visible")
       this.sleeveTarget.classList.add("is-visible")
-      this.renderVinyl(vinyl)
+      await this.wait(80)
+      this.sleeveTarget.classList.add("is-engulfing")
+      await this.wait(650)
+      this.triggerTarget.classList.add("is-engulfed")
       this.sleeveTarget.classList.add("is-ready")
       await this.wait(this.dissipateValue)
     } catch (error) {
@@ -66,6 +81,18 @@ export default class extends Controller {
     await this.hideSleeve()
   }
 
+  flipToBack(event) {
+    event.preventDefault()
+    if (!this.sleeveTarget.classList.contains("is-ready")) return
+
+    this.sleeveTarget.classList.add("is-flipped")
+  }
+
+  flipToFront(event) {
+    event.preventDefault()
+    this.sleeveTarget.classList.remove("is-flipped")
+  }
+
   async saveToCollection(event) {
     event.preventDefault()
     if (!this.currentVinyl || this.saveButtonTarget.disabled) return
@@ -87,13 +114,12 @@ export default class extends Controller {
 
       if (!response.ok) throw new Error(`Save failed with status ${response.status}`)
 
-      this.saveButtonTarget.textContent = "Saved in collection"
-      this.saveButtonTarget.classList.remove("btn-primary")
-      this.saveButtonTarget.classList.add("btn-secondary")
+      this.saveButtonTarget.textContent = "Saved"
+      this.saveButtonTarget.classList.add("is-saved")
     } catch (error) {
       console.error("Saving vinyl failed", error)
       this.saveButtonTarget.disabled = false
-      this.saveButtonTarget.textContent = "Save failed"
+      this.saveButtonTarget.textContent = "Error"
     }
   }
 
@@ -113,30 +139,43 @@ export default class extends Controller {
     this.currentVinyl = vinyl
     this.artworkTarget.src = vinyl.artwork_url || ""
     this.artworkTarget.alt = vinyl.title ? `${vinyl.title} cover` : "Vinyl artwork"
-    this.titleTarget.textContent = vinyl.title || "Untitled"
-    this.artistTarget.textContent = vinyl.artist || "Unknown artist"
-    this.metaTarget.textContent = [vinyl.year, vinyl.genre].filter(Boolean).join(" • ")
+    this.backTitleTarget.textContent = vinyl.title || "Untitled"
+    this.detailArtistTarget.textContent = vinyl.artist || "Unknown artist"
+    this.detailYearTarget.textContent = vinyl.year || "Unknown"
+    this.detailGenreTarget.textContent = vinyl.genre || "Unlisted"
 
     this.saveButtonTarget.disabled = Boolean(vinyl.saved)
-    this.saveButtonTarget.textContent = vinyl.saved ? "Saved in collection" : "Save to collection"
-    this.saveButtonTarget.classList.remove("btn-secondary", "btn-primary")
-    this.saveButtonTarget.classList.add(vinyl.saved ? "btn-secondary" : "btn-primary")
+    this.saveButtonTarget.textContent = vinyl.saved ? "Saved" : "Save"
+    this.saveButtonTarget.classList.toggle("is-saved", Boolean(vinyl.saved))
   }
 
   resetSleeve() {
-    this.sleeveTarget.classList.remove("is-visible", "is-ready")
+    this.sleeveTarget.classList.remove("is-visible", "is-ready", "is-engulfing", "is-flipped")
     this.backdropTarget.classList.remove("is-visible")
-    this.triggerTarget.classList.remove("has-result")
+    this.triggerTarget.classList.remove("has-result", "is-engulfed")
   }
 
   async hideSleeve() {
     if (!this.sleeveTarget.classList.contains("is-visible")) return
 
     this.sleeveTarget.classList.remove("is-ready")
-    this.sleeveTarget.classList.remove("is-visible")
+    this.sleeveTarget.classList.remove("is-engulfing", "is-flipped", "is-visible")
     this.backdropTarget.classList.remove("is-visible")
-    this.triggerTarget.classList.remove("has-result")
+    this.triggerTarget.classList.remove("has-result", "is-engulfed")
     await this.wait(450)
+  }
+
+  preloadArtwork(url) {
+    if (!url) return Promise.resolve()
+
+    return new Promise((resolve) => {
+      const image = new Image()
+      image.onload = () => resolve()
+      image.onerror = () => resolve()
+      image.src = url
+
+      if (image.complete) resolve()
+    })
   }
 
   setTriggerDisabled(disabled) {
