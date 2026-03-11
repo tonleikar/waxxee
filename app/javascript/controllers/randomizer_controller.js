@@ -88,7 +88,7 @@ export default class extends Controller {
       if (!response.ok) throw new Error(`Save failed with status ${response.status}`)
 
       this.saveButtonTarget.textContent = "Saved in collection"
-      this.saveButtonTarget.classList.remove("btn-light")
+      this.saveButtonTarget.classList.remove("btn-primary")
       this.saveButtonTarget.classList.add("btn-secondary")
     } catch (error) {
       console.error("Saving vinyl failed", error)
@@ -119,9 +119,8 @@ export default class extends Controller {
 
     this.saveButtonTarget.disabled = Boolean(vinyl.saved)
     this.saveButtonTarget.textContent = vinyl.saved ? "Saved in collection" : "Save to collection"
-    this.saveButtonTarget.classList.remove("btn-secondary")
-    this.saveButtonTarget.classList.add(vinyl.saved ? "btn-secondary" : "btn-light")
-    if (vinyl.saved) this.saveButtonTarget.classList.remove("btn-light")
+    this.saveButtonTarget.classList.remove("btn-secondary", "btn-primary")
+    this.saveButtonTarget.classList.add(vinyl.saved ? "btn-secondary" : "btn-primary")
   }
 
   resetSleeve() {
