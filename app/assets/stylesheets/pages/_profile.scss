@@ -89,23 +89,38 @@
 
 .profile-picked-vinyl {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 1fr;
   gap: 0;
   background: rgba(255, 251, 245, 0.7);
   box-shadow: 0 10px 24px rgba(17, 17, 17, 0.06);
-  min-height: 220px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .profile-picked-vinyl-image {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   border-radius: 0;
   object-fit: cover;
   display: block;
 }
 
 .profile-picked-vinyl > div {
+  min-width: 0;
   padding: 1.2rem 1.3rem;
+}
+
+.profile-picked-vinyl h2,
+.profile-vinyl-tile h3 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.profile-picked-vinyl h2 {
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  line-height: 1;
+  margin-bottom: 0.75rem;
 }
 .profile-empty-state {
   padding: 1rem;
@@ -208,10 +223,6 @@
 }
 
 @media (max-width: 991px) {
-  .profile-picked-vinyl {
-    grid-template-columns: 1fr;
-  }
-
   .profile-picked-vinyl-image {
     width: 100%;
     height: auto;
