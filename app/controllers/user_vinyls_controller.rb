@@ -10,6 +10,7 @@ class UserVinylsController < ApplicationController
 
   def destroy
     @user_vinyl = current_user.user_vinyls.find(params[:id])
+    current_user.update!(favorite_vinyl_id: nil) if current_user.favorite_vinyl_id == @user_vinyl.vinyl_id
     @user_vinyl.destroy!
     redirect_back fallback_location: vinyls_path, notice: "Vinyl removed from collection."
   end
