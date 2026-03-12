@@ -49,4 +49,8 @@ class VinylsController < ApplicationController
       { created_at: :desc }
     end
   end
+
+  def vinyl_params
+    params.require(:vinyl).permit(:artist, :artwork_url, :format, :genre, :year)
+  end
 end

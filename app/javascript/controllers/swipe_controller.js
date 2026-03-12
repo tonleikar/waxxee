@@ -1,46 +1,67 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { vinyls: Array, url: String, imageUrl: String }
-  static targets = ["form", "vinylId", "vinylWrapper", "backButton"]
+  static values = { url: String, cardUrl: String, key: String, secret: String }
+  static targets = ["vinylWrapper", "backButton", "template"]
 
-  connect() {
+  async connect() {
     this.index = 0
     this.startX = 0
     this.currentX = 0
     this.dragging = false
-    this.threshold = 300
+    this.threshold = 100
+    this.swiping = false
 
-    this.renderCard()
+    this.currentVinyls = []
+    this.currentPage = 1
+    this.activeVinyl = null
+    this.discogsAPI = `https://api.discogs.com/database/search?style=psychedelic&country=turkey&decade=1960&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
+
+    await this.getRecords()
+    await this.renderCard()
   }
 
-  renderCard() {
-    if (this.index >= this.vinylsValue.length) {
+  async getRecords() {
+    const response = await fetch(this.discogsAPI)
+    const data = await response.json()
+
+    this.currentVinyls = data.results || []
+  }
+
+  async renderCard() {
+    if (this.currentVinyls.length === 0) {
+      this.activeVinyl = null
       this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
       return
     }
 
-    const vinyl = this.vinylsValue[this.index]
+    const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
+    const vinyl = this.currentVinyls.splice(randomIndex, 1)[0]
+    this.activeVinyl = vinyl
+    console.log(vinyl)
 
-    this.vinylWrapperTarget.innerHTML = `
-      <div class="vinyl-card" data-id="${vinyl.id}">
-        <div class="vinyl-card-inner">
-          <div class="vinyl-card-front">
-            <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
-            <img src="${vinyl.artwork_url}">
-            </div>
-            <div class="vinyl-card-back">
-            <div class="vinyl-info">
-              <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
-              <h2>${vinyl.title}</h2>
-              <p>${vinyl.artist}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `
+    const cardCopy = this.templateTarget.content.cloneNode(true).querySelector(".vinyl-card")
+    console.log(cardCopy)
+    cardCopy.dataset.discogsId = vinyl.id;
+    cardCopy.querySelector("h2").textContent = vinyl.title;
+    cardCopy.querySelector(".album-img").src = vinyl.cover_image;
+    // TODO: Add the rest of the data
+    // TODO: Make this a post request to the VinylsController to create a new reecord on our backend
+    // const response = await fetch(this.cardUrlValue, {
+    //   method: "POST",
+    //   headers: {
+    //     "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+    //     "Content-Type": "application/json",
+    //     "Accept": "text/html"
+    //   },
+    //   body: JSON.stringify({ vinyl })
+    // })
+
+    this.vinylWrapperTarget.innerHTML = "";
+    this.vinylWrapperTarget.appendChild(cardCopy)
 
     const card = this.element.querySelector(".vinyl-card")
+    if (!card) return
 
     setTimeout(() => {
       card.classList.add("active")
@@ -55,6 +76,7 @@ export default class extends Controller {
       e.preventDefault()
       this.dragging = true
       this.startX = e.touches ? e.touches[0].clientX : e.clientX
+      this.currentX = this.startX
     }
 
     const move = (e) => {
@@ -77,28 +99,21 @@ export default class extends Controller {
 
           const direction = diff > 0 ? "right" : "left"
 
+          const bg = this.element.closest(".circles-bg")
+          if (bg) {
+            bg.classList.remove("swipe-bg-pulse")
+            void bg.offsetWidth
+            bg.classList.add("swipe-bg-pulse")
+            bg.addEventListener("animationend", () => bg.classList.remove("swipe-bg-pulse"), { once: true })
+          }
+
           card.style.transform =
             `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 
           card.style.opacity = 0
 
           if (direction === "right") {
-            const id = card.dataset.id
-            console.log("Save vinyl:", id)
-            console.log(this.urlValue)
-            console.log(this.c)
-            this.vinylIdTarget.value = id;
-
-            fetch(this.urlValue, {
-              method: "POST",
-              headers: {"X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content, "Accept": "application/json" },
-              body: new FormData(this.formTarget)
-            })
-              .then(response => response.json())
-              .then((data) => {
-                console.log(data)
-              })
-
+            this.saveVinyl(this.activeVinyl)
           }
 
           setTimeout(() => {
@@ -135,5 +150,43 @@ export default class extends Controller {
       btn.addEventListener("mousedown", (e) => e.stopPropagation())
       btn.addEventListener("touchstart", (e) => e.stopPropagation())
     })
+  }
+
+  async saveVinyl(vinyl) {
+    if (!vinyl) return
+
+    const response = await fetch(this.urlValue, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ vinyl })
+    })
+
+    if (!response.ok) return
+
+    const data = await response.json()
+    this.showToast(data.message)
+  }
+
+  showToast(message) {
+    let stack = document.querySelector(".toast-stack")
+    if (!stack) {
+      stack = document.createElement("div")
+      stack.className = "toast-stack"
+      stack.setAttribute("aria-live", "polite")
+      stack.setAttribute("aria-atomic", "true")
+      document.body.appendChild(stack)
+    }
+
+    const toast = document.createElement("div")
+    toast.className = "app-toast app-toast--success"
+    toast.setAttribute("role", "status")
+    toast.textContent = message
+    stack.appendChild(toast)
+
+    toast.addEventListener("animationend", () => toast.remove())
   }
 }

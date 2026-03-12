@@ -31,6 +31,10 @@ module Discogs
       get("/database/search", q: query, type: "release", page: page, per_page: per_page)
     end
 
+    def search(params = {})
+      get("/database/search", params)
+    end
+
     def find_release(release_id)
       get("/releases/#{release_id}")
     end
