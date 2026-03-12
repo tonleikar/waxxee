@@ -28,12 +28,12 @@
           </div>
 
           <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form mb-4" do |form| %>
-            <div class="row g-2">
-              <div class="col-12 col-md-9">
+            <div class="d-flex flex-nowrap gap-2 align-items-stretch">
+              <div class="flex-grow-1 vinyl-folder-create-input-wrap">
                 <%= form.text_field :name, class: "form-control", placeholder: "Create a crate", required: true %>
               </div>
-              <div class="col-12 col-md-3">
-                <%= form.submit "Add crate", class: "btn btn-outline-dark w-100" %>
+              <div class="flex-shrink-0">
+                <%= form.submit "Add crate", class: "btn btn-outline-dark" %>
               </div>
             </div>
           <% end %>
@@ -45,7 +45,13 @@
                   <% crate_vinyls = folder.vinyls.order(created_at: :desc).limit(4) %>
 
                   <div class="vinyl-folder-chip">
-                    <div class="vinyl-folder-chip-main">
+                    <button
+                      type="button"
+                      class="vinyl-folder-chip-main vinyl-folder-chip-trigger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#crateModal-<%= folder.id %>"
+                      aria-label="Open <%= folder.name %>"
+                    >
                       <% if crate_vinyls.any? %>
                         <div class="vinyl-folder-stack" aria-hidden="true">
                           <% crate_vinyls.each_with_index do |vinyl, index| %>
@@ -63,7 +69,7 @@
                         <strong><%= folder.name %></strong>
                         <small><%= pluralize(folder.vinyls.count, "record") %></small>
                       </span>
-                    </div>
+                    </button>
 
                     <%= button_to collection_path(folder),
                       method: :delete,
@@ -91,36 +97,43 @@
                 <%= form.hidden_field :sort, value: @sort %>
 
                 <div class="vinyl-library-search-input-wrapper">
+                  <span class="vinyl-library-search-icon" aria-hidden="true">
+                    <i class="fas fa-search"></i>
+                  </span>
                   <%= form.text_field :query, value: @query, placeholder: "Search title, artist, or genre", class: "form-control vinyl-library-search-input" %>
-                  <i class="fas fa-search vinyl-library-search-icon"></i>
                 </div>
 
                 <div class="vinyl-library-search-actions">
                   <%= form.submit "Search", class: "btn btn-dark w-100" %>
-                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100 d-none", id: "clear-search-btn" %>
+                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100", id: "clear-search-btn" %>
                 </div>
               <% end %>
             </div>
 
             <div class="vinyl-library-toolbar-sort">
-              <%= form_with url: vinyls_path, method: :get, local: true do |form| %>
+              <%= form_with url: vinyls_path, method: :get, local: true, html: { class: "vinyl-library-sort-form" } do |form| %>
                 <%= form.hidden_field :query, value: @query %>
-                <%= form.select :sort,
-                  options_for_select(
-                    [
-                      ["Recently added", "recent"],
-                      ["Title Z-A", "title_desc"],
-                      ["Title A-Z", "title_asc"],
-                      ["Artist A-Z", "artist_asc"],
-                      ["Artist Z-A", "artist_desc"],
-                      ["Year newest", "year_desc"],
-                      ["Year oldest", "year_asc"]
-                    ],
-                    @sort
-                  ),
-                  {},
-                  class: "form-select vinyl-library-sort-select",
-                  onchange: "this.form.requestSubmit()" %>
+                <div class="vinyl-library-sort-shell">
+                  <span class="vinyl-library-sort-icon" aria-hidden="true">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                  <%= form.select :sort,
+                    options_for_select(
+                      [
+                        ["Recently added", "recent"],
+                        ["Title Z-A", "title_desc"],
+                        ["Title A-Z", "title_asc"],
+                        ["Artist A-Z", "artist_asc"],
+                        ["Artist Z-A", "artist_desc"],
+                        ["Year newest", "year_desc"],
+                        ["Year oldest", "year_asc"]
+                      ],
+                      @sort
+                    ),
+                    {},
+                    class: "form-select vinyl-library-sort-select",
+                    onchange: "this.form.requestSubmit()" %>
+                </div>
               <% end %>
             </div>
           </div>
@@ -135,38 +148,11 @@
           <% vinyl_folder_ids = user_vinyl ? user_vinyl.folders.map(&:id) : [] %>
 
           <div class="col-12 col-md-6 col-xl-4">
-            <article class="card border-0 shadow-sm vinyl-library-card">
-              <div class="vinyl-library-card-media">
-                <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
-                <div class="vinyl-library-card-sheen"></div>
-                <% if vinyl.year.present? %>
-                  <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.year %></span>
-                <% end %>
-                <% if user_vinyl.present? %>
-                  <%= button_to user_vinyl_path(user_vinyl),
-                    method: :delete,
-                    class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
-                    form: { data: { turbo_confirm: "Remove #{vinyl.title} from your collection?" } } do %>
-                    <i class="fas fa-trash"></i>
-                  <% end %>
-                <% end %>
-              </div>
-
-              <div class="card-body p-4">
-                <div class="mb-3">
-                  <p class="vinyl-library-card-kicker mb-2"><%= vinyl.genre.presence || "Genre unknown" %></p>
-                  <h3 class="h4 mb-1 vinyl-library-card-title"><%= vinyl.title %></h3>
-                  <p class="text-muted mb-0 vinyl-library-card-artist"><%= vinyl.artist %></p>
-                </div>
-
-                <%= render "crate_controls",
-                  vinyl: vinyl,
-                  user_vinyl: user_vinyl,
-                  vinyl_folder_ids: vinyl_folder_ids,
-                  folders: @folders,
-                  expanded: false %>
-              </div>
-            </article>
+            <%= render "vinyl_card",
+              vinyl: vinyl,
+              user_vinyl: user_vinyl,
+              vinyl_folder_ids: vinyl_folder_ids,
+              folders: @folders %>
           </div>
         <% end %>
       </div>
@@ -174,22 +160,44 @@
   </div>
 </section>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.querySelector(".vinyl-library-search-input");
-    const clearButton = document.querySelector("#clear-search-btn");
+<% @folders.each do |folder| %>
+  <div class="modal fade vinyl-folder-modal" id="crateModal-<%= folder.id %>" tabindex="-1" aria-labelledby="crateModalLabel-<%= folder.id %>" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-lg-down modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content vinyl-folder-modal-content border-0">
+        <div class="modal-header vinyl-folder-modal-header border-0">
+          <div>
+            <p class="vinyl-library-card-kicker mb-2">Crate</p>
+            <h2 class="modal-title h3 mb-1" id="crateModalLabel-<%= folder.id %>"><%= folder.name %></h2>
+            <p class="text-muted mb-0"><%= pluralize(folder.vinyls.count, "record") %></p>
+          </div>
+          <button type="button" class="btn-close vinyl-folder-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body vinyl-folder-modal-body">
+          <% folder_vinyls = folder.vinyls.order(created_at: :desc) %>
+          <% if folder_vinyls.any? %>
+            <div class="row g-3">
+              <% folder_vinyls.each do |vinyl| %>
+                <% user_vinyl = @user_vinyls_by_vinyl_id[vinyl.id] %>
+                <% vinyl_folder_ids = user_vinyl ? user_vinyl.folders.map(&:id) : [] %>
 
-    if (!searchInput || !clearButton) return;
-
-    function toggleClearButton() {
-      if (searchInput.value.trim() === "") {
-        clearButton.classList.add("d-none");
-      } else {
-        clearButton.classList.remove("d-none");
-      }
-    }
-
-    searchInput.addEventListener("input", toggleClearButton);
-    toggleClearButton();
-  });
-</script>
+                <div class="col-12 col-md-6 col-xl-4" data-crate-card>
+                  <%= render "vinyl_card",
+                    vinyl: vinyl,
+                    user_vinyl: user_vinyl,
+                    vinyl_folder_ids: vinyl_folder_ids,
+                    folders: @folders,
+                    compact: true,
+                    current_folder: folder %>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="vinyl-folder-modal-empty">
+              <p class="mb-0 text-muted">This crate is empty.</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

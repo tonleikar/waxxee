@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String, cardUrl: String, key: String, secret: String }
-  static targets = ["vinylWrapper", "backButton", "template"]
+  static values = { url: String, key: String, secret: String }
+  static targets = ["vinylWrapper", "template"]
 
   async connect() {
     this.index = 0
@@ -38,26 +38,12 @@ export default class extends Controller {
     const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
     const vinyl = this.currentVinyls.splice(randomIndex, 1)[0]
     this.activeVinyl = vinyl
-    console.log(vinyl)
 
     const cardCopy = this.templateTarget.content.cloneNode(true).querySelector(".vinyl-card")
-    console.log(cardCopy)
-    cardCopy.dataset.discogsId = vinyl.id;
-    cardCopy.querySelector("h2").textContent = vinyl.title;
-    cardCopy.querySelector(".album-img").src = vinyl.cover_image;
-    // TODO: Add the rest of the data
-    // TODO: Make this a post request to the VinylsController to create a new reecord on our backend
-    // const response = await fetch(this.cardUrlValue, {
-    //   method: "POST",
-    //   headers: {
-    //     "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
-    //     "Content-Type": "application/json",
-    //     "Accept": "text/html"
-    //   },
-    //   body: JSON.stringify({ vinyl })
-    // })
+    cardCopy.dataset.discogsId = vinyl.id
+    this.populateCard(cardCopy, vinyl)
 
-    this.vinylWrapperTarget.innerHTML = "";
+    this.vinylWrapperTarget.innerHTML = ""
     this.vinylWrapperTarget.appendChild(cardCopy)
 
     const card = this.element.querySelector(".vinyl-card")
@@ -65,14 +51,18 @@ export default class extends Controller {
 
     setTimeout(() => {
       card.classList.add("active")
+      const sleeve = card.querySelector(".swiper-sleeve")
+      sleeve?.classList.add("is-visible")
+      sleeve?.classList.add("is-ready")
     }, 100)
 
     this.attachSwipe(card)
   }
 
   attachSwipe(card) {
-
     const start = (e) => {
+      if (e.target.closest("button")) return
+
       e.preventDefault()
       this.dragging = true
       this.startX = e.touches ? e.touches[0].clientX : e.clientX
@@ -96,19 +86,12 @@ export default class extends Controller {
 
       if (Math.abs(diff) > 25) {
         if (Math.abs(diff) > this.threshold) {
-
           const direction = diff > 0 ? "right" : "left"
 
           const bg = this.element.closest(".circles-bg")
-          if (bg) {
-            bg.classList.remove("swipe-bg-pulse")
-            void bg.offsetWidth
-            bg.classList.add("swipe-bg-pulse")
-            bg.addEventListener("animationend", () => bg.classList.remove("swipe-bg-pulse"), { once: true })
-          }
+          if (bg) this.spinBackground(bg)
 
-          card.style.transform =
-            `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
+          card.style.transform = `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 
           card.style.opacity = 0
 
@@ -129,13 +112,6 @@ export default class extends Controller {
       this.dragging = false
     }
 
-    const flipCard = (e) => {
-      e.stopPropagation()
-      e.preventDefault()
-      const inner = card.querySelector(".vinyl-card-inner")
-      inner.classList.toggle("flipped")
-    }
-
     card.addEventListener("mousedown", start)
     card.addEventListener("mousemove", move)
     card.addEventListener("mouseup", end)
@@ -143,13 +119,22 @@ export default class extends Controller {
     card.addEventListener("touchstart", start)
     card.addEventListener("touchmove", move)
     card.addEventListener("touchend", end)
+  }
 
-    this.backButtonTargets.forEach((btn) => {
-      btn.addEventListener("click", flipCard)
-      btn.addEventListener("touchend", flipCard)
-      btn.addEventListener("mousedown", (e) => e.stopPropagation())
-      btn.addEventListener("touchstart", (e) => e.stopPropagation())
-    })
+  flipToBack(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const sleeve = event.currentTarget.closest(".swiper-sleeve")
+    sleeve.classList.add("is-flipped")
+  }
+
+  flipToFront(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const sleeve = event.currentTarget.closest(".swiper-sleeve")
+    sleeve?.classList.remove("is-flipped")
   }
 
   async saveVinyl(vinyl) {
@@ -188,5 +173,48 @@ export default class extends Controller {
     stack.appendChild(toast)
 
     toast.addEventListener("animationend", () => toast.remove())
+  }
+
+  spinBackground(bg) {
+    bg.querySelectorAll(".circles-bg__ring").forEach((ring, index) => {
+      const current = Number(ring.dataset.rotation || 0)
+      const next = current + (index % 2 === 0 ? 42 : -42)
+      ring.dataset.rotation = String(next)
+      ring.style.transform = `rotate(${next}deg)`
+    })
+  }
+
+  populateCard(card, vinyl) {
+    const artwork = card.querySelector('[data-swipe-field="artwork"]')
+    const title = card.querySelector('[data-swipe-field="title"]')
+    const artist = card.querySelector('[data-swipe-field="artist"]')
+    const year = card.querySelector('[data-swipe-field="year"]')
+    const genre = card.querySelector('[data-swipe-field="genre"]')
+
+    if (artwork) {
+      artwork.src = vinyl.cover_image || artwork.src
+      artwork.alt = vinyl.title ? `${vinyl.title} cover` : "album cover"
+    }
+
+    if (title) title.textContent = vinyl.title || "Untitled"
+    if (artist) artist.textContent = this.artistName(vinyl)
+    if (year) year.textContent = vinyl.year || "Unknown"
+    if (genre) genre.textContent = this.genreName(vinyl)
+  }
+
+  artistName(vinyl) {
+    if (vinyl.artist) return vinyl.artist
+    if (vinyl.artists?.length) return vinyl.artists.join(", ")
+
+    const [artist] = (vinyl.title || "").split(" - ")
+    return artist || "Unknown artist"
+  }
+
+  genreName(vinyl) {
+    if (Array.isArray(vinyl.genre) && vinyl.genre.length) return vinyl.genre.join(", ")
+    if (Array.isArray(vinyl.style) && vinyl.style.length) return vinyl.style.join(", ")
+    if (typeof vinyl.genre === "string" && vinyl.genre.length > 0) return vinyl.genre
+
+    return "Unlisted"
   }
 }

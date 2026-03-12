@@ -23,10 +23,6 @@
                   <p class="profile-kicker mb-1">Profile picture</p>
                   <h2 class="h5 mb-0">Generate a new portrait</h2>
                 </div>
-                <%= button_tag "Regenerate",
-                  type: "button",
-                  class: "btn btn-outline-dark btn-sm",
-                  data: { action: "click->profile-avatar#regenerate" } %>
               </div>
 
               <img
@@ -44,17 +40,42 @@
                 <div data-profile-avatar-target="status" class="small text-muted d-none"></div>
                 <%= avatar_form.hidden_field :avatar_source_url, data: { profile_avatar_target: "input" } %>
                 <div>
-                  <label class="form-label" for="avatar-gender-select">Portrait type</label>
-                  <select
-                    id="avatar-gender-select"
-                    class="form-select"
-                    data-profile-avatar-target="genderSelect"
-                  >
-                    <option value="">Random</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                  </select>
+                  <label class="form-label">Portrait type</label>
+                  <input type="hidden" value="" data-profile-avatar-target="genderInput">
+                  <div class="profile-avatar-filter-group" role="group" aria-label="Portrait type">
+                    <button
+                      type="button"
+                      class="profile-avatar-filter is-active"
+                      data-profile-avatar-target="genderButton"
+                      data-action="click->profile-avatar#selectGender"
+                      data-gender-value=""
+                    >
+                      Random
+                    </button>
+                    <button
+                      type="button"
+                      class="profile-avatar-filter"
+                      data-profile-avatar-target="genderButton"
+                      data-action="click->profile-avatar#selectGender"
+                      data-gender-value="female"
+                    >
+                      Female
+                    </button>
+                    <button
+                      type="button"
+                      class="profile-avatar-filter"
+                      data-profile-avatar-target="genderButton"
+                      data-action="click->profile-avatar#selectGender"
+                      data-gender-value="male"
+                    >
+                      Male
+                    </button>
+                  </div>
                 </div>
+                <%= button_tag "Regenerate",
+                  type: "button",
+                  class: "btn btn-outline-dark align-self-start",
+                  data: { action: "click->profile-avatar#regenerate" } %>
                 <div>
                   <%= avatar_form.label :avatar_file, "Upload image", class: "form-label" %>
                   <%= avatar_form.file_field :avatar_file,

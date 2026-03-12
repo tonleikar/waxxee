@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["preview", "input", "fileInput", "genderSelect", "saveButton", "current", "status"]
+  static targets = ["preview", "input", "fileInput", "genderInput", "genderButton", "saveButton", "current", "status"]
   static values = { currentSourceType: String }
 
   connect() {
@@ -11,16 +11,16 @@ export default class extends Controller {
 
   async regenerate(event) {
     event.preventDefault()
-    if (this.hasCurrentTarget && this.currentSourceTypeValue === "uploaded") {
-      const shouldContinue = window.confirm("This profile already has a saved picture. Generate a new one anyway?")
-      if (!shouldContinue) return
-    }
     await this.loadGeneratedImage()
   }
 
   async save(event) {
     event.preventDefault()
     if (!this.inputTarget.value && (!this.hasFileInputTarget || this.fileInputTarget.files.length === 0)) return
+    if (this.hasCurrentTarget) {
+      const shouldContinue = window.confirm("This will change your current profile picture. Continue?")
+      if (!shouldContinue) return
+    }
 
     this.saveButtonTarget.disabled = true
     this.setStatus("Saving profile picture...")
@@ -59,12 +59,27 @@ export default class extends Controller {
     this.setStatus("Selected image ready to save.")
   }
 
+  selectGender(event) {
+    event.preventDefault()
+    if (!this.hasGenderInputTarget) return
+
+    const selectedValue = event.currentTarget.dataset.genderValue || ""
+    this.genderInputTarget.value = selectedValue
+
+    if (this.hasGenderButtonTarget) {
+      this.genderButtonTargets.forEach((button) => {
+        button.classList.toggle("is-active", button === event.currentTarget)
+      })
+    }
+  }
+
   async loadGeneratedImage() {
     if (this.hasSaveButtonTarget) this.saveButtonTarget.disabled = true
     this.previewTarget.classList.add("is-loading")
+    this.setStatus("Generating portrait...")
 
     try {
-      const gender = this.hasGenderSelectTarget ? this.genderSelectTarget.value : ""
+      const gender = this.hasGenderInputTarget ? this.genderInputTarget.value : ""
       const payload = await this.fetchPortrait(gender)
       const generatedUrl = payload.results?.[0]?.picture?.large
 
@@ -77,15 +92,21 @@ export default class extends Controller {
       this.setStatus("Generated image ready to save.")
     } catch (error) {
       console.error(error)
-      this.setStatus(error.message)
+      const gender = this.hasGenderInputTarget ? this.genderInputTarget.value : ""
+      this.setStatus(
+        gender ?
+          `Could not generate a matching ${gender} portrait. Try regenerate again.` :
+          "Could not generate a portrait. Try regenerate again."
+      )
     } finally {
+      this.previewTarget.classList.remove("is-loading")
       if (this.hasSaveButtonTarget) {
         this.saveButtonTarget.disabled = !this.inputTarget.value && (!this.hasFileInputTarget || this.fileInputTarget.files.length === 0)
       }
     }
   }
 
-  async fetchPortrait(gender, attempts = 3) {
+  async fetchPortrait(gender, attempts = 10) {
     const query = new URLSearchParams({
       seed: String(Date.now()),
       inc: "gender,picture",

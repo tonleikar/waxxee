@@ -114,20 +114,17 @@
           <% if @own_profile %>
             <%= link_to "Find users", users_path, class: "btn btn-outline-dark btn-sm" %>
           <% end %>
-          <span class="badge text-bg-light"><%= @following_users.count %> following</span>
         </div>
       </div>
 
       <% if @following_users.any? %>
         <div class="row g-4">
           <% @following_users.each do |followed_user| %>
-            <% followed_vinyl = followed_user.favorite_vinyl || followed_user.user_vinyls.last&.vinyl %>
-
             <div class="col-12 col-md-6 col-xl-4">
               <%= link_to profile_path(followed_user), class: "text-decoration-none text-reset d-block h-100" do %>
                 <article class="card h-100 profile-follow-card">
                   <div class="card-body">
-                    <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="d-flex align-items-center gap-3">
                       <img
                         src="<%= followed_user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(followed_user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
                         alt="<%= followed_user.username %>"
@@ -138,9 +135,6 @@
                       <div>
                         <h3 class="h5 mb-0"><%= followed_user.name.presence || followed_user.username %></h3>
                         <p class="text-muted mb-0">@<%= followed_user.username %></p>
-                        <% if followed_user.favorite_genre.present? %>
-                          <p class="mb-0 small"><strong>Favorite genre:</strong> <%= followed_user.favorite_genre %></p>
-                        <% end %>
                       </div>
                     </div>
                   </div>

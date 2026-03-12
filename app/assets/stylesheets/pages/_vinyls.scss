@@ -34,6 +34,8 @@
 
 .vinyl-library-search-input-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
   flex: 1 1 auto;
   width: 100%;
 }
@@ -41,12 +43,12 @@
 .vinyl-library-search-input {
   flex: 1 1 auto;
   width: 100%;
-  padding-right: 2.6rem;
+  padding-left: 2.6rem;
 }
 
 .vinyl-library-search-icon {
   position: absolute;
-  right: 0.9rem;
+  left: 0.9rem;
   top: 50%;
   transform: translateY(-50%);
   color: rgba(7, 16, 19, 0.55);
@@ -62,14 +64,55 @@
 
 .vinyl-library-toolbar-sort {
   flex: 0 0 auto;
+  display: flex;
   align-items: center;
 }
 
+.vinyl-library-sort-form {
+  display: inline-flex;
+  width: auto;
+}
+
+.vinyl-library-sort-shell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 251, 245, 0.88);
+}
+
+.vinyl-library-sort-icon {
+  flex: 0 0 auto;
+  color: rgba(17, 17, 17, 0.52);
+  font-size: 0.82rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .vinyl-library-sort-select {
-    min-width: 11rem;
-  text-align: center;
-  text-align-last: center;
-  padding: 0.5rem 2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: auto;
+  min-width: 0;
+  padding: 0 1.15rem 0 0;
+  border: 0 !important;
+  border-color: transparent !important;
+  background-color: transparent;
+  background-image: none;
+  background-position: right 0 center;
+  box-shadow: none !important;
+  outline: none;
+}
+
+.vinyl-library-sort-select:focus,
+.vinyl-library-sort-select:focus-visible {
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none;
 }
 
 @media (max-width: 767.98px) {
@@ -80,7 +123,7 @@
   }
 
   .vinyl-library-sort-select {
-    min-width: 0;
+    width: 100%;
   }
 
   .vinyl-library-search-actions {
@@ -96,6 +139,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.vinyl-folder-create-input-wrap {
+  min-width: 0;
 }
 
 .vinyl-folder-toggle {
@@ -143,6 +190,16 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.vinyl-library-card-compact {
+  background: rgba(255, 252, 247, 0.9);
+  box-shadow:
+    inset 0 0 0 1px rgba(109, 89, 63, 0.08);
+}
+
+.vinyl-library-card-compact .card-body {
+  padding: 1.25rem !important;
 }
 
 .vinyl-library-card-kicker,
@@ -201,22 +258,20 @@
   width: 2rem;
   height: 2rem;
   padding: 0;
-  border: 1px solid rgba(255, 251, 245, 0.72);
+  border: 0;
   border-radius: 999px;
-  background: rgba(255, 251, 245, 0.18);
-  color: rgba(255, 251, 245, 0.9);
+  background: rgba(255, 255, 255, 0.96);
+  color: rgba(17, 17, 17, 0.78);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
-  backdrop-filter: blur(12px);
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
 .vinyl-library-card-delete-btn:hover {
-  background: rgba(255, 251, 245, 0.32);
-  color: #fff;
-  border-color: rgba(255, 251, 245, 0.92);
+  background: #fff;
+  color: var(--wax-ink);
   transform: translateY(-1px);
 }
 
@@ -424,6 +479,19 @@
   overflow: visible;
 }
 
+.vinyl-folder-chip-trigger {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.vinyl-folder-chip-trigger:focus,
+.vinyl-folder-chip-trigger:focus-visible {
+  outline: none;
+}
+
 .vinyl-folder-stack {
   position: relative;
   width: 100%;
@@ -523,9 +591,53 @@
   -webkit-text-stroke: 1.35px #111111;
 }
 
+.vinyl-folder-modal {
+  background: transparent;
+  backdrop-filter: blur(14px);
+}
+
+.vinyl-folder-modal-content {
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.99), rgba(247, 240, 229, 0.98));
+  border-radius: 0;
+  box-shadow:
+    0 18px 40px rgba(160, 145, 124, 0.16),
+    inset 0 0 0 1px rgba(186, 167, 141, 0.14);
+}
+
+.vinyl-folder-modal-header {
+  padding: 1.75rem 1.75rem 0.5rem;
+}
+
+.vinyl-folder-modal-body {
+  padding: 1rem 1.75rem 1.75rem;
+}
+
+.vinyl-folder-modal-close {
+  border-radius: 0;
+  background-color: rgba(255, 252, 247, 0.9);
+  box-shadow: 0 4px 12px rgba(186, 167, 141, 0.12);
+}
+
+.vinyl-folder-modal-empty {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  border: 1px solid rgba(186, 167, 141, 0.14);
+  background: rgba(255, 252, 247, 0.72);
+}
+
 @media (max-width: 767.98px) {
   .vinyl-library-card-crate-grid {
     grid-template-columns: 1fr;
+  }
+
+  .vinyl-folder-modal-header {
+    padding: 1.25rem 1.25rem 0.35rem;
+  }
+
+  .vinyl-folder-modal-body {
+    padding: 0.85rem 1.25rem 1.25rem;
   }
 }
 

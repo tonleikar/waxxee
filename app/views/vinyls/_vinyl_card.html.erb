@@ -1,0 +1,40 @@
+<% user_vinyl = local_assigns.fetch(:user_vinyl, nil) %>
+<% vinyl_folder_ids = local_assigns.fetch(:vinyl_folder_ids, []) %>
+<% folders = local_assigns.fetch(:folders, []) %>
+<% compact = local_assigns.fetch(:compact, false) %>
+<% current_folder = local_assigns.fetch(:current_folder, nil) %>
+
+<article class="card border-0 shadow-sm vinyl-library-card <%= "vinyl-library-card-compact" if compact %>">
+  <div class="vinyl-library-card-media">
+    <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
+    <div class="vinyl-library-card-sheen"></div>
+    <% if vinyl.year.present? %>
+      <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.year %></span>
+    <% end %>
+    <% if user_vinyl.present? && !compact %>
+      <%= button_to user_vinyl_path(user_vinyl),
+        method: :delete,
+        class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
+        form: { data: { turbo_confirm: "Remove #{vinyl.title} from your collection?" } } do %>
+        <i class="fas fa-trash"></i>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="card-body p-4">
+    <div class="mb-3">
+      <p class="vinyl-library-card-kicker mb-2"><%= vinyl.genre.presence || "Genre unknown" %></p>
+      <h3 class="h4 mb-1 vinyl-library-card-title"><%= vinyl.title %></h3>
+      <p class="text-muted mb-0 vinyl-library-card-artist"><%= vinyl.artist %></p>
+    </div>
+
+    <%= render "crate_controls",
+      vinyl: vinyl,
+      user_vinyl: user_vinyl,
+      vinyl_folder_ids: vinyl_folder_ids,
+      folders: folders,
+      compact: compact,
+      current_folder: current_folder,
+      expanded: false %>
+  </div>
+</article>

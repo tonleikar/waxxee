@@ -1,115 +1,110 @@
-.tinder-container {
-  height: 100vh;
+.swiper-page {
   position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  bottom: 88px;
+  min-height: calc(100vh - 88px);
+  padding: 1.5rem 1.5rem calc(88px + 1.5rem);
+}
+
+.swiper-page > .text-center {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  z-index: 2;
+  width: calc(100% - 3rem);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.tinder-container {
+  min-height: calc(100vh - 88px - 3rem);
+  position: relative;
+  overflow: visible;
+  display: grid;
+  place-items: center;
+  width: 100%;
 }
 
 .vinyl-card {
-  transform: translateY(100px);
-  perspective: 1000px;
   width: 90vw;
-  max-width: 75vh;
   max-width: 500px;
-  position: absolute;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  margin: auto;
   opacity: 0;
   transition: transform 0.5s ease, opacity 0.3s ease-out;
 }
 
-.vinyl-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s ease;
-}
-
-.vinyl-card-front,
-.vinyl-card-back {
-  width: 100%;
-  backface-visibility: hidden;
-}
-
-.vinyl-card-back {
-  padding: 3rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotateY(180deg);
-  background: rgba(255, 251, 245, 0.8);
-  border: 0;
-  backdrop-filter: blur(18px);
-}
-
-.vinyl-card-inner.flipped {
-  transform: rotateY(180deg);
-}
-
-.vinyl-card img {
-  width: 100%;
-  border-radius: 0;
-  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.08);
-  backface-visibility: hidden;
-  pointer-events: none;
-}
-
 .vinyl-card.active {
-  transform: translateY(0px);
-  bottom: auto;
   opacity: 1;
 }
 
-.vinyl-back-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  backface-visibility: hidden;
-  z-index: 1;
+.swiper-sleeve {
+  opacity: 0;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 0.28s ease;
+}
 
-  img {
-    border-radius: 0;
-    box-shadow: none;
-    opacity: 0.8;
+.swiper-sleeve.is-visible {
+  opacity: 1;
+}
 
-  }
+.swiper-sleeve .randomizer-sleeve__artwork {
+  opacity: 1;
+}
+
+.swiper-sleeve .randomizer-sleeve__meta {
+  max-width: calc(100% - 3rem);
 }
 
 .circles-bg {
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="UTF-8"%3F><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.24 277.24"><defs><style> .cls-1 { fill: none; stroke: %23000000; stroke-width: 0.5; stroke-miterlimit: 10; } </style></defs><circle class="cls-1" cx="138.62" cy="138.62" r="138.12"/><circle class="cls-1" cx="138.62" cy="138.62" r="130.24"/><circle class="cls-1" cx="138.62" cy="138.62" r="122.36"/><circle class="cls-1" cx="138.62" cy="138.62" r="114.48"/><circle class="cls-1" cx="138.62" cy="138.62" r="106.6"/><circle class="cls-1" cx="138.62" cy="138.62" r="98.72"/><circle class="cls-1" cx="138.62" cy="138.62" r="90.84"/><circle class="cls-1" cx="138.62" cy="138.62" r="82.96"/><circle class="cls-1" cx="138.62" cy="138.62" r="75.08"/><circle class="cls-1" cx="138.62" cy="138.62" r="67.2"/><circle class="cls-1" cx="138.62" cy="138.62" r="59.32"/><circle class="cls-1" cx="138.62" cy="138.62" r="51.44"/><circle class="cls-1" cx="138.62" cy="138.62" r="43.56"/><circle class="cls-1" cx="138.62" cy="138.62" r="35.68"/><circle class="cls-1" cx="138.62" cy="138.62" r="27.8"/><circle class="cls-1" cx="138.62" cy="138.62" r="19.92"/><circle class="cls-1" cx="138.62" cy="138.62" r="12.04"/></svg>');
+  position: relative;
+  min-height: calc(100vh - 88px);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 251, 245, 0.38), rgba(255, 251, 245, 0) 44%),
+    linear-gradient(135deg, #f6efe3 0%, #efe4d3 48%, #f8f2e9 100%);
   background-color: var(--wax-cream);
-  background-size: 141vmax;
   overflow: hidden;
 }
 
-.flipped {
-  transform: rotateY(180deg);
+.circles-bg__rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 141vmax;
+  height: 141vmax;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-@keyframes swipe-bg-pulse {
-  0% {
-    background-size: 141vmax;
-    animation-timing-function: linear(0, 0.413 20.4%, 1 37.8%, 0.796 44.8%, 0.731 50.8%, 0.785 56.4%, 0.999 65.4%, 0.904 73.4%, 0.999 84.4%, 1);
-  }
-  50% {
-    background-size: 152vmax;
-    animation-timing-function: linear(0, 0.413 20.4%, 1 37.8%, 0.796 44.8%, 0.731 50.8%, 0.785 56.4%, 0.999 65.4%, 0.904 73.4%, 0.999 84.4%, 1);
-  }
-  100% {
-    background-size: 141vmax;
-  }
+.circles-bg__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.36s cubic-bezier(0.12, 0.82, 0.22, 1);
 }
 
-.swipe-bg-pulse {
-  animation: swipe-bg-pulse 0.6s forwards;
+.circles-bg__ring path {
+  fill: none;
+  stroke: #111111;
+  stroke-opacity: 0.055;
+  stroke-linecap: round;
+}
+
+.circles-bg > *:not(.circles-bg__rings) {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 992px) {
+  .swiper-page {
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  .tinder-container {
+    min-height: calc(100vh - 3rem);
+  }
+
+  .circles-bg {
+    min-height: 100vh;
+  }
 }

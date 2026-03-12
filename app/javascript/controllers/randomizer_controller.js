@@ -102,17 +102,21 @@ export default class extends Controller {
     try {
       const response = await fetch(this.saveUrlValue, {
         method: "POST",
+        credentials: "same-origin",
         headers: {
           "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "Content-Type": "application/json",
           "X-CSRF-Token": this.csrfToken
         },
-        body: new URLSearchParams({
-          "user_vinyl[vinyl_id]": this.currentVinyl.id
+        body: JSON.stringify({
+          user_vinyl: {
+            vinyl_id: this.currentVinyl.id
+          }
         })
       })
 
-      if (!response.ok) throw new Error(`Save failed with status ${response.status}`)
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok) throw new Error(payload.error || `Save failed with status ${response.status}`)
 
       this.saveButtonTarget.textContent = "Saved"
       this.saveButtonTarget.classList.add("is-saved")
