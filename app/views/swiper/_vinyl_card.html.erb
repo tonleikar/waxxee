@@ -1,0 +1,20 @@
+<div class="vinyl-card" data-id="<%= vinyl.id %>">
+  <div class="vinyl-card-inner">
+    <div class="vinyl-card-front">
+      <div class="vinyl-back-button" data-swipe-target="backButton">
+        <%= image_tag "vinyl-back-button.png" %>
+      </div>
+      <%= image_tag vinyl.artwork_url.presence || "placeholder.png", alt: "#{vinyl.title} album cover" %>
+    </div>
+    <div class="vinyl-card-back">
+      <div class="vinyl-info">
+        <div class="vinyl-back-button" data-swipe-target="backButton">
+          <%= image_tag "vinyl-back-button.png" %>
+        </div>
+        <h2><%= vinyl.title %></h2>
+        <p><%= vinyl.artist %></p>
+        <small><%= vinyl.year %> | <%= vinyl.genre %></small>
+      </div>
+    </div>
+  </div>
+</div>

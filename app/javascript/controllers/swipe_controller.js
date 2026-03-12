@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { vinyls: Array, url: String, imageUrl: String }
+  static values = { vinyls: Array, url: String, cardUrl: String, key: String, secret: String }
   static targets = ["form", "vinylId", "vinylWrapper", "backButton"]
 
   connect() {
@@ -10,35 +10,59 @@ export default class extends Controller {
     this.currentX = 0
     this.dragging = false
     this.threshold = 100
+    this.swiping = false
 
+    this.currentVinyls = []
+    this.currentPage = 1
+    this.discogsAPI = `https://api.discogs.com/database/search?style=psychedelic&country=turkey&decade=1960&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
+
+    this.getRecords()
     this.renderCard()
+
+
   }
 
-  renderCard() {
-    if (this.index >= this.vinylsValue.length) {
-      this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
-      return
+  getRecords() {
+    console.log(`${this.discogsAPI}$&key=${this.keyValue}&secret=${this.secretValue}`)
+      fetch(this.discogsAPI, {
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        this.currentVinyls = data.results || [];
+        console.log("Fetched records:", this.currentVinyls);
+      });
     }
 
-    const vinyl = this.vinylsValue[this.index]
+      async renderCard() {
+        if (this.currentVinyls.length === 0) {
+          this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
+          this.getRecords()
+          return
+        } else {
+          const vinyl = this.currentVinyls[randonmInt(0, this.currentVinyls.length - 1)]
+          const data = JSON.stringify({"vinyl": vinyl})
 
-    this.vinylWrapperTarget.innerHTML = `
-      <div class="vinyl-card" data-id="${vinyl.id}">
-        <div class="vinyl-card-inner">
-          <div class="vinyl-card-front">
-            <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
-            <img src="${vinyl.artwork_url}">
-            </div>
-            <div class="vinyl-card-back">
-            <div class="vinyl-info">
-              <div class="vinyl-back-button" data-swipe-target="backButton"><img src="${this.imageUrlValue}"></div>
-              <h2>${vinyl.title}</h2>
-              <p>${vinyl.artist}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    `
+          fetch("/vinyls", {
+          method: "POST",
+          headers: {
+            "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
+            "Content-Type": "application/json"
+          },
+          body: data
+        })
+      }
+
+      // rework partial to render the json
+      // delete instance in array
+      // have a create method that makes vinyl model and then associated user_vinyl
+
+
+    // ============== OLD CODE TO GET FROM LOCAL DB ================
+    // const id = this.vinylsValue[this.index]
+    // const url = this.cardUrlValue.replace("__id__", id)
+    // const response = await fetch(url, { headers: { "Accept": "text/html" } })
+    // this.vinylWrapperTarget.innerHTML = await response.text()
 
     const card = this.element.querySelector(".vinyl-card")
 

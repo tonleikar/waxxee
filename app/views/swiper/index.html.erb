@@ -1,9 +1,12 @@
 <div class="circles-bg">
   <div
     data-controller="swipe"
-    data-swipe-vinyls-value="<%= @vinyls.to_json(only: [:id, :artwork_url, :title, :artist]) %>"
+    data-swipe-vinyls-value="<%= @vinyls.map(&:id).to_json %>"
     data-swipe-url-value="<%= user_vinyls_url %>"
-    data-swipe-image-url-value="<%= asset_path('vinyl-back-button.png') %>">
+    data-swipe-card-url-value="<%= card_swiper_index_url(id: '__id__') %>"
+    data-swipe-key-value="<%= @key %>"
+    data-swipe-secret-value="<%= @secret %>"
+    >
     <%= simple_form_for @user_vinyl, html: {class: "d-none", data: {swipe_target: "form"}} do|f|  %>
       <%= f.input :vinyl_id, input_html: {data: {swipe_target: "vinylId"}} %>
       <%= f.submit %>

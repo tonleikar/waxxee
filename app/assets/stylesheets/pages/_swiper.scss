@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  bottom: 88px;
 }
 
 .vinyl-card {
@@ -52,6 +53,7 @@
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   backface-visibility: hidden;
+  pointer-events: none;
 }
 
 .vinyl-card.active {

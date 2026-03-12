@@ -25,7 +25,12 @@ class VinylsController < ApplicationController
   private
 
   def permitted_sort
-    %w[title_desc title_asc artist_asc artist_desc year_desc year_asc].include?(params[:sort]) ? params[:sort] : "title_desc"
+    if %w[title_desc title_asc artist_asc artist_desc year_desc
+          year_asc].include?(params[:sort])
+      params[:sort]
+    else
+      "title_desc"
+    end
   end
 
   def order_clause_for(sort)
@@ -43,5 +48,9 @@ class VinylsController < ApplicationController
     else
       { title: :desc }
     end
+  end
+
+  def vinyl_params
+    params.require(:vinyl).permit(:artist, :artwork_url, :format, :genre, :year)
   end
 end

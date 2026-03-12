@@ -5,7 +5,7 @@ class UserVinylsController < ApplicationController
 
   def create
     @user_vinyl = UserVinyl.find_or_create_by!(user: current_user, vinyl_id: vinyl_params[:vinyl_id])
-    render json: { message: "Success! #{@user_vinyl.vinyl.title.truncate(25, omission: '...')} added to collection." }
+    render json: { message: "#{@user_vinyl.vinyl.title.truncate(25, omission: '...')} added to collection." }
   end
 
   def destroy
