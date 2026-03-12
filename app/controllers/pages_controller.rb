@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  def home_logged_in
+  def randomizer
     @personas = Persona::RULES.map do |key, rule|
       next if key == "randomizer"
 

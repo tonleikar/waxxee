@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   authenticated :user do
-    root to: "pages#home_logged_in", as: :authenticated_root
+    root to: "pages#randomizer", as: :authenticated_root
   end
 
   devise_scope :user do
@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     end
   end
 
+
+  resources :welcome, only: [:index]
+  get "randomizer", to: "pages#randomizer", as: :randomizer
   resources :users, only: [:index]
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]

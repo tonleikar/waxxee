@@ -3,31 +3,7 @@
   <div class="d-flex justify-content-end mb-3">
     <%= link_to "Log in", new_user_session_path, class: "btn btn-dark" %>
   </div>
-<% end %>
-
-  <!-- Vinyl record -->
-  <div class="d-flex justify-content-center mb-4">
-    <%= link_to root_path(persona: "randomizer"),
-                class: "randomizer-btn",
-                "aria-label": "Randomizer record",
-                data: {
-                  controller: "randomizer",
-                  action: "click->randomizer#start",
-                  randomizer_loading_value: 1200,
-                  randomizer_success_value: 900,
-                  randomizer_dissipate_value: 700
-                } do %>
-
-      <div class="record-container">
-        <div class="record">
-          <div class="record-label">
-            <div class="record-hole"></div>
-          </div>
-        </div>
-      </div>
-
-    <% end %>
-  </div>
+  <% end %>
 
   <!-- Login box -->
   <div class="row justify-content-center">
