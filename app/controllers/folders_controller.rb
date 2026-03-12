@@ -12,23 +12,30 @@ class FoldersController < ApplicationController
   end
 
   def create
-    @folder = current_user.folders.new(folder_params)
+    @folder = current_user.folders.new(folder_params.merge(name: normalized_folder_name))
     if @folder.save
-      redirect_back fallback_location: vinyls_path, notice: "Folder created."
+      redirect_back fallback_location: vinyls_path, notice: "Crate created."
     else
-      redirect_back fallback_location: vinyls_path, alert: "Could not create folder."
+      redirect_back fallback_location: vinyls_path, alert: "Could not create crate."
     end
   end
 
   def destroy
     @folder = current_user.folders.find(params[:id])
     @folder.destroy
-    redirect_back fallback_location: vinyls_path, notice: "Folder deleted."
+    redirect_back fallback_location: vinyls_path, notice: "Crate deleted."
   end
 
   private
 
   def folder_params
     params.require(:folder).permit(:name)
+  end
+
+  def normalized_folder_name
+    name = folder_params[:name].to_s.strip
+    return name if name.downcase.end_with?(" crate")
+
+    "#{name} crate"
   end
 end

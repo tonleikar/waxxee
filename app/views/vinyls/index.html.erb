@@ -42,12 +42,21 @@
             <div class="vinyl-folder-list">
               <% if @folders.any? %>
                 <% @folders.each do |folder| %>
-                  <% latest_vinyl = folder.vinyls.order(created_at: :desc).first %>
+                  <% crate_vinyls = folder.vinyls.order(created_at: :desc).limit(4) %>
 
                   <div class="vinyl-folder-chip">
                     <div class="vinyl-folder-chip-main">
-                      <% if latest_vinyl&.artwork_url.present? %>
-                        <img src="<%= latest_vinyl.artwork_url %>" alt="<%= folder.name %>" class="vinyl-folder-thumb">
+                      <% if crate_vinyls.any? %>
+                        <div class="vinyl-folder-stack" aria-hidden="true">
+                          <% crate_vinyls.each_with_index do |vinyl, index| %>
+                            <img
+                              src="<%= vinyl.artwork_url %>"
+                              alt=""
+                              class="vinyl-folder-thumb vinyl-folder-thumb-stack"
+                              style="--stack-index: <%= index %>;"
+                            >
+                          <% end %>
+                        </div>
                       <% else %>
                         <div class="vinyl-folder-thumb vinyl-folder-thumb-placeholder"></div>
                       <% end %>
