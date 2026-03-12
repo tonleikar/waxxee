@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_12_123000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_12_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,9 +42,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_123000) do
 
   create_table "personas", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.json "genres", default: [], null: false
+    t.json "keywords", default: [], null: false
+    t.string "llm_model"
+    t.integer "max_year", default: 2026, null: false
+    t.integer "min_year", default: 1900, null: false
+    t.boolean "primary_profile", default: false, null: false
+    t.text "prompt"
+    t.text "summary"
     t.string "title"
     t.datetime "updated_at", null: false
     t.string "url"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_personas_on_user_id"
   end
 
   create_table "user_vinyls", force: :cascade do |t|
@@ -93,6 +103,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_12_123000) do
   add_foreign_key "folders", "users"
   add_foreign_key "followers", "users", column: "followed_id"
   add_foreign_key "followers", "users", column: "follower_id"
+  add_foreign_key "personas", "users"
   add_foreign_key "user_vinyls", "users"
   add_foreign_key "user_vinyls", "vinyls"
   add_foreign_key "users", "vinyls", column: "favorite_vinyl_id"

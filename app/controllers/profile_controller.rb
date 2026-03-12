@@ -10,6 +10,7 @@ class ProfileController < ApplicationController
     @vinyls = @user.vinyls
     @favorite_vinyl = @vinyls.find_by(id: @user.favorite_vinyl_id)
     @following_users = @user.following.order(:username)
+    @personas = @user.personas.generated_for_profile
     @own_profile = @user == current_user
   end
 

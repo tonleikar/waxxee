@@ -105,6 +105,95 @@
 
   <div class="card profile-panel mt-4">
     <div class="card-body p-4">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3 mb-4">
+        <div>
+          <p class="profile-kicker mb-1">Taste Personas</p>
+          <p class="text-muted mb-0 small">AI-generated record-discovery personas based on this profile's taste.</p>
+        </div>
+      </div>
+
+      <% if @own_profile %>
+        <%= form_with url: personas_path, method: :post, class: "profile-persona-form mb-4" do |form| %>
+          <div class="row g-3 align-items-end">
+            <div class="col-12 col-lg-9">
+              <%= form.label :prompt, "Create an extra persona from a custom brief", class: "form-label" %>
+              <%= form.text_area :prompt,
+                                 name: "persona[prompt]",
+                                 rows: 3,
+                                 class: "form-control",
+                                 placeholder: "Example: Build me a late-night cosmic jazz persona with 70s and 80s records only." %>
+            </div>
+            <div class="col-12 col-lg-3">
+              <%= form.submit "Create custom persona", class: "btn btn-outline-dark w-100" %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if @personas.any? %>
+        <div class="row g-4">
+          <% @personas.each do |persona| %>
+            <div class="col-12 col-xl-6">
+              <article class="card h-100 profile-persona-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                      <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                        <h3 class="h4 mb-0"><%= persona.title %></h3>
+                        <% if persona.primary_profile? %>
+                          <span class="profile-persona-badge">Core persona</span>
+                        <% end %>
+                      </div>
+                      <p class="text-muted mb-0"><%= persona.summary %></p>
+                    </div>
+                  </div>
+
+                  <div class="profile-persona-meta mb-3">
+                    <span class="profile-persona-chip"><%= persona.min_year %>-<%= persona.max_year %></span>
+                    <% Array(persona.genres).each do |genre| %>
+                      <span class="profile-persona-chip"><%= genre %></span>
+                    <% end %>
+                  </div>
+
+                  <% if Array(persona.keywords).any? %>
+                    <p class="mb-3 small text-muted">
+                      <strong>Keywords:</strong>
+                      <%= Array(persona.keywords).join(" • ") %>
+                    </p>
+                  <% end %>
+
+                  <% if persona.custom_prompt? %>
+                    <p class="mb-3 small text-muted">
+                      <strong>Prompt:</strong>
+                      <%= persona.prompt %>
+                    </p>
+                  <% end %>
+
+                  <div class="d-flex flex-wrap gap-2">
+                    <%= link_to "Open in swiper", swiper_index_path(persona_id: persona.id), class: "btn btn-dark btn-sm" %>
+                    <% if @own_profile %>
+                      <%= button_to "Delete",
+                                    persona_path(persona),
+                                    method: :delete,
+                                    class: "btn btn-outline-dark btn-sm",
+                                    form: { data: { turbo_confirm: "Delete this persona?" } } %>
+                    <% end %>
+                  </div>
+                </div>
+              </article>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="profile-empty-state">
+          <%= @own_profile ? "Save records or create a custom persona to build your discovery lanes." : "No taste personas generated yet." %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card profile-panel mt-4">
+    <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
         <div>
           <p class="profile-kicker mb-1">Following</p>
