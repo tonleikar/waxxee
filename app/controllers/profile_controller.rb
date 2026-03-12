@@ -24,19 +24,31 @@ class ProfileController < ApplicationController
   end
 
   def avatar
+    source_type = if avatar_params[:avatar_file].present?
+      "uploaded"
+    else
+      "generated"
+    end
+
+    upload_source = if avatar_params[:avatar_file].present?
+      avatar_params[:avatar_file].tempfile
+    else
+      avatar_params[:avatar_source_url]
+    end
+
     upload = Cloudinary::Uploader.upload(
-      avatar_params[:avatar_image_data],
+      upload_source,
       folder: "waxxee/profile_avatars",
       public_id: "user_#{@user.id}_avatar",
       overwrite: true,
       invalidate: true
     )
 
-    @user.update!(avatar_url: upload["secure_url"])
+    @user.update!(avatar_url: upload["secure_url"], avatar_source_type: source_type)
 
     respond_to do |format|
       format.html { redirect_to edit_profile_path(@user), notice: "Profile picture updated." }
-      format.json { render json: { avatar_url: @user.avatar_url } }
+      format.json { render json: { avatar_url: @user.avatar_url, avatar_source_type: @user.avatar_source_type } }
     end
   rescue StandardError => e
     respond_to do |format|
@@ -46,10 +58,8 @@ class ProfileController < ApplicationController
   end
 
   def avatar_preview
-    image_body, content_type = fetch_generated_avatar
-
     render json: {
-      image_data: "data:#{content_type};base64,#{Base64.strict_encode64(image_body)}"
+      image_url: fetch_generated_avatar_url
     }
   rescue StandardError => e
     render json: { error: e.message }, status: :bad_gateway
@@ -81,7 +91,7 @@ class ProfileController < ApplicationController
   end
 
   def avatar_params
-    params.require(:user).permit(:avatar_image_data)
+    params.require(:user).permit(:avatar_source_url, :avatar_file)
   end
 
   def normalized_profile_params
@@ -97,9 +107,9 @@ class ProfileController < ApplicationController
     attributes
   end
 
-  def fetch_generated_avatar
-    uri = URI("https://thispersondoesnotexist.com/")
-    uri.query = URI.encode_www_form(cb: params[:cb].presence || Time.current.to_i)
+  def fetch_generated_avatar_url
+    uri = URI("https://randomuser.me/api/")
+    uri.query = URI.encode_www_form(seed: params[:cb].presence || Time.current.to_i, inc: "picture")
 
     response = Net::HTTP.start(
       uri.host,
@@ -115,6 +125,10 @@ class ProfileController < ApplicationController
 
     raise "Avatar generation failed with status #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-    [response.body, response["Content-Type"].presence || "image/jpeg"]
+    payload = JSON.parse(response.body)
+    image_url = payload.dig("results", 0, "picture", "large")
+    raise "Avatar generation returned no image" if image_url.blank?
+
+    image_url
   end
 end

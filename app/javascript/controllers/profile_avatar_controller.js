@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["preview", "input", "saveButton", "current", "status"]
-  static values = { previewUrl: String }
+  static targets = ["preview", "input", "fileInput", "genderSelect", "saveButton", "current", "status"]
+  static values = { currentSourceType: String }
 
   connect() {
     if (!this.hasInputTarget || !this.hasPreviewTarget || !this.hasSaveButtonTarget) return
@@ -11,18 +11,22 @@ export default class extends Controller {
 
   async regenerate(event) {
     event.preventDefault()
+    if (this.hasCurrentTarget && this.currentSourceTypeValue === "uploaded") {
+      const shouldContinue = window.confirm("This profile already has a saved picture. Generate a new one anyway?")
+      if (!shouldContinue) return
+    }
     await this.loadGeneratedImage()
   }
 
   async save(event) {
     event.preventDefault()
-    if (!this.inputTarget.value) return
+    if (!this.inputTarget.value && (!this.hasFileInputTarget || this.fileInputTarget.files.length === 0)) return
 
     this.saveButtonTarget.disabled = true
     this.setStatus("Saving profile picture...")
 
     try {
-      const form = event.currentTarget.form
+      const form = event.currentTarget
       const response = await fetch(form.action, {
         method: "PATCH",
         headers: {
@@ -36,6 +40,7 @@ export default class extends Controller {
       if (!response.ok) throw new Error(payload.error || `Save failed with status ${response.status}`)
 
       if (this.hasCurrentTarget) this.currentTarget.src = payload.avatar_url
+      if (payload.avatar_source_type) this.currentSourceTypeValue = payload.avatar_source_type
       this.setStatus("Profile picture saved.")
     } catch (error) {
       console.error(error)
@@ -44,29 +49,67 @@ export default class extends Controller {
     }
   }
 
+  uploadPreview() {
+    if (!this.hasFileInputTarget || this.fileInputTarget.files.length === 0) return
+
+    const [file] = this.fileInputTarget.files
+    this.inputTarget.value = ""
+    this.previewTarget.src = URL.createObjectURL(file)
+    this.saveButtonTarget.disabled = false
+    this.setStatus("Selected image ready to save.")
+  }
+
   async loadGeneratedImage() {
     if (this.hasSaveButtonTarget) this.saveButtonTarget.disabled = true
     this.previewTarget.classList.add("is-loading")
 
     try {
-      const separator = this.previewUrlValue.includes("?") ? "&" : "?"
-      const response = await fetch(`${this.previewUrlValue}${separator}cb=${Date.now()}`, {
-        headers: { "Accept": "application/json" },
-        cache: "no-store"
-      })
-      if (!response.ok) throw new Error(`Avatar generation failed with status ${response.status}`)
+      const gender = this.hasGenderSelectTarget ? this.genderSelectTarget.value : ""
+      const payload = await this.fetchPortrait(gender)
+      const generatedUrl = payload.results?.[0]?.picture?.large
 
-      const payload = await response.json()
-      const dataUrl = payload.image_data
+      if (!generatedUrl) throw new Error("Avatar generation returned no image")
 
-      this.inputTarget.value = dataUrl
-      this.previewTarget.src = dataUrl
+      this.inputTarget.value = generatedUrl
+      if (this.hasFileInputTarget) this.fileInputTarget.value = ""
+      this.previewTarget.src = generatedUrl
       this.previewTarget.classList.remove("is-loading")
+      this.setStatus("Generated image ready to save.")
     } catch (error) {
       console.error(error)
+      this.setStatus(error.message)
     } finally {
-      if (this.hasSaveButtonTarget) this.saveButtonTarget.disabled = !this.inputTarget.value
+      if (this.hasSaveButtonTarget) {
+        this.saveButtonTarget.disabled = !this.inputTarget.value && (!this.hasFileInputTarget || this.fileInputTarget.files.length === 0)
+      }
     }
+  }
+
+  async fetchPortrait(gender, attempts = 3) {
+    const query = new URLSearchParams({
+      seed: String(Date.now()),
+      inc: "gender,picture",
+      noinfo: "1"
+    })
+    if (gender) query.set("gender", gender)
+
+    const response = await fetch(`https://randomuser.me/api/?${query.toString()}`, {
+      headers: { "Accept": "application/json" }
+    })
+    if (!response.ok) throw new Error(`Avatar generation failed with status ${response.status}`)
+
+    const payload = await response.json()
+    const returnedGender = payload.results?.[0]?.gender
+
+    if (gender && returnedGender && returnedGender !== gender) {
+      if (attempts <= 1) {
+        throw new Error(`Avatar generation returned ${returnedGender} instead of ${gender}`)
+      }
+
+      return this.fetchPortrait(gender, attempts - 1)
+    }
+
+    return payload
   }
 
   setStatus(message) {
