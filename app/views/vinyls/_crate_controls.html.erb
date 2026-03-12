@@ -42,7 +42,13 @@
                 <%= button_to folder_vinyl_path(folder_vinyl),
                   method: :delete,
                   class: "btn btn-sm vinyl-library-card-crate-action",
-                  form: { data: { turbo_confirm: "Remove #{vinyl.title} from #{folder.name}?" } } do %>
+                  form: {
+                    data: {
+                      controller: "crate-membership",
+                      action: "submit->crate-membership#remove",
+                      turbo: false
+                    }
+                  } do %>
                   -
                 <% end %>
               <% else %>

@@ -4,6 +4,7 @@ class FolderVinylsController < ApplicationController
     user_vinyl = current_user.user_vinyls.includes(:folders, :folder_vinyls).find_or_create_by!(vinyl_id: folder_vinyl_params[:vinyl_id])
 
     FolderVinyl.find_or_create_by!(folder: folder, user_vinyl: user_vinyl)
+    user_vinyl = current_user.user_vinyls.includes(:folders, :folder_vinyls).find_by!(vinyl_id: folder_vinyl_params[:vinyl_id])
 
     if turbo_frame_request?
       render_crate_controls(user_vinyl.vinyl, user_vinyl)
@@ -21,7 +22,7 @@ class FolderVinylsController < ApplicationController
 
     user_vinyl = current_user.user_vinyls.includes(:folders, :folder_vinyls).find_by(vinyl_id: vinyl.id)
 
-    if turbo_frame_request?
+    if turbo_frame_request? || request.xhr?
       render_crate_controls(vinyl, user_vinyl)
     else
       redirect_back fallback_location: vinyls_path, notice: "Vinyl removed from folder."

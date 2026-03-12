@@ -5,7 +5,10 @@ class VinylsController < ApplicationController
 
     @vinyls = Vinyl.where(id: current_user.user_vinyls.select(:vinyl_id))
     if @query.present?
-      @vinyls = @vinyls.where("title ILIKE :query OR artist ILIKE :query OR genre ILIKE :query", query: "%#{@query}%")
+      @vinyls = @vinyls.where(
+        "vinyls.title ILIKE :query OR vinyls.artist ILIKE :query OR vinyls.genre ILIKE :query",
+        query: "%#{@query}%"
+      )
     end
 
     @vinyls = @vinyls.order(order_clause_for(@sort))
@@ -35,6 +38,8 @@ class VinylsController < ApplicationController
 
   def order_clause_for(sort)
     case sort
+    when "title_desc"
+      { title: :desc }
     when "title_asc"
       { title: :asc }
     when "artist_asc"
@@ -46,8 +51,22 @@ class VinylsController < ApplicationController
     when "year_asc"
       { year: :asc, title: :asc }
     else
-      { created_at: :desc }
+      recent_order_clause
     end
+  end
+
+  def recent_order_clause
+    user_id = ActiveRecord::Base.connection.quote(current_user.id)
+
+    Arel.sql(<<~SQL.squish)
+      (
+        SELECT MAX(user_vinyls.created_at)
+        FROM user_vinyls
+        WHERE user_vinyls.user_id = #{user_id}
+          AND user_vinyls.vinyl_id = vinyls.id
+      ) DESC,
+      vinyls.title ASC
+    SQL
   end
 
   def vinyl_params

@@ -17,7 +17,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        vinyl = random_vinyl_for_persona(@persona)
+        vinyl = random_vinyl
 
         if vinyl.present?
           render json: vinyl_payload(vinyl)
@@ -30,13 +30,8 @@ class PagesController < ApplicationController
 
   private
 
-  def random_vinyl_for_persona(persona)
-    Vinyl
-      .where(year: persona[:min_year]..persona[:max_year])
-      .where(
-        persona[:genres].map { "genre ILIKE ?" }.join(" OR "),
-        *persona[:genres].map { |genre| "%#{genre}%" }
-      ).sample
+  def random_vinyl
+    Vinyl.all.to_a.sample
   end
 
   def selected_persona_key
