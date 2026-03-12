@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :folder_vinyls, only: [:create, :destroy]
   resources :swiper, only: [:index] do
     collection do
-      get "card/:id", to: "swiper#card", as: :card
+      post :card_preview
     end
   end
   resources :profile, only: [:show, :edit, :update, :destroy]

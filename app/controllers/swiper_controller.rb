@@ -1,13 +1,17 @@
 class SwiperController < ApplicationController
   def index
-    @vinyls = Vinyl.all.sample(20)
-    @user_vinyl = UserVinyl.new
     @key = ENV["DISCOGS_CONSUMER_KEY"]
     @secret = ENV["DISCOGS_CONSUMER_SECRET"]
   end
 
-  def card
-    @vinyl = Vinyl.find(params[:id])
-    render partial: "swiper/vinyl_card", locals: { vinyl: @vinyl }
+  def card_preview
+    vinyl = Discogs::SearchResult.new(vinyl_payload).preview_attributes
+    render partial: "swiper/vinyl_card", locals: { vinyl: vinyl }
+  end
+
+  private
+
+  def vinyl_payload
+    params.require(:vinyl).permit!.to_h
   end
 end

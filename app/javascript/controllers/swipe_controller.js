@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { vinyls: Array, url: String, cardUrl: String, key: String, secret: String }
-  static targets = ["form", "vinylId", "vinylWrapper", "backButton"]
+  static values = { url: String, cardUrl: String, key: String, secret: String }
+  static targets = ["vinylWrapper", "backButton"]
 
-  connect() {
+  async connect() {
     this.index = 0
     this.startX = 0
     this.currentX = 0
@@ -14,57 +14,44 @@ export default class extends Controller {
 
     this.currentVinyls = []
     this.currentPage = 1
+    this.activeVinyl = null
     this.discogsAPI = `https://api.discogs.com/database/search?style=psychedelic&country=turkey&decade=1960&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
 
-    this.getRecords()
-    this.renderCard()
-
-
+    await this.getRecords()
+    await this.renderCard()
   }
 
-  getRecords() {
-    console.log(`${this.discogsAPI}$&key=${this.keyValue}&secret=${this.secretValue}`)
-      fetch(this.discogsAPI, {
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        this.currentVinyls = data.results || [];
-        console.log("Fetched records:", this.currentVinyls);
-      });
+  async getRecords() {
+    const response = await fetch(this.discogsAPI)
+    const data = await response.json()
+
+    this.currentVinyls = data.results || []
+  }
+
+  async renderCard() {
+    if (this.currentVinyls.length === 0) {
+      this.activeVinyl = null
+      this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
+      return
     }
 
-      async renderCard() {
-        if (this.currentVinyls.length === 0) {
-          this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
-          this.getRecords()
-          return
-        } else {
-          const vinyl = this.currentVinyls[randonmInt(0, this.currentVinyls.length - 1)]
-          const data = JSON.stringify({"vinyl": vinyl})
+    const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
+    const [vinyl] = this.currentVinyls.splice(randomIndex, 1)
+    const response = await fetch(this.cardUrlValue, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+        "Content-Type": "application/json",
+        "Accept": "text/html"
+      },
+      body: JSON.stringify({ vinyl })
+    })
 
-          fetch("/vinyls", {
-          method: "POST",
-          headers: {
-            "X-CSRF-Token": document.querySelector('[name="csrf-token"]').content,
-            "Content-Type": "application/json"
-          },
-          body: data
-        })
-      }
-
-      // rework partial to render the json
-      // delete instance in array
-      // have a create method that makes vinyl model and then associated user_vinyl
-
-
-    // ============== OLD CODE TO GET FROM LOCAL DB ================
-    // const id = this.vinylsValue[this.index]
-    // const url = this.cardUrlValue.replace("__id__", id)
-    // const response = await fetch(url, { headers: { "Accept": "text/html" } })
-    // this.vinylWrapperTarget.innerHTML = await response.text()
+    this.activeVinyl = vinyl
+    this.vinylWrapperTarget.innerHTML = await response.text()
 
     const card = this.element.querySelector(".vinyl-card")
+    if (!card) return
 
     setTimeout(() => {
       card.classList.add("active")
@@ -116,21 +103,7 @@ export default class extends Controller {
           card.style.opacity = 0
 
           if (direction === "right") {
-            const id = card.dataset.id
-            console.log("Save vinyl:", id)
-            this.vinylIdTarget.value = id;
-
-            fetch(this.urlValue, {
-              method: "POST",
-              headers: {"X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content, "Accept": "application/json" },
-              body: new FormData(this.formTarget)
-            })
-              .then(response => response.json())
-              .then((data) => {
-                console.log(data.message)
-                this.showToast(data.message)
-              })
-
+            this.saveVinyl(this.activeVinyl)
           }
 
           setTimeout(() => {
@@ -167,6 +140,25 @@ export default class extends Controller {
       btn.addEventListener("mousedown", (e) => e.stopPropagation())
       btn.addEventListener("touchstart", (e) => e.stopPropagation())
     })
+  }
+
+  async saveVinyl(vinyl) {
+    if (!vinyl) return
+
+    const response = await fetch(this.urlValue, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ vinyl })
+    })
+
+    if (!response.ok) return
+
+    const data = await response.json()
+    this.showToast(data.message)
   }
 
   showToast(message) {
