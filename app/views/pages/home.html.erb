@@ -1,41 +1,16 @@
-<section class="container py-4">
-  <% unless user_signed_in? %>
-  <div class="d-flex justify-content-end mb-3">
-    <%= link_to "Log in", new_user_session_path, class: "btn btn-dark" %>
-  </div>
+<div class="welcome-header">
+  <%= image_tag "waxxee_logo" %>
+  <%= link_to profile_path(current_user) do %>
+    <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
   <% end %>
-
-  <!-- Login box -->
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card p-4 shadow-sm">
-
-        <h2 class="h5 text-center mb-3">Log in</h2>
-
-        <%= form_with url: user_session_path, scope: :user, local: true do |f| %>
-
-          <div class="mb-3">
-            <%= f.email_field :email,
-              placeholder: "Email",
-              class: "form-control" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.password_field :password,
-              placeholder: "Password",
-              class: "form-control" %>
-          </div>
-
-          <%= f.submit "Log in", class: "btn btn-dark w-100" %>
-
-        <% end %>
-
-        <div class="text-center mt-3">
-          <%= link_to "Create an account", new_user_registration_path %>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-</section>
+</div>
+<div class="container">
+  <h1 class="main-title">WELCOME TO WAXXEE <%= current_user.username %>!</h1>
+  <h2>DIGITAL CRATE CRATE DIGGING</h2>
+  <p>WAXXEE is designed to re-create the experience of flicking thourough boxes of dusty old records
+    in the basement of an old record shop. We don't learn anything about you, our alorithyms will
+    constantly surprise you bringing new and previsouly forgotten tunes to your ears.
+  </p>
+  <p>dive in and find something amazing</p>
+  <%= link_to "Log In", new_user_session_path, class: "btn btn-primary" %>
+</div>

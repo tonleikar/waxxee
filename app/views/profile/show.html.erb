@@ -143,19 +143,6 @@
                         <% end %>
                       </div>
                     </div>
-
-                    <% if followed_vinyl.present? %>
-                      <img src="<%= followed_vinyl.artwork_url %>" alt="<%= followed_vinyl.title %>" class="img-fluid profile-follow-artwork mb-3">
-
-                      <h4 class="h5 mb-1"><%= followed_vinyl.title %></h4>
-                      <p class="mb-1"><strong>Artist:</strong> <%= followed_vinyl.artist %></p>
-                      <p class="mb-1"><strong>Year:</strong> <%= followed_vinyl.year %></p>
-                      <p class="mb-0"><strong>Genre:</strong> <%= followed_vinyl.genre %></p>
-                    <% else %>
-                      <div class="profile-empty-state">
-                        No favorite record picked yet.
-                      </div>
-                    <% end %>
                   </div>
                 </article>
               <% end %>

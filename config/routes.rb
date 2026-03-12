@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     unauthenticated do
-      root to: "devise/sessions#new", as: :unauthenticated_root
+      root to: "pages#home", as: :unauthenticated_root
     end
   end
 

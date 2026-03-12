@@ -15,9 +15,5 @@
     <%= link_to vinyls_path, class: ["nav-icon", ("is-active" if current_page?(vinyls_path))].compact.join(" ") do %>
       <%= image_tag "nav/collections.svg", alt: "Collections", class: "nav-icon-image" %>
     <% end %>
-  <%# commented out for time being unitl I add back into home page %>
-    <% link_to profile_path(current_user), class: ["nav-icon", ("is-active" if current_page?(profile_path(current_user)) || current_page?(edit_profile_path(current_user)))].compact.join(" ") do %>
-      <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
-    <% end %>
   </nav>
 <% end %>
