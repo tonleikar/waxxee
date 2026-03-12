@@ -1,4 +1,6 @@
 class SwiperController < ApplicationController
+  include PersonaVinylPicker
+
   def index
     @key = ENV.fetch("DISCOGS_CONSUMER_KEY", nil)
     @secret = ENV.fetch("DISCOGS_CONSUMER_SECRET", nil)
@@ -18,17 +20,6 @@ class SwiperController < ApplicationController
     @persona = Persona::RULES.fetch(@persona_key)
     @vinyls = filtered_vinyl_scope(@persona).to_a.sample(20)
     @user_vinyl = UserVinyl.new
-  end
-
-  def filtered_vinyl_scope(persona)
-    scope = Vinyl.where(year: persona[:min_year]..persona[:max_year])
-
-    return scope if persona[:genres] == [""]
-
-    scope.where(
-      persona[:genres].map { "genre ILIKE ?" }.join(" OR "),
-      *persona[:genres].map { |genre| "%#{genre}%" }
-    )
   end
 
   def selected_persona_key

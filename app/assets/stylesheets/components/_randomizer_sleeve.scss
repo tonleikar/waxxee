@@ -66,6 +66,7 @@
   flex-direction: column;
   padding: 1rem;
   backface-visibility: hidden;
+  pointer-events: none;
   overflow: hidden;
   background:
     linear-gradient(135deg, #fffcf7, #efe3d3),
@@ -101,6 +102,13 @@
   transform: rotateY(180deg);
   justify-content: space-between;
   background: #efe3d3;
+}
+
+.home-randomizer-sleeve:not(.is-flipped) .randomizer-sleeve__face--front,
+.swiper-sleeve:not(.is-flipped) .randomizer-sleeve__face--front,
+.home-randomizer-sleeve.is-flipped .randomizer-sleeve__face--back,
+.swiper-sleeve.is-flipped .randomizer-sleeve__face--back {
+  pointer-events: auto;
 }
 
 .randomizer-sleeve__artwork-wrap {
