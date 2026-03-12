@@ -89,12 +89,7 @@ export default class extends Controller {
           const direction = diff > 0 ? "right" : "left"
 
           const bg = this.element.closest(".circles-bg")
-          if (bg) {
-            bg.classList.remove("swipe-bg-pulse")
-            void bg.offsetWidth
-            bg.classList.add("swipe-bg-pulse")
-            bg.addEventListener("animationend", () => bg.classList.remove("swipe-bg-pulse"), { once: true })
-          }
+          if (bg) this.spinBackground(bg)
 
           card.style.transform = `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 
@@ -130,7 +125,7 @@ export default class extends Controller {
     event.preventDefault()
     event.stopPropagation()
 
-    const sleeve = event.currentTarget.closest(".randomizer-sleeve")
+    const sleeve = event.currentTarget.closest(".swiper-sleeve")
     sleeve.classList.add("is-flipped")
   }
 
@@ -138,7 +133,7 @@ export default class extends Controller {
     event.preventDefault()
     event.stopPropagation()
 
-    const sleeve = event.currentTarget.closest(".randomizer-sleeve")
+    const sleeve = event.currentTarget.closest(".swiper-sleeve")
     sleeve?.classList.remove("is-flipped")
   }
 
@@ -178,6 +173,15 @@ export default class extends Controller {
     stack.appendChild(toast)
 
     toast.addEventListener("animationend", () => toast.remove())
+  }
+
+  spinBackground(bg) {
+    bg.querySelectorAll(".circles-bg__ring").forEach((ring, index) => {
+      const current = Number(ring.dataset.rotation || 0)
+      const next = current + (index % 2 === 0 ? 42 : -42)
+      ring.dataset.rotation = String(next)
+      ring.style.transform = `rotate(${next}deg)`
+    })
   }
 
   populateCard(card, vinyl) {

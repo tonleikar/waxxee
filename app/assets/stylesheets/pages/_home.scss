@@ -1,6 +1,7 @@
 .home-page {
   position: relative;
   color: var(--wax-ink);
+  isolation: isolate;
 }
 
 .page-backdrop {
@@ -14,10 +15,12 @@
 
 .page-backdrop.is-visible {
   opacity: 0;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .home-hero {
+  position: relative;
+  z-index: 21;
   margin-bottom: 0.25rem;
 }
 
@@ -55,6 +58,7 @@
 
 .randomizer-stage {
   position: relative;
+  z-index: 22;
   width: 100%;
   max-width: 760px;
   min-height: 590px;
@@ -74,7 +78,7 @@
   transform: scale(0.98);
 }
 
-.home-page .randomizer-sleeve {
+.home-page .home-randomizer-sleeve {
   position: absolute;
   left: 50%;
   bottom: 0;
@@ -87,11 +91,12 @@
   transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s ease;
 }
 
-.home-page .randomizer-sleeve.is-visible {
+.home-page .home-randomizer-sleeve.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
-.home-page .randomizer-sleeve.is-engulfing {
+.home-page .home-randomizer-sleeve.is-engulfing {
   transform: translateX(-50%) translateY(-1.75rem);
 }
 
@@ -288,7 +293,7 @@
     gap: 0.35rem;
   }
 
-  .home-page .randomizer-sleeve {
+  .home-page .home-randomizer-sleeve {
     top: 50%;
     bottom: auto;
     width: 392px;
@@ -296,7 +301,7 @@
     transform: translate(-50%, 120%);
   }
 
-  .home-page .randomizer-sleeve.is-engulfing {
+  .home-page .home-randomizer-sleeve.is-engulfing {
     transform: translate(-50%, -50%);
   }
 
