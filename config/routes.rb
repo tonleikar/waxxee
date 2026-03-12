@@ -16,26 +16,20 @@ Rails.application.routes.draw do
   resources :followers, only: [:index, :create, :destroy]
   resources :collections, controller: :folders, only: [:create, :destroy]
   resources :folder_vinyls, only: [:create, :destroy]
-<<<<<<< HEAD
   resources :swiper, only: [:index] do
     collection do
       post :card_preview
     end
   end
+
   resources :profile, only: [:show, :edit, :update, :destroy]
   resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show, :create]
-  resources :discogs, only: [:index]
-=======
-  resources :swiper, only: [:index]
+  resources :discogs, only: [:index, :create]
   resources :profile, only: [:show, :edit, :update, :destroy] do
     patch :avatar, on: :member
     get :avatar_preview, on: :member
   end
-  resources :user_vinyls, only: [:create, :destroy]
-  resources :vinyls, only: [:index, :show]
-  resources :discogs, only: [:index, :create]
->>>>>>> c9eccfe40453200b1c36a1ed3f8093eaeb13b206
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
