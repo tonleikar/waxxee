@@ -41,3 +41,10 @@
     height: 40px;
   }
 }
+
+.log-in-container {
+  background-color: $signal-orange;
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+  margin-block: 2rem;
+  padding: 2rem;
+}
