@@ -16,8 +16,9 @@ class SwiperController < ApplicationController
 
   def vinyl_payload
     params.require(:vinyl).permit!.to_h if params[:vinyl].present?
+    @persona_record = selected_persona_record
     @persona_key = selected_persona_key || "randomizer"
-    @persona = Persona::RULES.fetch(@persona_key)
+    @persona = @persona_record&.picker_rule || Persona::RULES.fetch(@persona_key)
     @vinyls = filtered_vinyl_scope(@persona).to_a.sample(20)
     @user_vinyl = UserVinyl.new
   end
@@ -25,5 +26,11 @@ class SwiperController < ApplicationController
   def selected_persona_key
     key = params[:persona]&.downcase
     key if key.present? && Persona::RULES.key?(key)
+  end
+
+  def selected_persona_record
+    return if params[:persona_id].blank?
+
+    Persona.find_by(id: params[:persona_id])
   end
 end

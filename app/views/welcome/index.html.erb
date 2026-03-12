@@ -4,10 +4,12 @@
     <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
   <% end %>
 </div>
+
 <div class="container">
   <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
   <h2>GO DIGGING...</h2>
-    <div class="persona-grid mb-5">
+
+  <div class="persona-grid mb-4">
     <% @personas.each do |persona| %>
       <%= link_to swiper_index_path(persona: persona[:key]),
                   class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
@@ -26,6 +28,86 @@
       <% end %>
     <% end %>
   </div>
+
+  <section class="home-persona-section mb-5"
+           data-controller="persona-form"
+           data-persona-form-open-class="is-open">
+    <div class="persona-grid mb-4">
+      <% @saved_personas.each do |persona| %>
+        <article class="persona-card persona-card--custom">
+          <%= link_to swiper_index_path(persona_id: persona.id), class: "persona-card__link" do %>
+            <div class="persona-card__thumbnail persona-card__thumbnail--custom">
+              <span class="persona-card__years"><%= persona.min_year %>-<%= persona.max_year %></span>
+              <span class="persona-card__badge">User generated</span>
+            </div>
+
+              <div class="persona-card__body persona-card__body--custom">
+                <div>
+                  <h2 class="persona-card__title mb-1"><%= persona.title %></h2>
+                  <p class="persona-card__meta mb-2"><%= Array(persona.genres).join(" / ") %></p>
+                  <p class="persona-card__summary mb-0"><%= persona.summary %></p>
+                </div>
+              </div>
+            <% end %>
+
+          <div class="persona-card__actions">
+            <%= link_to "Open",
+                        swiper_index_path(persona_id: persona.id),
+                        class: "persona-card__action persona-card__action--primary" %>
+            <%= button_to "Delete",
+                          persona_path(persona),
+                          method: :delete,
+                          class: "persona-card__action persona-card__action--secondary",
+                          form: { data: { turbo_confirm: "Delete this saved persona?" } } %>
+          </div>
+        </article>
+      <% end %>
+
+      <button type="button"
+              class="persona-card persona-card--builder"
+              data-persona-form-target="button"
+              data-action="persona-form#toggle"
+              aria-expanded="false">
+        <div class="persona-card__thumbnail persona-card__thumbnail--builder">
+          <span class="persona-card__years">Custom</span>
+        </div>
+
+        <div class="persona-card__body persona-card__body--builder">
+          <div>
+            <h2 class="persona-card__title mb-1"><%= @persona_builder_label %></h2>
+            <p class="persona-card__meta mb-0">Generate a saved Waxxee persona.</p>
+          </div>
+        </div>
+
+        <div class="persona-card__actions persona-card__actions--builder">
+          <span class="persona-card__action persona-card__action--primary">Create</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="home-persona-builder" data-persona-form-target="panel" hidden>
+      <%= form_with url: personas_path, method: :post, class: "home-persona-builder__form" do |form| %>
+        <%= form.hidden_field :return_to, name: "persona[return_to]", value: request.fullpath %>
+        <%= form.hidden_field :redirect_to_swiper, name: "persona[redirect_to_swiper]", value: true %>
+
+        <div class="home-persona-builder__field">
+          <%= form.label :prompt, "Describe your taste", class: "form-label" %>
+          <%= form.text_area :prompt,
+                             name: "persona[prompt]",
+                             rows: 4,
+                             class: "form-control home-persona-builder__input",
+                             data: { persona_form_target: "input" },
+                             placeholder: "Example: Build me a warm 70s cosmic soul persona with jazzy edges, dub textures, and late-night energy." %>
+        </div>
+
+        <div class="home-persona-builder__actions">
+          <p class="home-persona-builder__hint mb-0">The persona will be saved to your account.</p>
+          <%= form.submit "Generate and save persona", class: "home-persona-builder__submit" %>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
   <h2>RECENT FINDS...</h2>
   <div class="vinyl-wrapper">
     <% @recent_vinyls.each do |vinyl| %>

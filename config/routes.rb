@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :followers, only: [:index, :create, :destroy]
   resources :collections, controller: :folders, only: [:create, :destroy]
   resources :folder_vinyls, only: [:create, :destroy]
+  resources :personas, only: [:create, :destroy]
   resources :swiper, only: [:index] do
     collection do
       post :card_preview

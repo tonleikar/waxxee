@@ -249,6 +249,47 @@
   box-shadow: 0 12px 22px rgba(17, 17, 17, 0.08);
 }
 
+.profile-persona-primary-form {
+  margin: 0;
+}
+
+.profile-persona-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.profile-persona-card {
+  background: rgba(255, 251, 245, 0.9);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.06);
+}
+
+.profile-persona-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.55rem;
+  background: #111111;
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.profile-persona-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.profile-persona-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: rgba(255, 251, 245, 0.92);
+  font-size: 0.84rem;
+}
+
 .profile-follow-avatar {
   width: 56px;
   height: 56px;

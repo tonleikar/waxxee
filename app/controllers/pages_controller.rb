@@ -1,22 +1,12 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [:home]
+
   def home
     redirect_to welcome_index_path if current_user.present?
     @recent_vinyls = Vinyl.last(4)
   end
 
   def randomizer
-    @personas = Persona::RULES.map do |key, rule|
-      next if key == "randomizer"
-
-      {
-        key: key,
-        title: rule[:title],
-        min_year: rule[:min_year],
-        max_year: rule[:max_year],
-        genres: rule[:genres]
-      }
-    end.compact
     @persona_key = selected_persona_key || "randomizer"
     @persona = Persona::RULES.fetch(@persona_key)
 
