@@ -1,6 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static values = {
+    removeCard: Boolean
+  }
+
   async remove(event) {
     event.preventDefault()
 
@@ -15,6 +19,11 @@ export default class extends Controller {
     })
 
     if (!response.ok) return
+
+    if (this.removeCardValue) {
+      this.element.closest("[data-crate-card]")?.remove()
+      return
+    }
 
     const html = await response.text()
     const frame = this.element.closest("turbo-frame")
