@@ -16,6 +16,7 @@
               class="profile-avatar-panel"
               data-controller="profile-avatar"
               data-profile-avatar-preview-url-value="<%= avatar_preview_profile_path(@user) %>"
+              data-profile-avatar-current-source-type-value="<%= @user.avatar_source_type %>"
             >
               <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                 <div>
@@ -25,7 +26,7 @@
                 <%= button_tag "Regenerate",
                   type: "button",
                   class: "btn btn-outline-dark btn-sm",
-                  data: { action: "profile-avatar#regenerate" } %>
+                  data: { action: "click->profile-avatar#regenerate" } %>
               </div>
 
               <img
@@ -36,15 +37,32 @@
               >
 
               <p class="small text-muted mb-3">
-                Click regenerate to create a new portrait from thispersondoesnotexist.com, then save it to Cloudinary for this profile.
+                Click regenerate for a free random portrait, or upload your own image, then save it to Cloudinary for this profile.
               </p>
 
-              <%= form_with model: @user, url: avatar_profile_path(@user), method: :patch, class: "d-grid gap-3" do |avatar_form| %>
+              <%= form_with model: @user, url: avatar_profile_path(@user), method: :patch, class: "d-grid gap-3", data: { action: "submit->profile-avatar#save" }, html: { multipart: true } do |avatar_form| %>
                 <div data-profile-avatar-target="status" class="small text-muted d-none"></div>
-                <%= avatar_form.hidden_field :avatar_image_data, data: { profile_avatar_target: "input" } %>
-                <%= avatar_form.submit "Save profile picture",
-                  class: "btn btn-dark",
-                  data: { profile_avatar_target: "saveButton", action: "profile-avatar#save" } %>
+                <%= avatar_form.hidden_field :avatar_source_url, data: { profile_avatar_target: "input" } %>
+                <div>
+                  <label class="form-label" for="avatar-gender-select">Portrait type</label>
+                  <select
+                    id="avatar-gender-select"
+                    class="form-select"
+                    data-profile-avatar-target="genderSelect"
+                  >
+                    <option value="">Random</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
+                </div>
+                <div>
+                  <%= avatar_form.label :avatar_file, "Upload image", class: "form-label" %>
+                  <%= avatar_form.file_field :avatar_file,
+                    accept: "image/*",
+                    class: "form-control",
+                    data: { profile_avatar_target: "fileInput", action: "change->profile-avatar#uploadPreview" } %>
+                </div>
+                <%= avatar_form.submit "Save profile picture", class: "btn btn-dark", data: { profile_avatar_target: "saveButton" } %>
               <% end %>
 
               <% if @user.avatar_url.present? %>
