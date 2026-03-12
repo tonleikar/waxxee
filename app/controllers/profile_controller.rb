@@ -1,4 +1,7 @@
 class ProfileController < ApplicationController
+  require "net/http"
+  require "tempfile"
+
   before_action :set_profile_user, only: [:show]
   before_action :ensure_current_user!, only: [:edit, :update, :destroy, :avatar, :avatar_preview]
   before_action :set_current_user, only: [:edit, :update, :destroy, :avatar, :avatar_preview]
@@ -30,11 +33,7 @@ class ProfileController < ApplicationController
       "generated"
     end
 
-    upload_source = if avatar_params[:avatar_file].present?
-      avatar_params[:avatar_file].tempfile
-    else
-      avatar_params[:avatar_source_url]
-    end
+    upload_source = build_avatar_upload_source
 
     upload = Cloudinary::Uploader.upload(
       upload_source,
@@ -130,5 +129,36 @@ class ProfileController < ApplicationController
     raise "Avatar generation returned no image" if image_url.blank?
 
     image_url
+  end
+
+  def build_avatar_upload_source
+    return avatar_params[:avatar_file].tempfile if avatar_params[:avatar_file].present?
+
+    download_remote_image(avatar_params[:avatar_source_url])
+  end
+
+  def download_remote_image(url)
+    uri = URI(url)
+
+    response = Net::HTTP.start(
+      uri.host,
+      uri.port,
+      use_ssl: uri.scheme == "https",
+      open_timeout: 5,
+      read_timeout: 15
+    ) do |http|
+      request = Net::HTTP::Get.new(uri)
+      request["User-Agent"] = "Waxxee/1.0"
+      http.request(request)
+    end
+
+    raise "Could not download generated image: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
+
+    extension = Rack::Mime::MIME_TYPES.invert[response["Content-Type"].to_s.split(";").first] || ".jpg"
+    tempfile = Tempfile.new(["profile-avatar", extension])
+    tempfile.binmode
+    tempfile.write(response.body)
+    tempfile.rewind
+    tempfile
   end
 end
