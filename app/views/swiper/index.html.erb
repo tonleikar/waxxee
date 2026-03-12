@@ -5,7 +5,16 @@
     data-swipe-card-url-value="<%= card_preview_swiper_index_url %>"
     data-swipe-key-value="<%= @key %>"
     data-swipe-secret-value="<%= @secret %>"
-    >
+    data-swipe-vinyls-value="<%= @vinyls.to_json(only: [:id, :artwork_url, :title, :artist, :year, :genre]) %>"
+    data-swipe-image-url-value="<%= asset_path('vinyl-back-button.png') %>">
+    <div class="text-center text-light mb-3">
+      <p class="small text-uppercase mb-1 opacity-75">Swiper</p>
+      <h1 class="h3 mb-0"><%= @persona[:title] %></h1>
+    </div>
+    <%= simple_form_for @user_vinyl, html: {class: "d-none", data: {swipe_target: "form"}} do|f|  %>
+      <%= f.input :vinyl_id, input_html: {data: {swipe_target: "vinylId"}} %>
+      <%= f.submit %>
+    <% end %>
     <div class="tinder-container" data-swipe-target="vinylWrapper"></div>
   <%= render "shared/toast" %>
   </div>

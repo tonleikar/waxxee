@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Change This To Your Rails App Name" %></title>
+    <title><%= content_for(:title) || "WAXXEE" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Change This To Your Rails App Name">
@@ -11,24 +11,42 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
+  <body class="<%= 'is-auth-page' if devise_controller? %> <%= 'is-signed-in' if user_signed_in? %>">
+    <% show_auth_ticker = devise_controller? && controller_name == "sessions" && action_name == "new" %>
 
-  <body>
-    <%= render "shared/navbar" %>
+    <% if show_auth_ticker %>
+      <div class="auth-ticker auth-ticker-top" aria-hidden="true">
+        <div class="auth-ticker__track">
+          <span>WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE</span>
+          <span>WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE</span>
+        </div>
+      </div>
+    <% end %>
+
+    <% if user_signed_in? %>
+      <%= render "shared/navbar" %>
+    <% end %>
+
     <%= render "shared/flashes" %>
 
-    <main class="app-shell">
+    <main class="app-shell <%= 'app-shell-auth' if devise_controller? %>">
       <%= yield %>
     </main>
+
+    <% if show_auth_ticker %>
+      <div class="auth-ticker auth-ticker-bottom" aria-hidden="true">
+        <div class="auth-ticker__track auth-ticker__track--reverse">
+          <span>WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE</span>
+          <span>WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE WAXXEE</span>
+        </div>
+      </div>
+    <% end %>
   </body>
 </html>

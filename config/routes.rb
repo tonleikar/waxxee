@@ -1,11 +1,22 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: "pages#home"
 
+  authenticated :user do
+    root to: "pages#home_logged_in", as: :authenticated_root
+  end
+
+  devise_scope :user do
+    unauthenticated do
+      root to: "devise/sessions#new", as: :unauthenticated_root
+    end
+  end
+
+  resources :users, only: [:index]
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]
   resources :collections, controller: :folders, only: [:create, :destroy]
   resources :folder_vinyls, only: [:create, :destroy]
+<<<<<<< HEAD
   resources :swiper, only: [:index] do
     collection do
       post :card_preview
@@ -15,6 +26,16 @@ Rails.application.routes.draw do
   resources :user_vinyls, only: [:create, :destroy]
   resources :vinyls, only: [:index, :show, :create]
   resources :discogs, only: [:index]
+=======
+  resources :swiper, only: [:index]
+  resources :profile, only: [:show, :edit, :update, :destroy] do
+    patch :avatar, on: :member
+    get :avatar_preview, on: :member
+  end
+  resources :user_vinyls, only: [:create, :destroy]
+  resources :vinyls, only: [:index, :show]
+  resources :discogs, only: [:index, :create]
+>>>>>>> c9eccfe40453200b1c36a1ed3f8093eaeb13b206
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -1,7 +1,7 @@
 /* Base page background */
 body {
   margin: 0;
-  background: #2a2a2a;
+  background: var(--wax-cream);
 }
 /* Fullscreen dark background and centering – crop ripples so no scroll */
 .record-page {
@@ -10,7 +10,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #3a3a3a 0%, #202020 55%, #111111 100%);
+  background:
+    radial-gradient(circle at top, rgba(17, 17, 17, 0.08) 0%, rgba(17, 17, 17, 0.02) 52%, rgba(255, 252, 247, 0) 100%),
+    var(--wax-cream);
   overflow: hidden;
 }
 /* Randomizer button – reset default button styles */
@@ -68,11 +70,11 @@ body {
   opacity: 1;
   animation-play-state: running;
 }
-/* Dissipating: ripples keep moving while fading out (no pause) */
-.randomizer-btn.is-dissipating .record-container::before,
-.randomizer-btn.is-dissipating .record-container::after {
-  /* one last outward pass that fully disappears */
-  animation: outline-ripple-fade 0.9s ease-out 1 forwards;
+
+.randomizer-btn.has-result .record-container::before,
+.randomizer-btn.has-result .record-container::after {
+  opacity: 0;
+  animation: none;
 }
 /* Vinyl record base */
 .record {
@@ -80,6 +82,11 @@ body {
   height: 450px;
   border-radius: 50%;
   background:
+    repeating-radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.04) 0 1px,
+      rgba(0, 0, 0, 0) 1px 7px
+    ),
     radial-gradient(circle at center, #202020 0, #151515 35%, #050505 70%, #000 100%);
   background-blend-mode: normal;
   box-shadow: none;
@@ -154,10 +161,10 @@ body {
   border-radius: 50%;
   background:
     radial-gradient(ellipse 80% 80% at 25% 25%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%),
-    radial-gradient(ellipse 70% 70% at 75% 30%, rgba(140, 210, 255, 0.6) 0%, rgba(140, 210, 255, 0.12) 50%, transparent 75%),
-    radial-gradient(ellipse 70% 70% at 30% 75%, rgba(255, 180, 140, 0.4) 0%, rgba(255, 180, 140, 0.06) 50%, transparent 75%),
-    radial-gradient(ellipse 75% 75% at 70% 70%, rgba(180, 220, 255, 0.45) 0%, rgba(180, 220, 255, 0.08) 55%, transparent 80%),
-    radial-gradient(circle at center, #ffe8c0 0%, #d8e8ff 35%, #ffc8b8 65%, #b8d8ff 100%);
+    radial-gradient(ellipse 70% 70% at 74% 28%, rgba(148, 206, 255, 0.56) 0%, rgba(148, 206, 255, 0.14) 50%, transparent 76%),
+    radial-gradient(ellipse 68% 68% at 30% 74%, rgba(232, 96, 132, 0.44) 0%, rgba(232, 96, 132, 0.12) 50%, transparent 74%),
+    radial-gradient(ellipse 58% 58% at 70% 72%, rgba(255, 162, 92, 0.26) 0%, rgba(255, 162, 92, 0.06) 52%, transparent 78%),
+    radial-gradient(circle at center, #ffffff 0%, #d9ecff 28%, #ffb4c6 66%, #eb6f66 100%);
   background-blend-mode: overlay, overlay, overlay, overlay, normal;
   display: flex;
   align-items: center;
@@ -185,17 +192,6 @@ body {
   }
   8% {
     transform: scale(1.15);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(4.5);
-    opacity: 0;
-  }
-}
-/* Final fade used after success so last ring fully clears */
-@keyframes outline-ripple-fade {
-  0% {
-    transform: scale(2.5);
     opacity: 0.6;
   }
   100% {

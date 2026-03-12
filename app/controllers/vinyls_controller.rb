@@ -10,7 +10,7 @@ class VinylsController < ApplicationController
 
     @vinyls = @vinyls.order(order_clause_for(@sort))
     @folders = current_user.folders.order(name: :asc)
-    @user_vinyls_by_vinyl_id = current_user.user_vinyls.includes(:folders).index_by(&:vinyl_id)
+    @user_vinyls_by_vinyl_id = current_user.user_vinyls.includes(:folders, :folder_vinyls).index_by(&:vinyl_id)
   end
 
   def show
@@ -29,7 +29,7 @@ class VinylsController < ApplicationController
           year_asc].include?(params[:sort])
       params[:sort]
     else
-      "title_desc"
+      "recent"
     end
   end
 
@@ -46,7 +46,7 @@ class VinylsController < ApplicationController
     when "year_asc"
       { year: :asc, title: :asc }
     else
-      { title: :desc }
+      { created_at: :desc }
     end
   end
 

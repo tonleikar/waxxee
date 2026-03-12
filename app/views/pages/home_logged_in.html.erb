@@ -1,0 +1,131 @@
+<section class="home-page container py-4 py-lg-5"
+         data-controller="randomizer"
+         data-randomizer-url-value="<%= authenticated_root_path(format: :json, persona: @persona_key) %>"
+         data-randomizer-save-url-value="<%= user_vinyls_path %>"
+         data-randomizer-loading-value="1200"
+         data-randomizer-success-value="900"
+         data-randomizer-dissipate-value="700">
+  <div class="page-backdrop"
+       data-action="click->randomizer#close"
+       data-randomizer-target="backdrop"></div>
+
+  <div class="home-hero text-center">
+    <h1 class="home-title mb-3">Randomizer</h1>
+    <p class="home-subtitle mx-auto mb-4">
+      Spin for a record, or jump into a mood card below.
+    </p>
+
+    <div class="randomizer-stage mx-auto mb-5">
+      <button type="button"
+              class="randomizer-btn home-randomizer-btn"
+              aria-label="Randomizer record"
+              data-action="click->randomizer#start"
+              data-randomizer-target="trigger">
+        <div class="record-container">
+          <div class="record">
+            <div class="record-label">
+              <div class="record-hole"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <article class="randomizer-sleeve" data-randomizer-target="sleeve" aria-live="polite">
+        <div class="randomizer-sleeve__body">
+          <div class="randomizer-sleeve__face randomizer-sleeve__face--front">
+            <button type="button"
+                    class="randomizer-sleeve__close randomizer-sleeve__close--front"
+                    aria-label="Close result"
+                    data-action="click->randomizer#close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="randomizer-sleeve__artwork-wrap">
+              <img src=""
+                   alt=""
+                   class="randomizer-sleeve__artwork"
+                   data-randomizer-target="artwork">
+            </div>
+
+            <button type="button"
+                    class="randomizer-sleeve__flip"
+                    aria-label="Flip to details"
+                    data-action="click->randomizer#flipToBack">
+              <span aria-hidden="true">&#x21bb;</span>
+            </button>
+          </div>
+
+          <div class="randomizer-sleeve__face randomizer-sleeve__face--back">
+            <button type="button"
+                    class="randomizer-sleeve__close randomizer-sleeve__close--back"
+                    aria-label="Close result"
+                    data-action="click->randomizer#close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="randomizer-sleeve__back-header">
+              <p class="randomizer-sleeve__eyebrow mb-1">Release details</p>
+              <h2 class="randomizer-sleeve__back-title mb-0" data-randomizer-target="backTitle"></h2>
+            </div>
+
+            <dl class="randomizer-sleeve__details">
+              <div>
+                <dt>Artist</dt>
+                <dd data-randomizer-target="detailArtist"></dd>
+              </div>
+              <div>
+                <dt>Year</dt>
+                <dd data-randomizer-target="detailYear"></dd>
+              </div>
+              <div>
+                <dt>Genre</dt>
+                <dd data-randomizer-target="detailGenre"></dd>
+              </div>
+            </dl>
+
+            <div class="randomizer-sleeve__actions">
+              <button type="button"
+                      class="randomizer-sleeve__flip randomizer-sleeve__flip--back"
+                      aria-label="Flip to cover"
+                      data-action="click->randomizer#flipToFront">
+                <span aria-hidden="true">&#x21ba;</span>
+              </button>
+              <button type="button"
+                      class="randomizer-sleeve__action"
+                      data-action="click->randomizer#saveToCollection"
+                      data-randomizer-target="saveButton">
+                Save
+              </button>
+              <button type="button"
+                      class="randomizer-sleeve__action randomizer-sleeve__action--secondary"
+                      data-action="click->randomizer#tryAgain">
+                Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="persona-grid mb-5">
+    <% @personas.each do |persona| %>
+      <%= link_to swiper_index_path(persona: persona[:key]),
+                  class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
+        <div class="persona-card__thumbnail persona-card__thumbnail--<%= persona[:key] %>">
+          <span class="persona-card__years"><%= persona[:min_year] %>-<%= persona[:max_year] %></span>
+        </div>
+
+        <div class="persona-card__body">
+          <div>
+            <h2 class="persona-card__title mb-1"><%= persona[:title] %></h2>
+            <p class="persona-card__meta mb-0">
+              <%= persona[:genres].join(" / ") %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+</section>
