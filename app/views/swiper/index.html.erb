@@ -11,6 +11,9 @@
       <p class="small text-uppercase mb-1 opacity-75">Swiper</p>
       <h1 class="h3 mb-0"><%= @persona[:title] %></h1>
     </div>
+    <template data-swipe-target="template">
+      <%= render "swiper/vinyl_card", vinyl: nil %>
+    </template>
     <%= simple_form_for @user_vinyl, html: {class: "d-none", data: {swipe_target: "form"}} do|f|  %>
       <%= f.input :vinyl_id, input_html: {data: {swipe_target: "vinylId"}} %>
       <%= f.submit %>

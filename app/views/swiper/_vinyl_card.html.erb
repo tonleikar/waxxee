@@ -1,19 +1,19 @@
-<div class="vinyl-card" data-discogs-id="<%= vinyl[:discogs_id] %>">
+<div class="vinyl-card" data-discogs-id="<%= vinyl.nil? ? "{{vinylid}}" :  vinyl[:discogs_id] %>">
   <div class="vinyl-card-inner">
     <div class="vinyl-card-front">
       <div class="vinyl-back-button" data-swipe-target="backButton">
         <%= image_tag "vinyl-back-button.png" %>
       </div>
-      <%= image_tag vinyl[:artwork_url].presence || "placeholder.png", alt: "#{vinyl[:title]} album cover" %>
+      <%= image_tag vinyl.nil? || vinyl&.key?(:artwork_url) ? "placeholder.png" : vinyl[:artwork_url], alt: "album cover", class: "album-img" %>
     </div>
     <div class="vinyl-card-back">
       <div class="vinyl-info">
         <div class="vinyl-back-button" data-swipe-target="backButton">
           <%= image_tag "vinyl-back-button.png" %>
         </div>
-        <h2><%= vinyl[:title] %></h2>
-        <p><%= vinyl[:artist] %></p>
-        <small><%= vinyl[:year] %> | <%= vinyl[:genre] %></small>
+        <h2><%= vinyl.nil? ? "{{title}}" : vinyl[:title] %></h2>
+        <p><%# vinyl[:artist] %></p>
+        <small><%# vinyl[:year] %> | <%# vinyl[:genre] %></small>
       </div>
     </div>
   </div>

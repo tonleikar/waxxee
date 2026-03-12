@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { url: String, cardUrl: String, key: String, secret: String }
-  static targets = ["vinylWrapper", "backButton"]
+  static targets = ["vinylWrapper", "backButton", "template"]
 
   async connect() {
     this.index = 0
@@ -36,19 +36,29 @@ export default class extends Controller {
     }
 
     const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
-    const [vinyl] = this.currentVinyls.splice(randomIndex, 1)
-    const response = await fetch(this.cardUrlValue, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
-        "Content-Type": "application/json",
-        "Accept": "text/html"
-      },
-      body: JSON.stringify({ vinyl })
-    })
-
+    const vinyl = this.currentVinyls.splice(randomIndex, 1)[0]
     this.activeVinyl = vinyl
-    this.vinylWrapperTarget.innerHTML = await response.text()
+    console.log(vinyl)
+
+    const cardCopy = this.templateTarget.content.cloneNode(true).querySelector(".vinyl-card")
+    console.log(cardCopy)
+    cardCopy.dataset.discogsId = vinyl.id;
+    cardCopy.querySelector("h2").textContent = vinyl.title;
+    cardCopy.querySelector(".album-img").src = vinyl.cover_image;
+    // TODO: Add the rest of the data
+    // TODO: Make this a post request to the VinylsController to create a new reecord on our backend
+    // const response = await fetch(this.cardUrlValue, {
+    //   method: "POST",
+    //   headers: {
+    //     "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+    //     "Content-Type": "application/json",
+    //     "Accept": "text/html"
+    //   },
+    //   body: JSON.stringify({ vinyl })
+    // })
+
+    this.vinylWrapperTarget.innerHTML = "";
+    this.vinylWrapperTarget.appendChild(cardCopy)
 
     const card = this.element.querySelector(".vinyl-card")
     if (!card) return

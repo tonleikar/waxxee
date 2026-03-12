@@ -1,6 +1,7 @@
 module Discogs
   class SearchResult
     def initialize(payload)
+      p payload
       @payload = payload.deep_stringify_keys
     end
 
@@ -29,7 +30,9 @@ module Discogs
     end
 
     def artist
-      payload["artist"].presence || split_title.first.presence || Array(payload["artists"]).filter_map { |item| item["name"].presence }.join(", ")
+      payload["artist"].presence || split_title.first.presence || Array(payload["artists"]).filter_map do |item|
+        item["name"].presence
+      end.join(", ")
     end
 
     def year
