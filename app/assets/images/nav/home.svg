@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 121.54 121.54">
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 120.26 120.26">
+  <!-- Generator: Adobe Illustrator 29.8.5, SVG Export Plug-In . SVG Version: 2.1.1 Build 2)  -->
   <defs>
     <style>
-      .cls-1 {
+      .st0 {
         fill: none;
         stroke: #000;
         stroke-miterlimit: 10;
-        stroke-width: 2.5px;
+        stroke-width: 4px;
       }
     </style>
   </defs>
-  <g id="layer">
-    <g>
-      <path class="cls-1" d="M60.77,12.29c26.77,0,48.48,21.71,48.48,48.48h0"/>
-      <path class="cls-1" d="M12.29,60.77c0,26.04,20.54,47.29,46.29,48.43"/>
-      <path class="cls-1" d="M60.77,23.59c20.53,0,37.18,16.65,37.18,37.18h0"/>
-      <path class="cls-1" d="M23.59,60.77c0,19.79,15.48,35.98,34.99,37.11"/>
-      <path class="cls-1" d="M60.76,34.89h0c14.29,0,25.88,11.59,25.88,25.88h0"/>
-      <path class="cls-1" d="M34.89,60.77c0,13.56,10.43,24.68,23.7,25.79"/>
-      <path class="cls-1" d="M60.72,46.19h.05c8.05,0,14.58,6.53,14.58,14.58h0"/>
-      <path class="cls-1" d="M46.19,60.77c0,7.32,5.4,13.39,12.44,14.42"/>
-      <circle class="cls-1" cx="60.67" cy="60.77" r="6.11"/>
-      <circle class="cls-1" cx="60.77" cy="60.77" r="59.77"/>
-    </g>
-  </g>
+  <polygon class="st0" points="60.19 14 5.39 57.29 21.44 57.29 21.44 107.21 47.12 107.21 47.12 73.17 73.14 73.17 73.14 107.21 98.94 107.21 98.94 57.29 114.99 57.29 60.19 14"/>
 </svg>

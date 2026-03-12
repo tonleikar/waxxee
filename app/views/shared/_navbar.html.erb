@@ -1,7 +1,11 @@
 <% if user_signed_in? %>
   <nav class="navbar-lewagon">
-    <%= link_to authenticated_root_path, class: ["nav-icon", ("is-active" if current_page?(authenticated_root_path))].compact.join(" ") do %>
+    <%= link_to welcome_index_path, class: ["nav-icon", ("is-active" if current_page?(welcome_index_path))].compact.join(" ") do %>
       <%= image_tag "nav/home.svg", alt: "Home", class: "nav-icon-image" %>
+    <% end %>
+
+    <%= link_to randomizer_path, class: ["nav-icon", ("is-active" if current_page?(randomizer_path))].compact.join(" ") do %>
+      <%= image_tag "nav/randomiser.svg", alt: "Home", class: "nav-icon-image" %>
     <% end %>
 
     <%= link_to feed_index_path, class: ["nav-icon", ("is-active" if current_page?(feed_index_path))].compact.join(" ") do %>
@@ -10,10 +14,6 @@
 
     <%= link_to vinyls_path, class: ["nav-icon", ("is-active" if current_page?(vinyls_path))].compact.join(" ") do %>
       <%= image_tag "nav/collections.svg", alt: "Collections", class: "nav-icon-image" %>
-    <% end %>
-
-    <%= link_to profile_path(current_user), class: ["nav-icon", ("is-active" if current_page?(profile_path(current_user)) || current_page?(edit_profile_path(current_user)))].compact.join(" ") do %>
-      <%= image_tag "nav/profile.svg", alt: "Profile", class: "nav-icon-image" %>
     <% end %>
   </nav>
 <% end %>

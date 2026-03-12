@@ -1,6 +1,6 @@
 <section class="home-page container py-4 py-lg-5"
          data-controller="randomizer"
-         data-randomizer-url-value="<%= authenticated_root_path(format: :json) %>"
+         data-randomizer-url-value="<%= randomizer_path(format: :json, persona: @persona_key) %>"
          data-randomizer-save-url-value="<%= user_vinyls_path %>"
          data-randomizer-loading-value="1200"
          data-randomizer-success-value="900"
@@ -12,7 +12,7 @@
   <div class="home-hero text-center">
     <h1 class="home-title mb-3">Randomizer</h1>
     <p class="home-subtitle mx-auto mb-4">
-      Spin for a record, or jump into a mood card below.
+      Spin for a record from your collection.
     </p>
 
     <div class="randomizer-stage mx-auto mb-5">
@@ -109,25 +109,4 @@
       </article>
     </div>
   </div>
-
-  <div class="persona-grid mb-5">
-    <% @personas.each do |persona| %>
-      <%= link_to swiper_index_path(persona: persona[:key]),
-                  class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
-        <div class="persona-card__thumbnail persona-card__thumbnail--<%= persona[:key] %>">
-          <span class="persona-card__years"><%= persona[:min_year] %>-<%= persona[:max_year] %></span>
-        </div>
-
-        <div class="persona-card__body">
-          <div>
-            <h2 class="persona-card__title mb-1"><%= persona[:title] %></h2>
-            <p class="persona-card__meta mb-0">
-              <%= persona[:genres].join(" / ") %>
-            </p>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-
 </section>

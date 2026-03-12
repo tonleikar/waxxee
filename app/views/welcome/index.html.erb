@@ -1,0 +1,35 @@
+<div class="welcome-header">
+  <%= image_tag "waxxee_logo" %>
+  <%= link_to profile_path(current_user) do %>
+    <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
+  <% end %>
+</div>
+<div class="container">
+  <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
+  <h2>GO DIGGING...</h2>
+    <div class="persona-grid mb-5">
+    <% @personas.each do |persona| %>
+      <%= link_to swiper_index_path(persona: persona[:key]),
+                  class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
+        <div class="persona-card__thumbnail persona-card__thumbnail--<%= persona[:key] %>">
+          <span class="persona-card__years"><%= persona[:min_year] %>-<%= persona[:max_year] %></span>
+        </div>
+
+        <div class="persona-card__body">
+          <div>
+            <h2 class="persona-card__title mb-1"><%= persona[:title] %></h2>
+            <p class="persona-card__meta mb-0">
+              <%= persona[:genres].join(" / ") %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <h2>RECENT FINDS...</h2>
+  <div class="vinyl-wrapper">
+    <% @recent_vinyls.each do |vinyl| %>
+      <%= render "shared/vinyl_card", vinyl: vinyl.vinyl %>
+    <% end %>
+  </div>
+</div>

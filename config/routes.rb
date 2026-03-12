@@ -1,16 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  authenticated :user do
-    root to: "pages#home_logged_in", as: :authenticated_root
-  end
+  root to: "pages#home"
 
-  devise_scope :user do
-    unauthenticated do
-      root to: "devise/sessions#new", as: :unauthenticated_root
-    end
-  end
 
+
+  resources :welcome, only: [:index]
+  get "randomizer", to: "pages#randomizer", as: :randomizer
   resources :users, only: [:index]
   resources :feed, only: [:index], controller: :followers
   resources :followers, only: [:index, :create, :destroy]

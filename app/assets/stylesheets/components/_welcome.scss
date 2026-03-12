@@ -1,0 +1,50 @@
+.vinyl-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.welcome-vinyl-card {
+  padding: 0.5rem;
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgba(250, 246, 239, 0.98), rgba(240, 231, 218, 0.96));
+  box-shadow:
+    0 20px 40px rgba(17, 17, 17, 0.08),
+    inset 0 0 0 1px rgba(109, 89, 63, 0.08);
+  img {
+    width: 100%;
+  }
+}
+
+.main-title {
+  font-size: 3rem;
+  text-overflow: clip;
+  padding-bottom: 1rem;
+}
+
+.welcome-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 5rem;
+  padding-block: 1rem;
+  width: 100%;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+  img {
+    width: 100%;
+    max-width: 200px;
+    opacity: 0.6;
+  }
+  .profile-icon {
+    height: 40px;
+  }
+}
+
+.log-in-container {
+  background-color: $signal-orange;
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+  margin-block: 2rem;
+  padding: 2rem;
+}

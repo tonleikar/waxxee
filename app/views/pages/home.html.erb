@@ -1,65 +1,26 @@
-<section class="container py-4">
-  <% unless user_signed_in? %>
-  <div class="d-flex justify-content-end mb-3">
-    <%= link_to "Log in", new_user_session_path, class: "btn btn-dark" %>
-  </div>
-<% end %>
-
-  <!-- Vinyl record -->
-  <div class="d-flex justify-content-center mb-4">
-    <%= link_to root_path(persona: "randomizer"),
-                class: "randomizer-btn",
-                "aria-label": "Randomizer record",
-                data: {
-                  controller: "randomizer",
-                  action: "click->randomizer#start",
-                  randomizer_loading_value: 1200,
-                  randomizer_success_value: 900,
-                  randomizer_dissipate_value: 700
-                } do %>
-
-      <div class="record-container">
-        <div class="record">
-          <div class="record-label">
-            <div class="record-hole"></div>
-          </div>
-        </div>
-      </div>
-
-    <% end %>
-  </div>
-
-  <!-- Login box -->
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card p-4 shadow-sm">
-
-        <h2 class="h5 text-center mb-3">Log in</h2>
-
-        <%= form_with url: user_session_path, scope: :user, local: true do |f| %>
-
-          <div class="mb-3">
-            <%= f.email_field :email,
-              placeholder: "Email",
-              class: "form-control" %>
-          </div>
-
-          <div class="mb-3">
-            <%= f.password_field :password,
-              placeholder: "Password",
-              class: "form-control" %>
-          </div>
-
-          <%= f.submit "Log in", class: "btn btn-dark w-100" %>
-
-        <% end %>
-
-        <div class="text-center mt-3">
-          <%= link_to "Create an account", new_user_registration_path %>
-        </div>
-
+<div class="welcome-header">
+  <div></div><%= image_tag "waxxee_logo" %><div></div>
+</div>
+<div class="container">
+  <h1 class="main-title">WELCOME TO WAXXEE!</h1>
+  <h2>DIGITAL CRATE DIGGING</h2>
+  <p>WAXXEE is designed to re-create the experience of flicking thourough boxes of dusty old records
+    in the basement of an old record shop. We don't learn anything about you, our alorithyms will
+    constantly surprise you bringing new and previsouly forgotten tunes to your ears.
+  </p>
+  <div class="justify-content-center d-flex">
+    <div class="log-in-container col-10 col-md-6">
+      <h3>dive in and discover something amazing</h3>
+      <div class="d-flex justify-content-between px-4">
+        <%= link_to "Log In", new_user_session_path, class: "btn btn-primary" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
       </div>
     </div>
   </div>
-
-</section>
+    <h2 class="mt-5">RECENT FINDS...</h2>
+    <div class="vinyl-wrapper">
+      <% @recent_vinyls.each do |vinyl| %>
+        <%= render "shared/vinyl_card", vinyl: vinyl %>
+      <% end %>
+    </div>
+</div>
