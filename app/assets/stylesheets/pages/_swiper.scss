@@ -1,99 +1,100 @@
-.tinder-container {
-  height: 100vh;
+.swiper-page {
   position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  bottom: 88px;
+  min-height: calc(100vh - 88px);
+  padding: 1.5rem 1.5rem calc(88px + 1.5rem);
+}
+
+.swiper-page > .text-center {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  z-index: 2;
+  width: calc(100% - 3rem);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.tinder-container {
+  min-height: calc(100vh - 88px - 3rem);
+  position: relative;
+  overflow: visible;
+  display: grid;
+  place-items: center;
+  width: 100%;
 }
 
 .vinyl-card {
-  transform: translateY(100px);
-  perspective: 1000px;
   width: 90vw;
-  max-width: 75vh;
   max-width: 500px;
-  position: absolute;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  margin: auto;
   opacity: 0;
   transition: transform 0.5s ease, opacity 0.3s ease-out;
 }
 
-.vinyl-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s ease;
-}
-
-.vinyl-card-front,
-.vinyl-card-back {
-  width: 100%;
-  backface-visibility: hidden;
-}
-
-.vinyl-card-back {
-  padding: 3rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotateY(180deg);
-  background: rgba(255, 251, 245, 0.8);
-  border: 0;
-  backdrop-filter: blur(18px);
-}
-
-.vinyl-card-inner.flipped {
-  transform: rotateY(180deg);
-}
-
-.vinyl-card img {
-  width: 100%;
-  border-radius: 0;
-  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.08);
-  backface-visibility: hidden;
-  pointer-events: none;
-}
-
 .vinyl-card.active {
-  transform: translateY(0px);
-  bottom: auto;
   opacity: 1;
 }
 
-.vinyl-back-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  backface-visibility: hidden;
-  z-index: 1;
+.swiper-sleeve {
+  opacity: 0;
+  pointer-events: auto;
+  transform: none;
+  transition: opacity 0.28s ease;
+}
 
-  img {
-    border-radius: 0;
-    box-shadow: none;
-    opacity: 0.8;
+.swiper-sleeve.is-visible {
+  opacity: 1;
+}
 
-  }
+.swiper-sleeve .randomizer-sleeve__artwork {
+  opacity: 1;
+}
+
+.swiper-sleeve .randomizer-sleeve__meta {
+  max-width: calc(100% - 3rem);
 }
 
 .circles-bg {
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="UTF-8"%3F><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 277.24 277.24"><defs><style> .cls-1 { fill: none; stroke: %23000000; stroke-width: 0.5; stroke-miterlimit: 10; } </style></defs><circle class="cls-1" cx="138.62" cy="138.62" r="138.12"/><circle class="cls-1" cx="138.62" cy="138.62" r="130.24"/><circle class="cls-1" cx="138.62" cy="138.62" r="122.36"/><circle class="cls-1" cx="138.62" cy="138.62" r="114.48"/><circle class="cls-1" cx="138.62" cy="138.62" r="106.6"/><circle class="cls-1" cx="138.62" cy="138.62" r="98.72"/><circle class="cls-1" cx="138.62" cy="138.62" r="90.84"/><circle class="cls-1" cx="138.62" cy="138.62" r="82.96"/><circle class="cls-1" cx="138.62" cy="138.62" r="75.08"/><circle class="cls-1" cx="138.62" cy="138.62" r="67.2"/><circle class="cls-1" cx="138.62" cy="138.62" r="59.32"/><circle class="cls-1" cx="138.62" cy="138.62" r="51.44"/><circle class="cls-1" cx="138.62" cy="138.62" r="43.56"/><circle class="cls-1" cx="138.62" cy="138.62" r="35.68"/><circle class="cls-1" cx="138.62" cy="138.62" r="27.8"/><circle class="cls-1" cx="138.62" cy="138.62" r="19.92"/><circle class="cls-1" cx="138.62" cy="138.62" r="12.04"/></svg>');
+  position: relative;
+  min-height: calc(100vh - 88px);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 251, 245, 0.38), rgba(255, 251, 245, 0) 44%),
+    linear-gradient(135deg, #f6efe3 0%, #efe4d3 48%, #f8f2e9 100%);
   background-color: var(--wax-cream);
-  background-size: 141vmax;
   overflow: hidden;
 }
 
-.flipped {
-  transform: rotateY(180deg);
+.circles-bg::before {
+  content: "";
+  position: absolute;
+  inset: -8vmax;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1400 -1400 2800 2800'%3E%3Cg fill='none' stroke='%23111111' stroke-opacity='0.09' stroke-linecap='round'%3E%3Cpath d='M 83.18 11.69 A 84.00 84.00 0 1 1 81.50 -20.32' stroke-width='8'/%3E%3Cpath d='M 149.69 76.27 A 168.00 168.00 0 1 1 167.36 14.64' stroke-width='8'/%3E%3Cpath d='M 190.19 165.33 A 252.00 252.00 0 1 1 238.27 82.04' stroke-width='8'/%3E%3Cpath d='M 178.05 284.94 A 336.00 336.00 0 1 1 271.83 197.50' stroke-width='8'/%3E%3Cpath d='M 122.80 401.65 A 420.00 420.00 0 1 1 264.31 326.40' stroke-width='8'/%3E%3Cpath d='M -8.80 503.92 A 504.00 504.00 0 1 1 180.62 470.52' stroke-width='8'/%3E%3Cpath d='M -191.43 555.96 A 588.00 588.00 0 1 1 30.77 587.19' stroke-width='8'/%3E%3Cpath d='M -413.72 529.54 A 672.00 672.00 0 1 1 -185.23 645.97' stroke-width='8'/%3E%3Cpath d='M -634.03 411.75 A 756.00 756.00 0 1 1 -433.62 619.28' stroke-width='8'/%3E%3Cpath d='M -815.05 203.21 A 840.00 840.00 0 1 1 -679.57 493.74' stroke-width='8'/%3E%3Cpath d='M -921.75 -64.45 A 924.00 924.00 0 1 1 -878.78 285.53' stroke-width='8'/%3E%3Cpath d='M -898.13 -457.62 A 1008.00 1008.00 0 1 1 -1004.16 -87.85' stroke-width='8'/%3E%3Cpath d='M -716.42 -824.14 A 1092.00 1092.00 0 1 1 -972.98 -495.76' stroke-width='8'/%3E%3Cpath d='M -382.87 -1111.93 A 1176.00 1176.00 0 1 1 -771.53 -887.54' stroke-width='8'/%3E%3Cpath d='M 131.71 -1253.10 A 1260.00 1260.00 0 1 1 -347.30 -1211.19' stroke-width='8'/%3E%3Cpath d='M 692.21 -1152.03 A 1344.00 1344.00 0 1 1 210.25 -1327.45' stroke-width='8'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: center;
+  background-size: 141vmax;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.circles-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 992px) {
+  .swiper-page {
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  .tinder-container {
+    min-height: calc(100vh - 3rem);
+  }
+
+  .circles-bg {
+    min-height: 100vh;
+  }
 }
 
 @keyframes swipe-bg-pulse {
@@ -110,6 +111,6 @@
   }
 }
 
-.swipe-bg-pulse {
+.swipe-bg-pulse::before {
   animation: swipe-bg-pulse 0.6s forwards;
 }

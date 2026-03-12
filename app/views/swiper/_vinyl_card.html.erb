@@ -1,20 +1,54 @@
-<div class="vinyl-card" data-discogs-id="<%= vinyl.nil? ? "{{vinylid}}" :  vinyl[:discogs_id] %>">
-  <div class="vinyl-card-inner">
-    <div class="vinyl-card-front">
-      <div class="vinyl-back-button" data-swipe-target="backButton">
-        <%= image_tag "vinyl-back-button.png" %>
+<article class="vinyl-card randomizer-sleeve swiper-sleeve"
+         data-discogs-id="<%= vinyl.nil? ? '{{vinylid}}' : vinyl[:discogs_id] %>"
+         aria-live="polite">
+  <div class="randomizer-sleeve__body">
+    <div class="randomizer-sleeve__face randomizer-sleeve__face--front">
+      <div class="randomizer-sleeve__artwork-wrap">
+        <%= image_tag(vinyl&.dig(:artwork_url).presence || "placeholder.png",
+                      alt: "album cover",
+                      class: "randomizer-sleeve__artwork album-img",
+                      data: { swipe_field: "artwork" }) %>
       </div>
-      <%= image_tag vinyl.nil? || vinyl&.key?(:artwork_url) ? "placeholder.png" : vinyl[:artwork_url], alt: "album cover", class: "album-img" %>
+
+      <button type="button"
+              class="randomizer-sleeve__flip"
+              aria-label="Flip to details"
+              data-action="click->swipe#flipToBack">
+        <span aria-hidden="true">&#x21bb;</span>
+      </button>
     </div>
-    <div class="vinyl-card-back">
-      <div class="vinyl-info">
-        <div class="vinyl-back-button" data-swipe-target="backButton">
-          <%= image_tag "vinyl-back-button.png" %>
-        </div>
-        <h2><%= vinyl.nil? ? "{{title}}" : vinyl[:title] %></h2>
-        <p><%# vinyl[:artist] %></p>
-        <small><%# vinyl[:year] %> | <%# vinyl[:genre] %></small>
+
+    <div class="randomizer-sleeve__face randomizer-sleeve__face--back">
+      <div class="randomizer-sleeve__back-header">
+        <p class="randomizer-sleeve__eyebrow mb-1">Release details</p>
+        <h2 class="randomizer-sleeve__back-title mb-0" data-swipe-field="title">
+          <%= vinyl.nil? ? "{{title}}" : vinyl[:title] %>
+        </h2>
       </div>
+
+      <dl class="randomizer-sleeve__details">
+        <div>
+          <dt>Artist</dt>
+          <dd data-swipe-field="artist"><%= vinyl.nil? ? "{{artist}}" : vinyl[:artist] %></dd>
+        </div>
+        <div>
+          <dt>Year</dt>
+          <dd data-swipe-field="year"><%= vinyl.nil? ? "{{year}}" : vinyl[:year] %></dd>
+        </div>
+        <div>
+          <dt>Genre</dt>
+          <dd data-swipe-field="genre"><%= vinyl.nil? ? "{{genre}}" : vinyl[:genre] %></dd>
+        </div>
+      </dl>
+
+      <p class="randomizer-sleeve__meta mb-0">Swipe right to save. Swipe left to pass.</p>
+
+      <button type="button"
+              class="randomizer-sleeve__flip randomizer-sleeve__flip--back"
+              aria-label="Flip to cover"
+              data-action="click->swipe#flipToFront">
+        <span aria-hidden="true">&#x21ba;</span>
+      </button>
     </div>
   </div>
-</div>
+</article>
