@@ -50,6 +50,7 @@ export default class extends Controller {
       this.triggerTarget.classList.remove("is-success")
       this.triggerTarget.classList.add("has-result")
       this.backdropTarget.classList.add("is-visible")
+      this.sleeveTarget.hidden = false
       this.sleeveTarget.classList.add("is-visible")
       await this.wait(80)
       this.sleeveTarget.classList.add("is-engulfing")
@@ -154,6 +155,7 @@ export default class extends Controller {
   }
 
   resetSleeve() {
+    this.sleeveTarget.hidden = true
     this.sleeveTarget.classList.remove("is-visible", "is-ready", "is-engulfing", "is-flipped")
     this.backdropTarget.classList.remove("is-visible")
     this.triggerTarget.classList.remove("has-result", "is-engulfed")
@@ -167,6 +169,7 @@ export default class extends Controller {
     this.backdropTarget.classList.remove("is-visible")
     this.triggerTarget.classList.remove("has-result", "is-engulfed")
     await this.wait(450)
+    this.sleeveTarget.hidden = true
   }
 
   preloadArtwork(url) {
