@@ -6,9 +6,12 @@ class UserVinylsControllerTest < ActionDispatch::IntegrationTest
       @vinyl = vinyl
     end
 
-    def import!(release_id:)
+    attr_reader :cover_image
+
+    def import!(release_id:, cover_image: nil)
       raise "unexpected release_id" unless release_id.to_s == "42"
 
+      @cover_image = cover_image
       @vinyl
     end
   end
@@ -67,6 +70,21 @@ class UserVinylsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :created
+  end
+
+  test "saving a record forwards swiper cover image to the importer" do
+    importer = FakeImporter.new(@vinyl)
+
+    with_stubbed_constructor(Discogs::ReleaseImporter, importer) do
+      with_stubbed_constructor(PersonaUpdater, FakeUpdater.new) do
+        post user_vinyls_path,
+             params: { release_id: 42, cover_image: "https://img.example/discovery-cover.jpg" },
+             as: :json
+      end
+    end
+
+    assert_response :created
+    assert_equal "https://img.example/discovery-cover.jpg", importer.cover_image
   end
 
   private

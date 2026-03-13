@@ -6,7 +6,10 @@ class UserVinylsController < ApplicationController
   def create
     return render json: { error: "Missing release_id." }, status: :unprocessable_entity if release_id.blank?
 
-    vinyl = Discogs::ReleaseImporter.new.import!(release_id: release_id)
+    vinyl = Discogs::ReleaseImporter.new.import!(
+      release_id: release_id,
+      cover_image: cover_image
+    )
     @user_vinyl = current_user.user_vinyls.find_by(vinyl: vinyl)
     created = false
 
@@ -38,6 +41,10 @@ class UserVinylsController < ApplicationController
 
   def release_id
     params[:release_id].presence || params.dig(:vinyl, :id).presence
+  end
+
+  def cover_image
+    params[:cover_image].presence || params.dig(:vinyl, :cover_image).presence
   end
 
   def refresh_primary_persona

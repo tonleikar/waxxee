@@ -29,10 +29,12 @@
           <dt>Artist</dt>
           <dd><%= vinyl.artist.presence || "Unknown artist" %></dd>
         </div>
-        <div>
-          <dt>Year</dt>
-          <dd><%= vinyl.year.presence || "Unknown" %></dd>
-        </div>
+        <% if vinyl.year_known? %>
+          <div>
+            <dt>Year</dt>
+            <dd><%= vinyl.display_year %></dd>
+          </div>
+        <% end %>
         <div>
           <dt>Genre</dt>
           <dd><%= vinyl.genre.presence || "Unlisted" %></dd>
