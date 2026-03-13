@@ -1,4 +1,4 @@
-<section class="home-page container pt-4 pt-lg-5 pb-0"
+<section class="home-page randomizer-page"
          data-controller="randomizer"
          data-randomizer-url-value="<%= randomizer_path(format: :json, persona: @persona_key) %>"
          data-randomizer-save-url-value="<%= user_vinyls_path %>"
@@ -9,10 +9,10 @@
        data-action="click->randomizer#close"
        data-randomizer-target="backdrop"></div>
 
-  <div class="home-hero text-center">
+  <div class="home-hero randomizer-page__hero text-center">
     <h1 class="home-title mb-3">Randomizer</h1>
     <p class="home-subtitle mx-auto mb-4">
-      Spin for a record from your collection.
+      Get a random vinyl from your collection.
     </p>
 
     <div class="randomizer-stage mx-auto">
@@ -92,12 +92,6 @@
                       aria-label="Flip to cover"
                       data-action="click->randomizer#flipToFront">
                 <span aria-hidden="true">&#x21ba;</span>
-              </button>
-              <button type="button"
-                      class="randomizer-sleeve__action"
-                      data-action="click->randomizer#saveToCollection"
-                      data-randomizer-target="saveButton">
-                Save
               </button>
               <button type="button"
                       class="randomizer-sleeve__action randomizer-sleeve__action--secondary"
