@@ -140,23 +140,34 @@ export default class extends Controller {
   async saveVinyl(vinyl) {
     if (!vinyl) return
 
-    const response = await fetch(this.urlValue, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ vinyl })
-    })
+    try {
+      const response = await fetch(this.urlValue, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          release_id: vinyl.id,
+          cover_image: vinyl.cover_image
+        })
+      })
 
-    if (!response.ok) return
+      const data = await response.json().catch(() => ({}))
 
-    const data = await response.json()
-    this.showToast(data.message)
+      if (!response.ok) {
+        this.showToast(data.error || "Could not save this release.", "neutral")
+        return
+      }
+
+      this.showToast(data.message, "success")
+    } catch (_error) {
+      this.showToast("Could not save this release.", "neutral")
+    }
   }
 
-  showToast(message) {
+  showToast(message, tone = "success") {
     let stack = document.querySelector(".toast-stack")
     if (!stack) {
       stack = document.createElement("div")
@@ -167,7 +178,7 @@ export default class extends Controller {
     }
 
     const toast = document.createElement("div")
-    toast.className = "app-toast app-toast--success"
+    toast.className = `app-toast app-toast--${tone}`
     toast.setAttribute("role", "status")
     toast.textContent = message
     stack.appendChild(toast)
@@ -189,6 +200,7 @@ export default class extends Controller {
     const title = card.querySelector('[data-swipe-field="title"]')
     const artist = card.querySelector('[data-swipe-field="artist"]')
     const year = card.querySelector('[data-swipe-field="year"]')
+    const yearRow = card.querySelector('[data-swipe-field-row="year"]')
     const genre = card.querySelector('[data-swipe-field="genre"]')
 
     if (artwork) {
@@ -198,8 +210,17 @@ export default class extends Controller {
 
     if (title) title.textContent = vinyl.title || "Untitled"
     if (artist) artist.textContent = this.artistName(vinyl)
-    if (year) year.textContent = vinyl.year || "Unknown"
+    if (year) {
+      const displayYear = this.displayYear(vinyl.year)
+      year.textContent = displayYear || ""
+      yearRow?.toggleAttribute("hidden", !displayYear)
+    }
     if (genre) genre.textContent = this.genreName(vinyl)
+  }
+
+  displayYear(year) {
+    const numericYear = Number(year)
+    return Number.isFinite(numericYear) && numericYear > 0 ? String(year) : null
   }
 
   artistName(vinyl) {

@@ -8,14 +8,13 @@ export default class extends Controller {
     "artwork",
     "backTitle",
     "detailArtist",
+    "detailYearRow",
     "detailYear",
-    "detailGenre",
-    "saveButton"
+    "detailGenre"
   ]
 
   static values = {
     url: String,
-    saveUrl: String,
     loading: { type: Number, default: 1200 },
     success: { type: Number, default: 900 },
     dissipate: { type: Number, default: 700 }
@@ -50,6 +49,7 @@ export default class extends Controller {
       this.triggerTarget.classList.remove("is-success")
       this.triggerTarget.classList.add("has-result")
       this.backdropTarget.classList.add("is-visible")
+      this.sleeveTarget.hidden = false
       this.sleeveTarget.classList.add("is-visible")
       await this.wait(80)
       this.sleeveTarget.classList.add("is-engulfing")
@@ -93,40 +93,6 @@ export default class extends Controller {
     this.sleeveTarget.classList.remove("is-flipped")
   }
 
-  async saveToCollection(event) {
-    event.preventDefault()
-    if (!this.currentVinyl || this.saveButtonTarget.disabled) return
-
-    this.saveButtonTarget.disabled = true
-
-    try {
-      const response = await fetch(this.saveUrlValue, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "X-CSRF-Token": this.csrfToken
-        },
-        body: JSON.stringify({
-          user_vinyl: {
-            vinyl_id: this.currentVinyl.id
-          }
-        })
-      })
-
-      const payload = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(payload.error || `Save failed with status ${response.status}`)
-
-      this.saveButtonTarget.textContent = "Saved"
-      this.saveButtonTarget.classList.add("is-saved")
-    } catch (error) {
-      console.error("Saving vinyl failed", error)
-      this.saveButtonTarget.disabled = false
-      this.saveButtonTarget.textContent = "Error"
-    }
-  }
-
   async fetchVinyl() {
     const response = await fetch(this.urlValue, {
       headers: { "Accept": "application/json" }
@@ -145,15 +111,14 @@ export default class extends Controller {
     this.artworkTarget.alt = vinyl.title ? `${vinyl.title} cover` : "Vinyl artwork"
     this.backTitleTarget.textContent = vinyl.title || "Untitled"
     this.detailArtistTarget.textContent = vinyl.artist || "Unknown artist"
-    this.detailYearTarget.textContent = vinyl.year || "Unknown"
+    const displayYear = this.displayYear(vinyl.year)
+    this.detailYearTarget.textContent = displayYear || ""
+    this.detailYearRowTarget.toggleAttribute("hidden", !displayYear)
     this.detailGenreTarget.textContent = vinyl.genre || "Unlisted"
-
-    this.saveButtonTarget.disabled = Boolean(vinyl.saved)
-    this.saveButtonTarget.textContent = vinyl.saved ? "Saved" : "Save"
-    this.saveButtonTarget.classList.toggle("is-saved", Boolean(vinyl.saved))
   }
 
   resetSleeve() {
+    this.sleeveTarget.hidden = true
     this.sleeveTarget.classList.remove("is-visible", "is-ready", "is-engulfing", "is-flipped")
     this.backdropTarget.classList.remove("is-visible")
     this.triggerTarget.classList.remove("has-result", "is-engulfed")
@@ -167,6 +132,7 @@ export default class extends Controller {
     this.backdropTarget.classList.remove("is-visible")
     this.triggerTarget.classList.remove("has-result", "is-engulfed")
     await this.wait(450)
+    this.sleeveTarget.hidden = true
   }
 
   preloadArtwork(url) {
@@ -191,7 +157,8 @@ export default class extends Controller {
     return new Promise((resolve) => setTimeout(resolve, duration))
   }
 
-  get csrfToken() {
-    return document.querySelector('meta[name="csrf-token"]')?.content || ""
+  displayYear(year) {
+    const numericYear = Number(year)
+    return Number.isFinite(numericYear) && numericYear > 0 ? String(year) : null
   }
 }

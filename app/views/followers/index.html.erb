@@ -46,7 +46,9 @@
 
                 <h2 class="h5 mb-1"><%= vinyl.title %></h2>
                 <p class="mb-1"><strong>Artist:</strong> <%= vinyl.artist %></p>
-                <p class="mb-1"><strong>Year:</strong> <%= vinyl.year %></p>
+                <% if vinyl.year_known? %>
+                  <p class="mb-1"><strong>Year:</strong> <%= vinyl.display_year %></p>
+                <% end %>
                 <p class="mb-0"><strong>Genre:</strong> <%= vinyl.genre %></p>
               <% end %>
             </div>

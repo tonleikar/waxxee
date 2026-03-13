@@ -1,13 +1,13 @@
 <div class="welcome-header">
   <%= image_tag "waxxee_logo" %>
-  <%= link_to profile_path(current_user) do %>
+  <%= link_to profile_path(current_user), class: "welcome-header__profile-link" do %>
     <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
   <% end %>
 </div>
 
-<div class="container">
+<div class="container home-dashboard">
   <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
-  <h2>GO DIGGING...</h2>
+  <h2 class="home-dashboard__section-title">GO DIGGING...</h2>
 
   <section class="home-persona-section mb-5"
            data-controller="persona-form"
@@ -88,10 +88,13 @@
     </div>
   </section>
 
-  <h2>RECENT FINDS...</h2>
-  <div class="vinyl-wrapper">
-    <% @recent_vinyls.each do |vinyl| %>
-      <%= render "shared/vinyl_card", vinyl: vinyl.vinyl %>
-    <% end %>
-  </div>
+  <section class="home-recent-finds">
+    <h2 class="home-dashboard__section-title home-dashboard__section-title--recent">RECENT FINDS...</h2>
+
+    <div class="vinyl-wrapper">
+      <% @recent_vinyls.each do |vinyl| %>
+        <%= render "shared/vinyl_card", vinyl: vinyl.vinyl %>
+      <% end %>
+    </div>
+  </section>
 </div>

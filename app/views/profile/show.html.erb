@@ -63,7 +63,9 @@
                 <div>
                   <h3 class="h4 mb-1"><%= @favorite_vinyl.title %></h3>
                   <p class="mb-1"><strong>Artist:</strong> <%= @favorite_vinyl.artist %></p>
-                  <p class="mb-1"><strong>Year:</strong> <%= @favorite_vinyl.year %></p>
+                  <% if @favorite_vinyl.year_known? %>
+                    <p class="mb-1"><strong>Year:</strong> <%= @favorite_vinyl.display_year %></p>
+                  <% end %>
                   <p class="mb-0"><strong>Genre:</strong> <%= @favorite_vinyl.genre %></p>
                 </div>
               </div>
@@ -274,7 +276,7 @@
               data-vinyl-picker-id-param="<%= vinyl.id %>"
               data-vinyl-picker-title-param="<%= vinyl.title %>"
               data-vinyl-picker-artist-param="<%= vinyl.artist %>"
-              data-vinyl-picker-year-param="<%= vinyl.year %>"
+              data-vinyl-picker-year-param="<%= vinyl.display_year %>"
               data-vinyl-picker-genre-param="<%= vinyl.genre %>"
               data-vinyl-picker-image-param="<%= vinyl.artwork_url %>"
               data-vinyl-picker-search="<%= [vinyl.title, vinyl.artist].join(" ").downcase %>"
@@ -289,7 +291,10 @@
                   </span>
                 </span>
                 <span><%= vinyl.artist %></span>
-                <span><%= vinyl.year %> • <%= vinyl.genre %></span>
+                <% metadata = [vinyl.display_year, vinyl.genre.presence].compact.join(" • ") %>
+                <% if metadata.present? %>
+                  <span><%= metadata %></span>
+                <% end %>
               </span>
             </button>
           <% end %>

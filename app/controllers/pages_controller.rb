@@ -27,7 +27,7 @@ class PagesController < ApplicationController
   private
 
   def random_vinyl
-    Vinyl.all.to_a.sample
+    current_user.user_vinyls.includes(:vinyl).to_a.sample&.vinyl
   end
 
   def selected_persona_key

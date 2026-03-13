@@ -3,32 +3,74 @@
 <% folders = local_assigns.fetch(:folders, []) %>
 <% compact = local_assigns.fetch(:compact, false) %>
 <% current_folder = local_assigns.fetch(:current_folder, nil) %>
+<% more_info_id = "vinylMoreInfo-#{vinyl.id}" %>
+<% track_list = Array(vinyl.tracks).reject(&:blank?) %>
+<% info_rows = [
+  ["Title", vinyl.title],
+  ["Year", vinyl.display_year],
+  ["Format", vinyl.format],
+  ["Tracks", track_list.size.positive? ? track_list.size : nil]
+].select { |_, value| value.present? } %>
 
 <article class="card border-0 shadow-sm vinyl-library-card <%= "vinyl-library-card-compact" if compact %>">
   <div class="vinyl-library-card-media">
     <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
     <div class="vinyl-library-card-sheen"></div>
-    <% if vinyl.year.present? %>
-      <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.year %></span>
+    <% if vinyl.year_known? %>
+      <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.display_year %></span>
     <% end %>
     <% if user_vinyl.present? && !compact %>
       <%= button_to user_vinyl_path(user_vinyl),
         method: :delete,
         class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
         form: { data: { turbo_confirm: "Remove #{vinyl.title} from your collection?" } } do %>
-        <i class="fas fa-trash"></i>
+        <%= image_tag "bin-icon.svg", alt: "", class: "vinyl-trash-icon" %>
       <% end %>
     <% end %>
   </div>
 
   <div class="card-body p-4">
-    <div class="mb-3">
+    <div class="mb-3 vinyl-library-card-heading">
       <p class="vinyl-library-card-kicker mb-2"><%= vinyl.genre.presence || "Genre unknown" %></p>
       <h3 class="h4 mb-1 vinyl-library-card-title"><%= vinyl.title %></h3>
       <p class="text-muted mb-0 vinyl-library-card-artist"><%= vinyl.artist %></p>
     </div>
 
-    <%= render "crate_controls",
+    <% if info_rows.any? %>
+      <div class="vinyl-library-card-section">
+        <button
+          type="button"
+          class="btn vinyl-library-card-info-toggle"
+          data-bs-toggle="collapse"
+          data-bs-target="#<%= more_info_id %>"
+          aria-expanded="false"
+          aria-controls="<%= more_info_id %>"
+        >
+          <span>More info</span>
+          <span class="vinyl-library-card-info-toggle-icon" aria-hidden="true">▾</span>
+        </button>
+
+        <div class="collapse vinyl-library-card-info-panel" id="<%= more_info_id %>">
+          <dl class="vinyl-library-card-info-list mb-0">
+            <% info_rows.each do |label, value| %>
+              <div class="vinyl-library-card-info-row">
+                <dt><%= label %></dt>
+                <dd><%= value %></dd>
+              </div>
+            <% end %>
+
+            <% if track_list.any? %>
+              <div class="vinyl-library-card-info-row vinyl-library-card-info-row-tracks">
+                <dt>Tracklist</dt>
+                <dd><%= track_list.first(3).join(" • ") %><%= "..." if track_list.size > 3 %></dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render "vinyls/crate_controls",
       vinyl: vinyl,
       user_vinyl: user_vinyl,
       vinyl_folder_ids: vinyl_folder_ids,
