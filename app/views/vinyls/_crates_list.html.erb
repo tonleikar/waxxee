@@ -1,0 +1,48 @@
+<div id="vinyl_crates_list_panel">
+  <div class="collapse d-md-block" id="vinylCratesList">
+    <div class="vinyl-folder-list">
+      <% if folders.any? %>
+        <% folders.each do |folder| %>
+          <% crate_vinyls = folder.vinyls.order(created_at: :desc).limit(4) %>
+
+          <div class="vinyl-folder-chip">
+            <button
+              type="button"
+              class="vinyl-folder-chip-main vinyl-folder-chip-trigger"
+              data-bs-toggle="modal"
+              data-bs-target="#crateModal-<%= folder.id %>"
+              aria-label="Open <%= folder.name %>"
+            >
+              <% if crate_vinyls.any? %>
+                <div class="vinyl-folder-stack" aria-hidden="true">
+                  <% crate_vinyls.each_with_index do |vinyl, index| %>
+                    <img
+                      src="<%= vinyl.artwork_url %>"
+                      alt=""
+                      class="vinyl-folder-thumb vinyl-folder-thumb-stack"
+                      style="--stack-index: <%= index %>;"
+                    >
+                  <% end %>
+                </div>
+              <% end %>
+
+              <span>
+                <strong><%= folder.name %></strong>
+                <small><%= pluralize(folder.vinyls.count, "record") %></small>
+              </span>
+            </button>
+
+            <%= button_to collection_path(folder),
+              method: :delete,
+              form: { data: { turbo_confirm: "Delete #{folder.name}?" } },
+              class: "btn btn-sm vinyl-trash-btn" do %>
+              <%= image_tag "bin-icon.svg", alt: "", class: "vinyl-trash-icon" %>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

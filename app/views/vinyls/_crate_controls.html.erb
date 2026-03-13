@@ -34,20 +34,6 @@
       <% end %>
     </div>
   <% else %>
-    <div class="vinyl-library-card-section vinyl-folder-membership mb-3">
-      <p class="small text-muted mb-2 vinyl-library-card-label">In crates</p>
-
-      <% if vinyl_folder_ids.any? %>
-        <div class="vinyl-folder-tag-list">
-          <% user_vinyl.folders.each do |folder| %>
-            <span class="vinyl-folder-tag-display"><%= folder.name %></span>
-          <% end %>
-        </div>
-      <% else %>
-        <span class="text-muted small">Not in any crate yet.</span>
-      <% end %>
-    </div>
-
     <% if folders.any? %>
       <div class="vinyl-library-card-section">
         <button
