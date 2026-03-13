@@ -38,52 +38,7 @@
             </div>
           <% end %>
 
-          <div class="collapse d-md-block" id="vinylCratesList">
-            <div class="vinyl-folder-list">
-              <% if @folders.any? %>
-                <% @folders.each do |folder| %>
-                  <% crate_vinyls = folder.vinyls.order(created_at: :desc).limit(4) %>
-
-                  <div class="vinyl-folder-chip">
-                    <button
-                      type="button"
-                      class="vinyl-folder-chip-main vinyl-folder-chip-trigger"
-                      data-bs-toggle="modal"
-                      data-bs-target="#crateModal-<%= folder.id %>"
-                      aria-label="Open <%= folder.name %>"
-                    >
-                      <% if crate_vinyls.any? %>
-                        <div class="vinyl-folder-stack" aria-hidden="true">
-                          <% crate_vinyls.each_with_index do |vinyl, index| %>
-                            <img
-                              src="<%= vinyl.artwork_url %>"
-                              alt=""
-                              class="vinyl-folder-thumb vinyl-folder-thumb-stack"
-                              style="--stack-index: <%= index %>;"
-                            >
-                          <% end %>
-                        </div>
-                      <% end %>
-
-                      <span>
-                        <strong><%= folder.name %></strong>
-                        <small><%= pluralize(folder.vinyls.count, "record") %></small>
-                      </span>
-                    </button>
-
-                    <%= button_to collection_path(folder),
-                      method: :delete,
-                      form: { data: { turbo_confirm: "Delete #{folder.name}?" } },
-                      class: "btn btn-sm vinyl-trash-btn" do %>
-                      <i class="fas fa-trash"></i>
-                    <% end %>
-                  </div>
-                <% end %>
-              <% else %>
-                <p class="text-muted mb-0">No folders yet. Create one here, then add records from the cards.</p>
-              <% end %>
-            </div>
-          </div>
+          <%= render "crates_list", folders: @folders %>
         </div>
       </div>
     </div>
@@ -166,13 +121,12 @@
       <div class="modal-content vinyl-folder-modal-content border-0">
         <div class="modal-header vinyl-folder-modal-header border-0">
           <div>
-            <p class="vinyl-library-card-kicker mb-2">Crate</p>
             <h2 class="modal-title h3 mb-1" id="crateModalLabel-<%= folder.id %>"><%= folder.name %></h2>
             <p class="text-muted mb-0"><%= pluralize(folder.vinyls.count, "record") %></p>
           </div>
           <button type="button" class="btn-close vinyl-folder-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body vinyl-folder-modal-body">
+        <div class="modal-body">
           <% folder_vinyls = folder.vinyls.order(created_at: :desc) %>
           <% if folder_vinyls.any? %>
             <div class="row g-3">

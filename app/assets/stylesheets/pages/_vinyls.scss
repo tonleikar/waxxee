@@ -80,7 +80,7 @@
   width: fit-content;
   padding: 0.5rem 0.9rem;
   border: 1px solid rgba(17, 17, 17, 0.08);
-  border-radius: 999px;
+  border-radius: 0;
   background: rgba(255, 251, 245, 0.88);
 }
 
@@ -104,6 +104,7 @@
   background-color: transparent;
   background-image: none;
   background-position: right 0 center;
+  border-radius: 0;
   box-shadow: none !important;
   outline: none;
 }
@@ -211,11 +212,22 @@
   text-transform: uppercase;
 }
 
+.vinyl-library-card-heading {
+  min-height: 8.9rem;
+}
+
 .vinyl-library-card-title {
   font-size: clamp(1.3rem, 2vw, 1.65rem);
-  line-height: 0.98;
+  line-height: 1.02;
   letter-spacing: -0.03em;
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.02em * 3);
 }
 
 .vinyl-library-card-artist {
@@ -276,10 +288,11 @@
 }
 
 .vinyl-library-card-section {
-  padding-top: 0.9rem;
+  padding-top: 0.7rem;
   border-top: 1px solid rgba(83, 65, 41, 0.08);
 }
 
+.vinyl-library-card-info-toggle,
 .vinyl-library-card-crate-toggle {
   appearance: none;
   width: 100%;
@@ -287,29 +300,37 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0 0 0.7rem;
+  padding: 0 !important;
+  padding-inline: 0 !important;
   border: 0;
   border-radius: 0;
   background: transparent;
   color: var(--wax-ink);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: none !important;
 }
 
+.vinyl-library-card-info-toggle:focus,
+.vinyl-library-card-info-toggle:focus-visible,
+.vinyl-library-card-info-toggle:hover,
+.vinyl-library-card-info-toggle:active,
 .vinyl-library-card-crate-toggle:focus,
 .vinyl-library-card-crate-toggle:focus-visible,
+.vinyl-library-card-crate-toggle:hover,
 .vinyl-library-card-crate-toggle:active {
   background: transparent;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
+.vinyl-library-card-info-toggle > span:first-child,
 .vinyl-library-card-crate-toggle > span:first-child {
   flex: 1 1 auto;
   text-align: left;
 }
 
+.vinyl-library-card-info-toggle-icon,
 .vinyl-library-card-crate-toggle-icon {
   flex: 0 0 auto;
   margin-left: auto;
@@ -318,18 +339,53 @@
   transition: transform 0.18s ease;
 }
 
+.vinyl-library-card-info-toggle[aria-expanded="true"] .vinyl-library-card-info-toggle-icon,
 .vinyl-library-card-crate-toggle[aria-expanded="true"] .vinyl-library-card-crate-toggle-icon {
   transform: rotate(180deg);
 }
 
+.vinyl-library-card-info-panel,
 .vinyl-library-card-crate-panel {
-  margin-top: 0.85rem;
+  margin-top: 0.65rem;
+  box-shadow: none;
+}
+
+.vinyl-library-card-info-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.vinyl-library-card-info-row {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.vinyl-library-card-info-row dt,
+.vinyl-library-card-info-row dd {
+  margin: 0;
+}
+
+.vinyl-library-card-info-row dt {
+  color: rgba(83, 65, 41, 0.62);
+  font-weight: 600;
+}
+
+.vinyl-library-card-info-row dd {
+  color: var(--wax-ink);
+}
+
+.vinyl-library-card-info-row-tracks dd {
+  overflow-wrap: anywhere;
 }
 
 .vinyl-library-card-crate-panel-inner {
   display: grid;
   gap: 0.8rem;
   padding-top: 0.2rem;
+  box-shadow: none;
 }
 
 .vinyl-library-card-crate-grid {
@@ -373,10 +429,12 @@
   justify-content: center;
   font-size: 1rem;
   line-height: 1;
+  box-shadow: none;
 }
 
 .vinyl-library-card-crate-action:hover {
   background: rgba(255, 251, 245, 0.46);
+  box-shadow: none;
 }
 
 .vinyl-folder-tags {
@@ -402,11 +460,11 @@
   padding: 0.38rem 0.7rem;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(28, 22, 17, 0.96), rgba(62, 42, 27, 0.94));
-  color: #fff;
+  background: linear-gradient(135deg, rgba(86, 54, 29, 0.98), rgba(124, 83, 47, 0.96));
+  color: #f8efe3;
   font-size: 0.75rem;
   line-height: 1;
-  box-shadow: 0 8px 18px rgba(17, 17, 17, 0.08);
+  box-shadow: 0 8px 18px rgba(60, 35, 16, 0.16);
 }
 
 .vinyl-folder-membership .text-muted.small {
@@ -423,14 +481,13 @@
   width: 100%;
   min-height: 7.2rem;
   padding: 1rem 3.1rem 0.8rem 0.85rem;
-  border: 1px solid rgba(160, 175, 188, 0.28);
+  border: 1px solid rgba(110, 71, 40, 0.35);
   background:
-    linear-gradient(180deg, rgba(236, 242, 246, 0.62), rgba(214, 223, 230, 0.54));
-  backdrop-filter: blur(12px);
+    linear-gradient(180deg, rgba(161, 114, 70, 0.96), rgba(117, 77, 43, 0.98));
   box-shadow:
-    0 16px 28px rgba(17, 17, 17, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    0 16px 28px rgba(58, 34, 17, 0.18),
+    inset 0 1px 0 rgba(255, 235, 214, 0.18),
+    inset 0 0 0 1px rgba(255, 231, 205, 0.08);
   transition: box-shadow 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
 }
 
@@ -439,11 +496,19 @@
   position: absolute;
   inset: 0.58rem 0.5rem 0.45rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.04) 18%),
-    linear-gradient(180deg, rgba(225, 233, 239, 0.58), rgba(208, 218, 225, 0.46));
+    linear-gradient(180deg, rgba(250, 214, 176, 0.2), rgba(121, 74, 42, 0.08) 18%),
+    repeating-linear-gradient(
+      175deg,
+      rgba(150, 102, 60, 0.6) 0,
+      rgba(150, 102, 60, 0.6) 10px,
+      rgba(132, 86, 49, 0.56) 10px,
+      rgba(132, 86, 49, 0.56) 22px,
+      rgba(117, 74, 41, 0.54) 22px,
+      rgba(117, 74, 41, 0.54) 34px
+    );
   box-shadow:
-    inset 0 0 0 1px rgba(163, 176, 188, 0.18),
-    inset 0 -12px 18px rgba(173, 184, 193, 0.12);
+    inset 0 0 0 1px rgba(83, 49, 24, 0.16),
+    inset 0 -12px 18px rgba(79, 46, 21, 0.16);
 }
 
 .vinyl-folder-chip::after {
@@ -454,17 +519,17 @@
   top: 0.32rem;
   height: 0.42rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(224, 232, 238, 0.48));
+    linear-gradient(180deg, rgba(230, 188, 145, 0.86), rgba(164, 109, 65, 0.78));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.54),
-    0 1px 0 rgba(134, 149, 161, 0.16);
+    inset 0 1px 0 rgba(255, 229, 200, 0.44),
+    0 1px 0 rgba(93, 58, 31, 0.26);
 }
 
 .vinyl-folder-chip:hover {
   box-shadow:
-    0 20px 34px rgba(17, 17, 17, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    0 20px 34px rgba(58, 34, 17, 0.24),
+    inset 0 1px 0 rgba(255, 236, 214, 0.22),
+    inset 0 0 0 1px rgba(255, 230, 204, 0.12);
   transform: translateY(-2px);
 }
 
@@ -509,10 +574,10 @@
   border-radius: 0;
   object-fit: cover;
   flex-shrink: 0;
-  background: #e9e5dc;
+  background: #d9c1a1;
   box-shadow:
-    inset 0 0 0 1px rgba(145, 158, 171, 0.16),
-    0 4px 10px rgba(78, 91, 103, 0.1);
+    inset 0 0 0 1px rgba(110, 70, 38, 0.16),
+    0 4px 10px rgba(65, 39, 19, 0.18);
 }
 
 .vinyl-folder-thumb-stack {
@@ -529,7 +594,7 @@
 
 .vinyl-folder-thumb-placeholder {
   border: 0;
-  background: rgba(228, 235, 240, 0.68);
+  background: rgba(170, 125, 83, 0.48);
   width: 72px;
   height: 72px;
   margin-top: -0.55rem;
@@ -548,11 +613,12 @@
   font-size: 0.96rem;
   font-weight: 600;
   line-height: 1.2;
+  color: #f8efe3;
   overflow-wrap: anywhere;
 }
 
 .vinyl-folder-chip small {
-  color: rgba(76, 90, 101, 0.76);
+  color: rgba(244, 230, 214, 0.82);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -569,21 +635,15 @@
 .vinyl-folder-chip .vinyl-trash-btn {
   width: 2rem;
   height: 2rem;
-  border: 1px solid rgba(145, 158, 171, 0.34);
-  background: rgba(249, 252, 255, 0.24);
-  color: rgba(73, 88, 100, 0.82);
-  box-shadow: 0 4px 10px rgba(17, 17, 17, 0.06);
-  backdrop-filter: blur(10px);
+  border: 0;
+  background: rgba(86, 50, 26, 0.3);
+  color: rgba(248, 239, 227, 0.88);
+  box-shadow: 0 4px 10px rgba(56, 31, 14, 0.16);
 }
 
 .vinyl-folder-chip .vinyl-trash-btn:hover {
-  background: rgba(255, 255, 255, 0.44);
-  color: rgba(38, 52, 63, 0.92);
-  border-color: rgba(120, 137, 149, 0.46);
-}
-
-.vinyl-library-card .vinyl-trash-btn i {
-  font-size: 20px;
+  background: rgba(104, 60, 31, 0.42);
+  color: #fff4e9;
 }
 
 .vinyl-trash-btn i {
@@ -591,22 +651,33 @@
   -webkit-text-stroke: 1.35px #111111;
 }
 
+.vinyl-library-card .vinyl-trash-icon {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+.vinyl-folder-chip .vinyl-trash-icon {
+  width: 34px;
+  height: 34px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
 .vinyl-folder-modal {
-  background: transparent;
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
 }
 
 .vinyl-folder-modal-content {
-  background:
-    linear-gradient(180deg, rgba(255, 252, 247, 0.99), rgba(247, 240, 229, 0.98));
+  background: #f6efe7;
   border-radius: 0;
-  box-shadow:
-    0 18px 40px rgba(160, 145, 124, 0.16),
-    inset 0 0 0 1px rgba(186, 167, 141, 0.14);
+  box-shadow: 0 18px 40px rgba(17, 17, 17, 0.14);
 }
 
 .vinyl-folder-modal-header {
   padding: 1.75rem 1.75rem 0.5rem;
+  background: transparent;
 }
 
 .vinyl-folder-modal-body {
@@ -614,17 +685,18 @@
 }
 
 .vinyl-folder-modal-close {
-  border-radius: 0;
-  background-color: rgba(255, 252, 247, 0.9);
-  box-shadow: 0 4px 12px rgba(186, 167, 141, 0.12);
+  border-radius: 999px;
+  background-color: rgba(17, 17, 17, 0.06);
+  box-shadow: none;
 }
 
 .vinyl-folder-modal-empty {
   display: grid;
   place-items: center;
   min-height: 12rem;
-  border: 1px solid rgba(186, 167, 141, 0.14);
-  background: rgba(255, 252, 247, 0.72);
+  border: 1px solid rgba(83, 65, 41, 0.08);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.58);
 }
 
 @media (max-width: 767.98px) {
