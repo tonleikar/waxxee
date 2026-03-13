@@ -17,6 +17,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= favicon_link_tag asset_path('favicon.svg') %>
   </head>
   <body class="<%= 'is-auth-page' if devise_controller? %> <%= 'is-signed-in' if user_signed_in? %>">
     <% show_auth_ticker = devise_controller? && controller_name == "sessions" && action_name == "new" %>
