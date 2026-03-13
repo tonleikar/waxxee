@@ -9,31 +9,11 @@
   <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
   <h2>GO DIGGING...</h2>
 
-  <div class="persona-grid mb-4">
-    <% @personas.each do |persona| %>
-      <%= link_to swiper_index_path(persona: persona[:key]),
-                  class: "persona-card #{'is-active' if persona[:key] == @persona_key}" do %>
-        <div class="persona-card__thumbnail persona-card__thumbnail--<%= persona[:key] %>">
-          <span class="persona-card__years"><%= persona[:min_year] %>-<%= persona[:max_year] %></span>
-        </div>
-
-        <div class="persona-card__body">
-          <div>
-            <h2 class="persona-card__title mb-1"><%= persona[:title] %></h2>
-            <p class="persona-card__meta mb-0">
-              <%= persona[:genres].join(" / ") %>
-            </p>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-
   <section class="home-persona-section mb-5"
            data-controller="persona-form"
            data-persona-form-open-class="is-open">
     <div class="persona-grid mb-4">
-      <% @saved_personas.each do |persona| %>
+      <% @personas.each do |persona| %>
         <article class="persona-card persona-card--custom">
           <%= link_to swiper_index_path(persona_id: persona.id), class: "persona-card__link" do %>
             <div class="persona-card__thumbnail persona-card__thumbnail--custom">

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String, key: String, secret: String }
+  static values = { url: String, key: String, secret: String, persona: String }
   static targets = ["vinylWrapper", "template"]
 
   async connect() {
@@ -15,7 +15,7 @@ export default class extends Controller {
     this.currentVinyls = []
     this.currentPage = 1
     this.activeVinyl = null
-    this.discogsAPI = `https://api.discogs.com/database/search?style=psychedelic&country=turkey&decade=1960&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
+    this.discogsAPI = `${this.personaValue}&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
 
     await this.getRecords()
     await this.renderCard()

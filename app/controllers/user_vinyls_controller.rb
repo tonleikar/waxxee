@@ -4,6 +4,7 @@ class UserVinylsController < ApplicationController
   end
 
   def create
+    p params
     return render json: { error: "Missing vinyl_id." }, status: :unprocessable_entity if vinyl_params[:vinyl_id].blank?
 
     vinyl = Vinyl.find(vinyl_params[:vinyl_id])
@@ -43,5 +44,4 @@ class UserVinylsController < ApplicationController
   rescue StandardError => e
     Rails.logger.warn("Persona refresh failed for user #{current_user.id}: #{e.message}")
   end
-
 end

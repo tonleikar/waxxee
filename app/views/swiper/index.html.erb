@@ -21,6 +21,7 @@
     class="swiper-page"
     data-controller="swipe"
     data-swipe-url-value="<%= user_vinyls_url %>"
+    data-swipe-persona-value="<%= Persona.find(params[:persona_id]).url %>"
     data-swipe-key-value="<%= @key %>"
     data-swipe-secret-value="<%= @secret %>"
     data-swipe-vinyls-value="<%= @vinyls.to_json(only: [:id, :artwork_url, :title, :artist, :year, :genre]) %>">
