@@ -4,9 +4,12 @@ class UserVinylsController < ApplicationController
   end
 
   def create
-    return render json: { error: "Missing vinyl_id." }, status: :unprocessable_entity if vinyl_params[:vinyl_id].blank?
+    return render json: { error: "Missing release_id." }, status: :unprocessable_entity if release_id.blank?
 
-    vinyl = Vinyl.find(vinyl_params[:vinyl_id])
+    vinyl = Discogs::ReleaseImporter.new.import!(
+      release_id: release_id,
+      cover_image: cover_image
+    )
     @user_vinyl = current_user.user_vinyls.find_by(vinyl: vinyl)
     created = false
 
@@ -23,6 +26,8 @@ class UserVinylsController < ApplicationController
       persona_updated: created,
       message: "#{@user_vinyl.vinyl.title.truncate(25, omission: '...')} added to collection."
     }, status: :created
+  rescue Discogs::ConfigurationError, Discogs::ApiError, ActiveRecord::RecordInvalid => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def destroy
@@ -34,8 +39,12 @@ class UserVinylsController < ApplicationController
 
   private
 
-  def vinyl_params
-    params.fetch(:user_vinyl, {}).permit(:vinyl_id)
+  def release_id
+    params[:release_id].presence || params.dig(:vinyl, :id).presence
+  end
+
+  def cover_image
+    params[:cover_image].presence || params.dig(:vinyl, :cover_image).presence
   end
 
   def refresh_primary_persona
@@ -43,5 +52,4 @@ class UserVinylsController < ApplicationController
   rescue StandardError => e
     Rails.logger.warn("Persona refresh failed for user #{current_user.id}: #{e.message}")
   end
-
 end

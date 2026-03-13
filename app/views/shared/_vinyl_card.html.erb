@@ -1,3 +1,54 @@
-<div class="welcome-vinyl-card">
-  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>">
-</div>
+<article class="welcome-vinyl-card home-randomizer-sleeve is-ready"
+         data-controller="vinyl-flip"
+         data-action="click->vinyl-flip#flipToBack"
+         aria-live="polite">
+  <div class="randomizer-sleeve__body">
+    <div class="randomizer-sleeve__face randomizer-sleeve__face--front">
+      <div class="randomizer-sleeve__artwork-wrap">
+        <img src="<%= vinyl.artwork_url %>"
+             alt="<%= vinyl.title %>"
+             class="randomizer-sleeve__artwork">
+      </div>
+
+      <button type="button"
+              class="randomizer-sleeve__flip"
+              aria-label="Flip to details"
+              data-action="click->vinyl-flip#flipToBack">
+        <span aria-hidden="true">&#x21bb;</span>
+      </button>
+    </div>
+
+    <div class="randomizer-sleeve__face randomizer-sleeve__face--back">
+      <div class="randomizer-sleeve__back-header">
+        <p class="randomizer-sleeve__eyebrow mb-1">Release details</p>
+        <h2 class="randomizer-sleeve__back-title mb-0"><%= vinyl.title %></h2>
+      </div>
+
+      <dl class="randomizer-sleeve__details">
+        <div>
+          <dt>Artist</dt>
+          <dd><%= vinyl.artist.presence || "Unknown artist" %></dd>
+        </div>
+        <% if vinyl.year_known? %>
+          <div>
+            <dt>Year</dt>
+            <dd><%= vinyl.display_year %></dd>
+          </div>
+        <% end %>
+        <div>
+          <dt>Genre</dt>
+          <dd><%= vinyl.genre.presence || "Unlisted" %></dd>
+        </div>
+      </dl>
+
+      <div class="randomizer-sleeve__actions">
+        <button type="button"
+                class="randomizer-sleeve__flip randomizer-sleeve__flip--back"
+                aria-label="Flip to cover"
+                data-action="click->vinyl-flip#flipToFront">
+          <span aria-hidden="true">&#x21ba;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>

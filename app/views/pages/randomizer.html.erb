@@ -1,4 +1,4 @@
-<section class="home-page container py-4 py-lg-5"
+<section class="home-page randomizer-page"
          data-controller="randomizer"
          data-randomizer-url-value="<%= randomizer_path(format: :json, persona: @persona_key) %>"
          data-randomizer-save-url-value="<%= user_vinyls_path %>"
@@ -9,13 +9,13 @@
        data-action="click->randomizer#close"
        data-randomizer-target="backdrop"></div>
 
-  <div class="home-hero text-center">
+  <div class="home-hero randomizer-page__hero text-center">
     <h1 class="home-title mb-3">Randomizer</h1>
     <p class="home-subtitle mx-auto mb-4">
-      Spin for a record from your collection.
+      Get a random vinyl from your collection.
     </p>
 
-    <div class="randomizer-stage mx-auto mb-5">
+    <div class="randomizer-stage mx-auto">
       <button type="button"
               class="randomizer-btn home-randomizer-btn"
               aria-label="Randomizer record"
@@ -32,6 +32,7 @@
 
       <article class="home-randomizer-sleeve"
                data-randomizer-target="sleeve"
+               hidden
                aria-live="polite">
         <div class="randomizer-sleeve__body">
           <div class="randomizer-sleeve__face randomizer-sleeve__face--front">
@@ -75,7 +76,7 @@
                 <dt>Artist</dt>
                 <dd data-randomizer-target="detailArtist"></dd>
               </div>
-              <div>
+              <div data-randomizer-target="detailYearRow">
                 <dt>Year</dt>
                 <dd data-randomizer-target="detailYear"></dd>
               </div>
@@ -91,12 +92,6 @@
                       aria-label="Flip to cover"
                       data-action="click->randomizer#flipToFront">
                 <span aria-hidden="true">&#x21ba;</span>
-              </button>
-              <button type="button"
-                      class="randomizer-sleeve__action"
-                      data-action="click->randomizer#saveToCollection"
-                      data-randomizer-target="saveButton">
-                Save
               </button>
               <button type="button"
                       class="randomizer-sleeve__action randomizer-sleeve__action--secondary"

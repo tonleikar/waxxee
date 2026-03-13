@@ -35,4 +35,25 @@ class Discogs::ReleaseImporterTest < ActiveSupport::TestCase
     assert_equal "https://img.example/discovery.jpg", vinyl.artwork_url
     assert vinyl.persisted?
   end
+
+  test "uses swiper cover image when discogs release has no primary image" do
+    payload = {
+      "title" => "Discovery",
+      "year" => 2001,
+      "artists" => [{ "name" => "Daft Punk" }],
+      "genres" => ["Electronic"],
+      "formats" => [{ "name" => "Vinyl" }],
+      "tracklist" => [{ "title" => "One More Time" }],
+      "thumb" => "https://img.example/discovery-thumb.jpg"
+    }
+
+    importer = Discogs::ReleaseImporter.new(client: FakeClient.new(payload))
+
+    vinyl = importer.import!(
+      release_id: 42,
+      cover_image: "https://img.example/discovery-cover.jpg"
+    )
+
+    assert_equal "https://img.example/discovery-cover.jpg", vinyl.artwork_url
+  end
 end

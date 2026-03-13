@@ -59,3 +59,45 @@ User.find_each do |user|
     UserVinyl.find_or_create_by!(user: user, vinyl: vinyl)
   end
 end
+
+premade = [ {
+  title: "grunge",
+  min_year: 1988,
+  max_year: 1999,
+  genres: ["Rock"],
+  url: "https://api.discogs.com/database/search?q=grunge&genre=Rock&year=1988-1999&type=release"
+},
+{
+  title: "emo",
+  min_year: 1995,
+  max_year: 2010,
+  genres: ["Rock", "Pop"],
+  url: "https://api.discogs.com/database/search?q=emo&genre=Rock&genre=Pop&year=1995-2010&type=release"
+},
+{
+  title: "dreamy",
+  min_year: 1983,
+  max_year: 2025,
+  genres: ["Electronic", "Pop", "Rock"],
+  url: "https://api.discogs.com/database/search?genre=Electronic&genre=Pop&genre=Rock&year=1983-2025&type=release"
+},
+{
+  title: "throwback",
+  min_year: 1983,
+  max_year: 1989,
+  genres: ["Funk / Soul", "Jazz", "Blues", "Rock"],
+  url: "https://api.discogs.com/database/search?genre=Funk+%2F+Soul&genre=Jazz&genre=Blues&genre=Rock&year=1983-1989&type=release"
+},
+{
+  title: "midnight",
+  min_year: 1990,
+  max_year: 2025,
+  genres: ["Electronic", "Hip Hop", "Funk / Soul"],
+  url: "https://api.discogs.com/database/search?&genre=Electronic&genre=Hip+Hop&genre=Funk+%2F+Soul&decade=1990&type=release"
+}]
+
+premade.each do |premade|
+  p premade
+  new_persona = Persona.create(title: premade[:title], min_year: premade[:min_year], max_year: premade[:max_year], url: premade[:url], genres: premade[:genres], keywords: premade[:genres])
+  new_persona.save!
+end

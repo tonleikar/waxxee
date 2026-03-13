@@ -36,7 +36,8 @@ class Persona < ApplicationRecord
       title: "Midnight",
       min_year: 1990,
       max_year: 2025,
-      genres: ["Electronic", "Hip Hop", "Funk / Soul"]
+      genres: ["Electronic", "Hip Hop", "Funk / Soul"],
+      url: "https://api.discogs.com/database/search?&genre=Electronic&genre=Hip+Hop&genre=Funk+%2F+Soul&decade=1990&type=release"
     }
   }.freeze
 

@@ -4,11 +4,11 @@ module Discogs
       @client = client
     end
 
-    def import!(release_id:, user: nil)
+    def import!(release_id:, user: nil, cover_image: nil)
       payload = client.find_release(release_id)
       vinyl = find_or_initialize_vinyl(payload)
 
-      vinyl.assign_attributes(vinyl_attributes(payload))
+      vinyl.assign_attributes(vinyl_attributes(payload, cover_image: cover_image))
       vinyl.save!
 
       return vinyl unless user
@@ -28,7 +28,7 @@ module Discogs
       )
     end
 
-    def vinyl_attributes(payload)
+    def vinyl_attributes(payload, cover_image:)
       {
         title: payload["title"],
         artist: artist_name(payload),
@@ -36,7 +36,7 @@ module Discogs
         format: format_name(payload),
         genre: Array(payload["genres"]).join(", "),
         tracks: track_titles(payload),
-        artwork_url: artwork_url(payload)
+        artwork_url: artwork_url(payload, cover_image: cover_image)
       }
     end
 
@@ -56,9 +56,9 @@ module Discogs
       Array(payload["tracklist"]).filter_map { |track| track["title"].presence }
     end
 
-    def artwork_url(payload)
+    def artwork_url(payload, cover_image:)
       primary_image = Array(payload["images"]).find { |image| image["type"] == "primary" }
-      primary_image&.fetch("uri", nil) || payload["thumb"]
+      primary_image&.fetch("uri", nil) || cover_image.presence || payload["thumb"]
     end
   end
 end
