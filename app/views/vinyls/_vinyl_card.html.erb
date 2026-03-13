@@ -7,7 +7,7 @@
 <% track_list = Array(vinyl.tracks).reject(&:blank?) %>
 <% info_rows = [
   ["Title", vinyl.title],
-  ["Year", vinyl.year],
+  ["Year", vinyl.display_year],
   ["Format", vinyl.format],
   ["Tracks", track_list.size.positive? ? track_list.size : nil]
 ].select { |_, value| value.present? } %>
@@ -16,8 +16,8 @@
   <div class="vinyl-library-card-media">
     <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="vinyl-library-card-image">
     <div class="vinyl-library-card-sheen"></div>
-    <% if vinyl.year.present? %>
-      <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.year %></span>
+    <% if vinyl.year_known? %>
+      <span class="vinyl-library-card-year vinyl-library-card-year-overlay"><%= vinyl.display_year %></span>
     <% end %>
     <% if user_vinyl.present? && !compact %>
       <%= button_to user_vinyl_path(user_vinyl),

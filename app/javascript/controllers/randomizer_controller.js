@@ -8,6 +8,7 @@ export default class extends Controller {
     "artwork",
     "backTitle",
     "detailArtist",
+    "detailYearRow",
     "detailYear",
     "detailGenre"
   ]
@@ -110,7 +111,9 @@ export default class extends Controller {
     this.artworkTarget.alt = vinyl.title ? `${vinyl.title} cover` : "Vinyl artwork"
     this.backTitleTarget.textContent = vinyl.title || "Untitled"
     this.detailArtistTarget.textContent = vinyl.artist || "Unknown artist"
-    this.detailYearTarget.textContent = vinyl.year || "Unknown"
+    const displayYear = this.displayYear(vinyl.year)
+    this.detailYearTarget.textContent = displayYear || ""
+    this.detailYearRowTarget.toggleAttribute("hidden", !displayYear)
     this.detailGenreTarget.textContent = vinyl.genre || "Unlisted"
   }
 
@@ -152,5 +155,10 @@ export default class extends Controller {
 
   wait(duration) {
     return new Promise((resolve) => setTimeout(resolve, duration))
+  }
+
+  displayYear(year) {
+    const numericYear = Number(year)
+    return Number.isFinite(numericYear) && numericYear > 0 ? String(year) : null
   }
 }
