@@ -9,13 +9,11 @@ export default class extends Controller {
     "backTitle",
     "detailArtist",
     "detailYear",
-    "detailGenre",
-    "saveButton"
+    "detailGenre"
   ]
 
   static values = {
     url: String,
-    saveUrl: String,
     loading: { type: Number, default: 1200 },
     success: { type: Number, default: 900 },
     dissipate: { type: Number, default: 700 }
@@ -94,40 +92,6 @@ export default class extends Controller {
     this.sleeveTarget.classList.remove("is-flipped")
   }
 
-  async saveToCollection(event) {
-    event.preventDefault()
-    if (!this.currentVinyl || this.saveButtonTarget.disabled) return
-
-    this.saveButtonTarget.disabled = true
-
-    try {
-      const response = await fetch(this.saveUrlValue, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "X-CSRF-Token": this.csrfToken
-        },
-        body: JSON.stringify({
-          user_vinyl: {
-            vinyl_id: this.currentVinyl.id
-          }
-        })
-      })
-
-      const payload = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(payload.error || `Save failed with status ${response.status}`)
-
-      this.saveButtonTarget.textContent = "Saved"
-      this.saveButtonTarget.classList.add("is-saved")
-    } catch (error) {
-      console.error("Saving vinyl failed", error)
-      this.saveButtonTarget.disabled = false
-      this.saveButtonTarget.textContent = "Error"
-    }
-  }
-
   async fetchVinyl() {
     const response = await fetch(this.urlValue, {
       headers: { "Accept": "application/json" }
@@ -148,10 +112,6 @@ export default class extends Controller {
     this.detailArtistTarget.textContent = vinyl.artist || "Unknown artist"
     this.detailYearTarget.textContent = vinyl.year || "Unknown"
     this.detailGenreTarget.textContent = vinyl.genre || "Unlisted"
-
-    this.saveButtonTarget.disabled = Boolean(vinyl.saved)
-    this.saveButtonTarget.textContent = vinyl.saved ? "Saved" : "Save"
-    this.saveButtonTarget.classList.toggle("is-saved", Boolean(vinyl.saved))
   }
 
   resetSleeve() {
@@ -192,9 +152,5 @@ export default class extends Controller {
 
   wait(duration) {
     return new Promise((resolve) => setTimeout(resolve, duration))
-  }
-
-  get csrfToken() {
-    return document.querySelector('meta[name="csrf-token"]')?.content || ""
   }
 }

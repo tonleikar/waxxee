@@ -582,7 +582,7 @@
 
 .vinyl-folder-thumb-stack {
   position: absolute;
-  left: calc((100% - 72px) * var(--stack-index) / 3);
+  left: calc((#{'100% - 72px'}) * var(--stack-index) / 3);
   bottom: 0;
   width: 72px;
   height: 72px;
