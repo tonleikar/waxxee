@@ -138,9 +138,9 @@
   border: 0;
   border-radius: 999px;
   background: rgba(255, 251, 245, 0.62);
-  color: rgba(17, 17, 17, 0.78);
+  color: #111111;
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -149,7 +149,7 @@
 
 .randomizer-sleeve__action:hover {
   background: rgba(255, 251, 245, 0.86);
-  color: var(--wax-ink);
+  color: #111111;
 }
 
 .randomizer-sleeve__action--secondary {
@@ -158,7 +158,7 @@
 
 .randomizer-sleeve__action.is-saved {
   background: rgba(17, 17, 17, 0.12);
-  color: rgba(17, 17, 17, 0.62);
+  color: #111111;
 }
 
 @media (min-width: 992px) {
@@ -170,11 +170,33 @@
 .persona-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-dashboard {
+  padding-top: 3rem;
+  padding-bottom: 2.5rem;
+}
+
+.home-dashboard--public {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.home-dashboard__section-title {
+  margin: 0 0 2.25rem;
+}
+
+.home-dashboard__section-title--recent {
+  margin-top: 0;
+}
+
+.home-persona-grid {
+  margin-bottom: 1rem;
 }
 
 .home-persona-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .home-persona-section__eyebrow {
@@ -194,6 +216,46 @@
 .home-persona-section__copy {
   max-width: 42rem;
   color: rgba(17, 17, 17, 0.62);
+}
+
+.home-public-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.home-public-intro__card {
+  padding: 1.4rem;
+  background: rgba(255, 251, 245, 0.76);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+}
+
+.home-public-intro__copy {
+  max-width: 48rem;
+  color: rgba(17, 17, 17, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.home-public-intro__card--cta {
+  display: grid;
+  gap: 1.25rem;
+  align-content: space-between;
+  background: $signal-orange;
+}
+
+.home-public-intro__cta-title {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.home-public-intro__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .home-persona-builder {
@@ -250,7 +312,7 @@
   border: 0;
   background: #111111;
   color: #fff;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .persona-card {
@@ -284,6 +346,14 @@
 
 .persona-card--custom {
   justify-content: space-between;
+}
+
+.persona-card--custom:active,
+.persona-card--custom:focus-within,
+.persona-card--custom .persona-card__link:active,
+.persona-card--custom .persona-card__link:focus {
+  background: rgba(255, 251, 245, 0.66);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
 }
 
 .persona-card__link {
@@ -467,14 +537,16 @@
   background: rgba(255, 251, 245, 0.92);
   color: #111111;
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 400;
   text-decoration: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .persona-card__action--primary {
   border-color: #111111;
   background: #111111;
-  color: #fff;
+  color: #ffffff;
 }
 
 .persona-card__actions--builder .persona-card__action--primary {
@@ -483,9 +555,48 @@
 
 .persona-card__action--secondary {
   background: transparent;
+  color: #111111;
 }
 
 @media (max-width: 767px) {
+  .home-dashboard {
+    padding-top: 1.75rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .home-dashboard--public {
+    gap: 1.75rem;
+  }
+
+  .home-dashboard__section-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .home-persona-grid {
+    margin-bottom: 0.85rem;
+  }
+
+  .home-persona-section {
+    margin-bottom: 1.75rem;
+  }
+
+  .home-public-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .home-public-intro__card {
+    padding: 1.1rem;
+  }
+
+  .home-public-intro__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-public-intro__actions .btn {
+    width: 100%;
+  }
+
   .persona-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
