@@ -28,7 +28,7 @@ module Openai
     def response_body
       uri = URI("https://api.openai.com/v1/chat/completions")
       request = Net::HTTP::Post.new(uri)
-      request["Authorization"] = "Bearer #{ENV.fetch("OPENAI_API_KEY")}"
+      request["Authorization"] = "Bearer #{ENV.fetch('OPENAI_API_KEY')}"
       request["Content-Type"] = "application/json"
       request.body = JSON.generate(request_payload)
 
@@ -58,13 +58,14 @@ module Openai
             content: <<~TEXT
               You create record-discovery personas for Waxxee, a vinyl collection app.
               Return valid JSON only with these keys:
-              title, summary, min_year, max_year, genres, keywords.
+              title, summary, min_year, max_year, genres, keywords, url.
               Rules:
               - title: short and specific, max 32 characters
               - summary: 1-2 sentences, no markdown
               - min_year and max_year: integers between 1900 and #{Time.current.year}
               - genres: array of 1-5 broad genres suited for filtering vinyl records
               - keywords: array of 3-8 short taste descriptors
+              - url: a Discogs search URL that would return records matching this persona in this format: https://api.discogs.com/database/search?q=QUERY&genre=GENRE&year=MIN_YEAR-MAX_YEAR&type=release
             TEXT
           },
           {
@@ -138,7 +139,9 @@ module Openai
         min_year: payload["min_year"].to_i.clamp(1900, current_year),
         max_year: payload["max_year"].to_i.clamp(1900, current_year),
         genres: Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(5),
-        keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8)
+        keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8),
+        url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release"
+
       }.then do |attributes|
         if attributes[:max_year] < attributes[:min_year]
           attributes[:min_year], attributes[:max_year] = attributes[:max_year], attributes[:min_year]
