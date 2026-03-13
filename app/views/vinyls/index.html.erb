@@ -121,13 +121,12 @@
       <div class="modal-content vinyl-folder-modal-content border-0">
         <div class="modal-header vinyl-folder-modal-header border-0">
           <div>
-            <p class="vinyl-library-card-kicker mb-2">Crate</p>
             <h2 class="modal-title h3 mb-1" id="crateModalLabel-<%= folder.id %>"><%= folder.name %></h2>
             <p class="text-muted mb-0"><%= pluralize(folder.vinyls.count, "record") %></p>
           </div>
           <button type="button" class="btn-close vinyl-folder-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body vinyl-folder-modal-body">
+        <div class="modal-body">
           <% folder_vinyls = folder.vinyls.order(created_at: :desc) %>
           <% if folder_vinyls.any? %>
             <div class="row g-3">
