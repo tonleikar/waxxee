@@ -61,7 +61,7 @@
   z-index: 22;
   width: 100%;
   max-width: 760px;
-  min-height: 590px;
+  min-height: 0;
   display: grid;
   place-items: center;
   perspective: 2400px;
@@ -70,12 +70,13 @@
 .home-randomizer-btn {
   position: relative;
   z-index: 1;
+  transform: translateY(clamp(20px, 7vh, 72px));
   transition: transform 0.65s ease, opacity 0.45s ease, filter 0.45s ease;
 }
 
 .home-randomizer-btn.is-engulfed {
   opacity: 0;
-  transform: scale(0.98);
+  transform: translateY(clamp(20px, 7vh, 72px)) scale(0.98);
 }
 
 .home-page .home-randomizer-sleeve {
@@ -89,6 +90,10 @@
   pointer-events: none;
   transform: translateX(-50%) translateY(115%);
   transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s ease;
+}
+
+.home-page .home-randomizer-sleeve[hidden] {
+  display: none;
 }
 
 .home-page .home-randomizer-sleeve.is-visible {
@@ -461,12 +466,16 @@
 }
 
 @media (max-width: 767px) {
+  .home-randomizer-btn {
+    margin-top: 0.75rem;
+  }
+
   .persona-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .randomizer-stage {
-    min-height: 640px;
+    min-height: 0;
   }
 
   .home-randomizer-btn .record {
