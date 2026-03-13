@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo-rails"
 
 export default class extends Controller {
   static values = {
@@ -12,7 +13,7 @@ export default class extends Controller {
       method: "DELETE",
       credentials: "same-origin",
       headers: {
-        "Accept": "text/html",
+        "Accept": "text/vnd.turbo-stream.html, text/html",
         "X-CSRF-Token": this.csrfToken,
         "X-Requested-With": "XMLHttpRequest"
       }
@@ -20,16 +21,22 @@ export default class extends Controller {
 
     if (!response.ok) return
 
+    const contentType = response.headers.get("content-type") || ""
+    const body = await response.text()
+
+    if (contentType.includes("text/vnd.turbo-stream.html")) {
+      Turbo.renderStreamMessage(body)
+    }
+
     if (this.removeCardValue) {
       this.element.closest("[data-crate-card]")?.remove()
       return
     }
 
-    const html = await response.text()
     const frame = this.element.closest("turbo-frame")
-    if (!frame) return
+    if (!frame || contentType.includes("text/vnd.turbo-stream.html")) return
 
-    frame.outerHTML = html
+    frame.outerHTML = body
   }
 
   get csrfToken() {
