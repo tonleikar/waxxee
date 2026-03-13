@@ -1,26 +1,39 @@
-<div class="welcome-header">
-  <div></div><%= image_tag "waxxee_logo" %><div></div>
+<div class="welcome-header container">
+  <div></div>
+  <%= image_tag "waxxee_logo" %>
+  <div></div>
 </div>
-<div class="container">
+
+<div class="container home-dashboard home-dashboard--public">
   <h1 class="main-title">WELCOME TO WAXXEE!</h1>
-  <h2>DIGITAL CRATE DIGGING</h2>
-  <p>WAXXEE is designed to re-create the experience of flicking thourough boxes of dusty old records
-    in the basement of an old record shop. We don't learn anything about you, our alorithyms will
-    constantly surprise you bringing new and previsouly forgotten tunes to your ears.
-  </p>
-  <div class="justify-content-center d-flex">
-    <div class="log-in-container col-10 col-md-6">
-      <h3>dive in and discover something amazing</h3>
-      <div class="d-flex justify-content-between px-4">
+
+  <h2 class="home-dashboard__section-title">DIGITAL CRATE DIGGING</h2>
+
+  <section class="home-public-intro">
+    <div class="home-public-intro__card">
+      <p class="home-public-intro__copy mb-0">
+        WAXXEE is designed to recreate the feeling of flicking through dusty boxes of old records in the
+        basement of a shop. It is built for discovery, not prediction, so the music keeps surprising you.
+      </p>
+    </div>
+
+    <div class="home-public-intro__card home-public-intro__card--cta">
+      <h3 class="home-public-intro__cta-title">Dive in and discover something amazing</h3>
+
+      <div class="home-public-intro__actions">
         <%= link_to "Log In", new_user_session_path, class: "btn btn-primary" %>
         <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
       </div>
     </div>
-  </div>
-    <h2 class="mt-5">RECENT FINDS...</h2>
+  </section>
+
+  <section class="home-recent-finds">
+    <h2 class="home-dashboard__section-title home-dashboard__section-title--recent">RECENT FINDS...</h2>
+
     <div class="vinyl-wrapper">
       <% @recent_vinyls.each do |vinyl| %>
         <%= render "shared/vinyl_card", vinyl: vinyl %>
       <% end %>
     </div>
+  </section>
 </div>

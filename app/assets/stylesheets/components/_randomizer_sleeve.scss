@@ -1,5 +1,6 @@
 .home-randomizer-sleeve,
-.swiper-sleeve {
+.swiper-sleeve,
+.welcome-vinyl-card {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 0;
@@ -24,7 +25,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
+  box-shadow: none;
   z-index: 3;
   pointer-events: auto;
   cursor: pointer;
@@ -37,12 +38,14 @@
 }
 
 .home-randomizer-sleeve.is-flipped,
-.swiper-sleeve.is-flipped {
+.swiper-sleeve.is-flipped,
+.welcome-vinyl-card.is-flipped {
   pointer-events: auto;
 }
 
 .home-randomizer-sleeve.is-ready,
-.swiper-sleeve.is-ready {
+.swiper-sleeve.is-ready,
+.welcome-vinyl-card.is-ready {
   pointer-events: auto;
 }
 
@@ -55,7 +58,8 @@
 }
 
 .home-randomizer-sleeve.is-flipped .randomizer-sleeve__body,
-.swiper-sleeve.is-flipped .randomizer-sleeve__body {
+.swiper-sleeve.is-flipped .randomizer-sleeve__body,
+.welcome-vinyl-card.is-flipped .randomizer-sleeve__body {
   transform: rotateY(180deg);
 }
 
@@ -106,8 +110,10 @@
 
 .home-randomizer-sleeve:not(.is-flipped) .randomizer-sleeve__face--front,
 .swiper-sleeve:not(.is-flipped) .randomizer-sleeve__face--front,
+.welcome-vinyl-card:not(.is-flipped) .randomizer-sleeve__face--front,
 .home-randomizer-sleeve.is-flipped .randomizer-sleeve__face--back,
-.swiper-sleeve.is-flipped .randomizer-sleeve__face--back {
+.swiper-sleeve.is-flipped .randomizer-sleeve__face--back,
+.welcome-vinyl-card.is-flipped .randomizer-sleeve__face--back {
   pointer-events: auto;
 }
 
@@ -130,7 +136,8 @@
 }
 
 .home-randomizer-sleeve.is-ready .randomizer-sleeve__artwork,
-.swiper-sleeve.is-ready .randomizer-sleeve__artwork {
+.swiper-sleeve.is-ready .randomizer-sleeve__artwork,
+.welcome-vinyl-card.is-ready .randomizer-sleeve__artwork {
   opacity: 1;
 }
 
@@ -152,7 +159,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
+  box-shadow: none;
   pointer-events: auto;
   cursor: pointer;
   transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
