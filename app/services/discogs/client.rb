@@ -17,9 +17,9 @@ module Discogs
 
   class Client
     def initialize(
-      base_url: Rails.configuration.x.discogs.base_url,
-      token: Rails.configuration.x.discogs.token,
-      user_agent: Rails.configuration.x.discogs.user_agent
+      base_url: discogs_config(:base_url) || "https://api.discogs.com",
+      token: discogs_config(:token) || ENV["DISCOGS_USER_TOKEN"],
+      user_agent: discogs_config(:user_agent) || ENV["DISCOGS_USER_AGENT"]
     )
       @base_url = base_url
       @token = token
@@ -42,6 +42,12 @@ module Discogs
     private
 
     attr_reader :base_url, :token, :user_agent
+
+    def discogs_config(key)
+      Rails.configuration.x.discogs&.public_send(key)
+    rescue NoMethodError
+      nil
+    end
 
     def validate_configuration!
       raise ConfigurationError, "Discogs token is missing" if token.blank?

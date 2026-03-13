@@ -15,7 +15,7 @@ export default class extends Controller {
     this.currentVinyls = []
     this.currentPage = 1
     this.activeVinyl = null
-    this.discogsAPI = `https://api.discogs.com/database/search?style=psychedelic&country=turkey&decade=1960&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
+    this.discogsAPI = `https://api.discogs.com/database/search?style=rock&country=brazil&decade=2000&type=release&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
 
     await this.getRecords()
     await this.renderCard()
@@ -140,23 +140,31 @@ export default class extends Controller {
   async saveVinyl(vinyl) {
     if (!vinyl) return
 
-    const response = await fetch(this.urlValue, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ vinyl })
-    })
+    try {
+      const response = await fetch(this.urlValue, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ release_id: vinyl.id })
+      })
 
-    if (!response.ok) return
+      const data = await response.json().catch(() => ({}))
 
-    const data = await response.json()
-    this.showToast(data.message)
+      if (!response.ok) {
+        this.showToast(data.error || "Could not save this release.", "neutral")
+        return
+      }
+
+      this.showToast(data.message, "success")
+    } catch (_error) {
+      this.showToast("Could not save this release.", "neutral")
+    }
   }
 
-  showToast(message) {
+  showToast(message, tone = "success") {
     let stack = document.querySelector(".toast-stack")
     if (!stack) {
       stack = document.createElement("div")
@@ -167,7 +175,7 @@ export default class extends Controller {
     }
 
     const toast = document.createElement("div")
-    toast.className = "app-toast app-toast--success"
+    toast.className = `app-toast app-toast--${tone}`
     toast.setAttribute("role", "status")
     toast.textContent = message
     stack.appendChild(toast)
