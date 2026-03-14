@@ -267,24 +267,20 @@
   top: 1.75rem;
   right: 1.75rem;
   z-index: 2;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
+  padding: 4px;
+  margin:0;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
-  color: rgba(17, 17, 17, 0.78);
+  background: rgba(255, 255, 255, 0.8);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 
 .vinyl-library-card-delete-btn:hover {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   color: var(--wax-ink);
-  transform: translateY(-1px);
 }
 
 .vinyl-library-card-section {
@@ -639,6 +635,8 @@
   background: rgba(86, 50, 26, 0.3);
   color: rgba(248, 239, 227, 0.88);
   box-shadow: 0 4px 10px rgba(56, 31, 14, 0.16);
+  margin: 0;
+  padding: 0;
 }
 
 .vinyl-folder-chip .vinyl-trash-btn:hover {
@@ -652,14 +650,14 @@
 }
 
 .vinyl-library-card .vinyl-trash-icon {
-  width: 34px;
-  height: 34px;
+  width: 1.5rem;
+  height: 1.5rem;
   display: block;
 }
 
 .vinyl-folder-chip .vinyl-trash-icon {
-  width: 34px;
-  height: 34px;
+  width: 1.5rem;
+  height: 1.5rem;
   display: block;
   filter: brightness(0) invert(1);
 }
