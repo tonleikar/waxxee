@@ -407,36 +407,6 @@
   filter: blur(14px);
 }
 
-.persona-card__thumbnail--grungie {
-  background:
-    linear-gradient(145deg, rgba(122, 104, 86, 0.42), rgba(244, 236, 222, 0.82)),
-    linear-gradient(45deg, #dac8b6, #b6987f);
-}
-
-.persona-card__thumbnail--emo {
-  background:
-    linear-gradient(160deg, rgba(78, 66, 72, 0.3), rgba(244, 236, 222, 0.82)),
-    linear-gradient(45deg, #decfce, #b9979f);
-}
-
-.persona-card__thumbnail--dreamy {
-  background:
-    linear-gradient(150deg, rgba(88, 116, 134, 0.26), rgba(244, 236, 222, 0.8)),
-    linear-gradient(45deg, #d9e8ea, #b6c8cf);
-}
-
-.persona-card__thumbnail--throwback {
-  background:
-    linear-gradient(155deg, rgba(164, 122, 69, 0.28), rgba(244, 236, 222, 0.8)),
-    linear-gradient(45deg, #ecd7bb, #cea676);
-}
-
-.persona-card__thumbnail--midnight {
-  background:
-    linear-gradient(150deg, rgba(73, 101, 112, 0.26), rgba(244, 236, 222, 0.8)),
-    linear-gradient(45deg, #d9e3e4, #aabdc1);
-}
-
 .persona-card__thumbnail--custom {
   background:
     radial-gradient(circle at 22% 20%, rgba(255, 214, 102, 0.26), transparent 28%),
