@@ -56,9 +56,11 @@ module Openai
           {
             role: "system",
             content: <<~TEXT
-              You create record-discovery personas for Waxxee, a vinyl collection app.
+              You create record-discovery personas for Waxxee, a vinyl discovery app.
+              The aim is help users find new records they'll love based on their profile and saved records.
+              Obscure and niche personas are encouraged, but not required.
               Return valid JSON only with these keys:
-              title, summary, min_year, max_year, genres, keywords, url.
+              title, summary, min_year, max_year, genres, keywords, url, image_url
               Rules:
               - title: short and specific, max 32 characters
               - summary: 1-2 sentences, no markdown
@@ -66,6 +68,7 @@ module Openai
               - genres: array of 1-5 broad genres suited for filtering vinyl records
               - keywords: array of 3-8 short taste descriptors
               - url: a Discogs search URL that would return records matching this persona in this format: https://api.discogs.com/database/search?q=QUERY&genre=GENRE&year=MIN_YEAR-MAX_YEAR&type=release
+              - image_url: get a relevant image URL from Unsplash that represents this persona's taste in music or the cloest matching genre.
             TEXT
           },
           {
