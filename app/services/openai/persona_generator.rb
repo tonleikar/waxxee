@@ -143,7 +143,7 @@ module Openai
         genres: Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(5),
         keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8),
         url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release",
-        image_url: Unsplash::Photo.random(query: payload["title"] + "music")&.id || "1667936505833-d1aa8466f84b"
+        image_url: Unsplash::Photo.random(query: payload["title"] + "music")&.urls&.small || "1667936505833-d1aa8466f84b"
 
       }.then do |attributes|
         if attributes[:max_year] < attributes[:min_year]
