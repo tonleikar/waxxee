@@ -60,7 +60,7 @@ module Openai
               The aim is help users find new records they'll love based on their profile and saved records.
               Obscure and niche personas are encouraged, but not required.
               Return valid JSON only with these keys:
-              title, summary, min_year, max_year, genres, keywords, url, image_url
+              title, summary, min_year, max_year, genres, keywords, url
               Rules:
               - title: short and specific, max 32 characters
               - summary: 1-2 sentences, no markdown
@@ -68,7 +68,6 @@ module Openai
               - genres: array of 1-5 broad genres suited for filtering vinyl records
               - keywords: array of 3-8 short taste descriptors
               - url: a Discogs search URL that would return records matching this persona in this format: https://api.discogs.com/database/search?q=QUERY&genre=GENRE&year=MIN_YEAR-MAX_YEAR&type=release
-              - image_url: get a relevant image URL from Unsplash that represents this persona's taste in music or the cloest matching genre. The link should be a direct embeddable link to the actual file and not require authentication.
             TEXT
           },
           {
@@ -144,7 +143,7 @@ module Openai
         genres: Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(5),
         keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8),
         url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release",
-        image_url: payload["image_url"].to_s.strip.presence || "https://images.unsplash.com/photo-1667936505833-d1aa8466f84b?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        image_url: Unsplash::Photo.random(query: payload["title"] + "music")&.id || "1667936505833-d1aa8466f84b"
 
       }.then do |attributes|
         if attributes[:max_year] < attributes[:min_year]
