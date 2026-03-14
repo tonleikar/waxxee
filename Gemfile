@@ -30,6 +30,9 @@ gem "solid_cable"
 # Cloudinary gem file
 gem "cloudinary"
 
+# Unsplash gem for thubnail generation
+gem "unsplash"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

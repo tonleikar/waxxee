@@ -1,0 +1,27 @@
+<article class="persona-card persona-card--custom">
+  <%= link_to swiper_index_path(persona_id: persona.id), class: "persona-card__link" do %>
+    <div class="persona-card__thumbnail persona-card__thumbnail--custom" style="background-image: url('<%= persona.image_url %>');">
+      <span class="persona-card__years"><%= persona.min_year %>-<%= persona.max_year %></span>
+      <span class="persona-card__badge">User generated</span>
+    </div>
+
+      <div class="persona-card__body persona-card__body--custom">
+        <div>
+          <h2 class="persona-card__title mb-1"><%= persona.title %></h2>
+          <p class="persona-card__meta mb-2"><%= Array(persona.genres).join(" / ") %></p>
+          <p class="persona-card__summary mb-0"><%= persona.summary %></p>
+        </div>
+      </div>
+    <% end %>
+
+  <div class="persona-card__actions">
+    <%= link_to "Explore",
+                swiper_index_path(persona_id: persona.id),
+                class: "persona-card__action persona-card__action--primary" %>
+    <%= button_to "Delete",
+                  persona_path(persona),
+                  method: :delete,
+                  class: "persona-card__action persona-card__action--secondary",
+                  form: { data: { turbo_confirm: "Delete this saved persona?" } } %>
+  </div>
+</article>
