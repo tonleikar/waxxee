@@ -1,11 +1,15 @@
 <article class="persona-card persona-card--custom">
-    <div class="persona-card__thumbnail" style="--persona-image: url('<%= persona.image_url %>');">
+    <div class="persona-card__thumbnail" style="--persona-image: url('<%= persona.image_url or asset_path("default-persona-image.jpg") %>');">
       <span class="persona-card__years"><%= persona.min_year %>-<%= persona.max_year %></span>
     </div>
 
       <div class="persona-card__body persona-card__body--custom">
         <div>
-          <p class="photo-credit">Photo by <a href="https://unsplash.com/@<%= persona.image_credit %>"><%= persona.image_credit %></a> on <a href="https://unsplash.com/">Unsplash</a></p>
+          <% if persona.image_url %>
+            <p class="photo-credit">Photo by <a href="https://unsplash.com/@<%= persona.image_credit %>"><%= persona.image_credit %></a> on <a href="https://unsplash.com/">Unsplash</a></p>
+          <% else %>
+            <p class="photo-credit">Photo by <a href="https://unsplash.com/@amr_taha">Amr Taha</a> on <a href="https://unsplash.com/">Unsplash</a></p>
+          <% end %>
           <h2 class="persona-card__title mb-1"><%= persona.title %></h2>
           <p class="persona-card__meta mb-2"><%= Array(persona.genres).join(" / ") %></p>
           <p class="persona-card__summary mb-0"><%= persona.summary %></p>
