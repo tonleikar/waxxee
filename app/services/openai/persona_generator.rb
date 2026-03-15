@@ -56,9 +56,11 @@ module Openai
           {
             role: "system",
             content: <<~TEXT
-              You create record-discovery personas for Waxxee, a vinyl collection app.
+              You create record-discovery personas for Waxxee, a vinyl discovery app.
+              The aim is help users find new records they'll love based on their profile and saved records.
+              Obscure and niche personas are encouraged, but not required.
               Return valid JSON only with these keys:
-              title, summary, min_year, max_year, genres, keywords, url.
+              title, summary, min_year, max_year, genres, keywords, url
               Rules:
               - title: short and specific, max 32 characters
               - summary: 1-2 sentences, no markdown
@@ -132,7 +134,8 @@ module Openai
 
     def normalize_persona(payload)
       current_year = Time.current.year
-
+      genres = Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).join(" ")
+      image = Unsplash::Photo.random(query: "#{genres} music")
       {
         title: payload["title"].to_s.strip.presence || "Untitled Persona",
         summary: payload["summary"].to_s.strip.presence || "A Waxxee persona based on your saved records.",
@@ -140,8 +143,9 @@ module Openai
         max_year: payload["max_year"].to_i.clamp(1900, current_year),
         genres: Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(5),
         keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8),
-        url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release"
-
+        url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release",
+        image_url: image.urls.small,
+        image_credit: image.user.name
       }.then do |attributes|
         if attributes[:max_year] < attributes[:min_year]
           attributes[:min_year], attributes[:max_year] = attributes[:max_year], attributes[:min_year]

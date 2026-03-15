@@ -1,9 +1,4 @@
-<div class="welcome-header">
-  <%= image_tag "waxxee_logo" %>
-  <%= link_to profile_path(current_user), class: "welcome-header__profile-link" do %>
-    <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
-  <% end %>
-</div>
+<%= render "shared/header" %>
 
 <div class="container home-dashboard">
   <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
@@ -13,34 +8,8 @@
            data-controller="persona-form"
            data-persona-form-open-class="is-open">
     <div class="persona-grid mb-4">
-      <% @personas.each do |persona| %>
-        <article class="persona-card persona-card--custom">
-          <%= link_to swiper_index_path(persona_id: persona.id), class: "persona-card__link" do %>
-            <div class="persona-card__thumbnail persona-card__thumbnail--custom">
-              <span class="persona-card__years"><%= persona.min_year %>-<%= persona.max_year %></span>
-              <span class="persona-card__badge">User generated</span>
-            </div>
-
-              <div class="persona-card__body persona-card__body--custom">
-                <div>
-                  <h2 class="persona-card__title mb-1"><%= persona.title %></h2>
-                  <p class="persona-card__meta mb-2"><%= Array(persona.genres).join(" / ") %></p>
-                  <p class="persona-card__summary mb-0"><%= persona.summary %></p>
-                </div>
-              </div>
-            <% end %>
-
-          <div class="persona-card__actions">
-            <%= link_to "Open",
-                        swiper_index_path(persona_id: persona.id),
-                        class: "persona-card__action persona-card__action--primary" %>
-            <%= button_to "Delete",
-                          persona_path(persona),
-                          method: :delete,
-                          class: "persona-card__action persona-card__action--secondary",
-                          form: { data: { turbo_confirm: "Delete this saved persona?" } } %>
-          </div>
-        </article>
+      <% current_user.personas.each do |persona| %>
+        <%= render "shared/persona_card",  persona: persona %>
       <% end %>
 
       <button type="button"
@@ -87,14 +56,7 @@
       <% end %>
     </div>
   </section>
-
-  <section class="home-recent-finds">
-    <h2 class="home-dashboard__section-title home-dashboard__section-title--recent">RECENT FINDS...</h2>
-
-    <div class="vinyl-wrapper">
-      <% @recent_vinyls.each do |vinyl| %>
-        <%= render "shared/vinyl_card", vinyl: vinyl.vinyl %>
-      <% end %>
-    </div>
-  </section>
+  <% if current_user.vinyls.any? %>
+    <%= render "shared/recent_finds" %>
+  <% end %>
 </div>

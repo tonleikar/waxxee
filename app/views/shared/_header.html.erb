@@ -1,0 +1,6 @@
+<div class="welcome-header">
+  <%= image_tag "waxxee_logo" %>
+  <%= link_to profile_path(current_user), class: "welcome-header__profile-link" do %>
+    <%= image_tag "nav/profile.svg", alt: "Profile", class: "profile-icon" %>
+  <% end %>
+</div>

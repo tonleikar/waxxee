@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module ChangeThisToYourRailsAppName
+module Waxxee
   class Application < Rails::Application
     config.generators do |generate|
       generate.assets false
@@ -28,5 +28,9 @@ module ChangeThisToYourRailsAppName
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    Unsplash.configure do |config|
+      config.application_access_key = ENV.fetch("UNSPLASH_ACCESS_KEY")
+      config.application_secret = ENV.fetch("UNSPLASH_SECRET_KEY")
+    end
   end
 end

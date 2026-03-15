@@ -1,0 +1,8 @@
+  <section class="home-recent-finds">
+    <h2 class="home-dashboard__section-title home-dashboard__section-title--recent">RECENT FINDS...</h2>
+    <div class="vinyl-wrapper">
+      <% current_user.vinyls.last(4).each do |vinyl| %>
+        <%= render "shared/vinyl_card", vinyl: vinyl %>
+      <% end %>
+    </div>
+  </section>
