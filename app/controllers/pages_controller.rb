@@ -7,13 +7,10 @@ class PagesController < ApplicationController
   end
 
   def randomizer
-    @persona_key = selected_persona_key || "randomizer"
-    @persona = Persona::RULES.fetch(@persona_key)
-
     respond_to do |format|
       format.html
       format.json do
-        vinyl = random_vinyl
+        vinyl = current_user.vinyls.sample
 
         if vinyl.present?
           render json: vinyl_payload(vinyl)
@@ -25,15 +22,6 @@ class PagesController < ApplicationController
   end
 
   private
-
-  def random_vinyl
-    current_user.user_vinyls.includes(:vinyl).to_a.sample&.vinyl
-  end
-
-  def selected_persona_key
-    key = params[:persona]&.downcase
-    key if key.present? && Persona::RULES.key?(key)
-  end
 
   def vinyl_payload(vinyl)
     saved = current_user.user_vinyls.exists?(vinyl_id: vinyl.id)
