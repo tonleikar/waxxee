@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post :card_preview
     end
   end
+  get "swiper/music_preview", to: 'swiper#music_preview'
 
   resources :profile, only: [:show, :edit, :update, :destroy]
   resources :user_vinyls, only: [:create, :destroy]

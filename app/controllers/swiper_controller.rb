@@ -1,3 +1,4 @@
+require "uri"
 class SwiperController < ApplicationController
   include PersonaVinylPicker
 
@@ -10,6 +11,16 @@ class SwiperController < ApplicationController
   def card_preview
     vinyl = Discogs::SearchResult.new(params[:vinyl]).preview_attributes
     render partial: "swiper/vinyl_card", locals: { vinyl: vinyl }
+  end
+
+  def music_preview
+    input = params[:query]
+    response = URI.open(input).read
+    if response
+      data = JSON.parse(response)
+      p data["data"][0]["preview"]
+      render json: { previewUrl: data["data"][0]["preview"] }, status: :created
+    end
   end
 
   private

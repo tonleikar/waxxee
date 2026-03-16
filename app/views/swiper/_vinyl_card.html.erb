@@ -39,9 +39,14 @@
           <dt>Genre</dt>
           <dd data-swipe-field="genre"><%= vinyl.nil? ? "{{genre}}" : vinyl[:genre] %></dd>
         </div>
+        <div>
+          <dt>Links</dt>
+          <dd>
+            <a data-swipe-field="youtube-link" href="https://www.youtube.com/results?search_query=<%= vinyl.nil? ? "{{title}}" : vinyl[:title] %>" target="_blank" rel="noopener noreferrer"><%= image_tag("youtube-logo.svg", alt: "YouTube", class: "vinyl-card-logo") %></a>
+            <a data-swipe-field="discogs-link" href="https://www.discogs.com/release/<%= vinyl.nil? ? "{{vinylid}}" : vinyl[:discogs_id] %>" target="_blank" rel="noopener noreferrer"><%= image_tag("discogs-logo.svg", alt: "Discogs", class: "vinyl-card-logo") %></a>
+          </dd>
+        </div>
       </dl>
-
-      <p class="randomizer-sleeve__meta mb-0">Swipe right to save. Swipe left to pass.</p>
 
       <button type="button"
               class="randomizer-sleeve__flip randomizer-sleeve__flip--back"

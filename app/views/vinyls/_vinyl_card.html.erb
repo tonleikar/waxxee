@@ -9,7 +9,9 @@
   ["Title", vinyl.title],
   ["Year", vinyl.display_year],
   ["Format", vinyl.format],
-  ["Tracks", track_list.size.positive? ? track_list.size : nil]
+  ["Tracks", track_list.size.positive? ? track_list.size : nil],
+  ["Genre", vinyl.genre],
+  ["Discogs link", vinyl.discogs_url.present? ? link_to("View on Discogs", vinyl.discogs_url, target: "_blank", rel: "noopener noreferrer") : nil]
 ].select { |_, value| value.present? } %>
 
 <article class="card border-0 shadow-sm vinyl-library-card <%= "vinyl-library-card-compact" if compact %>">

@@ -13,7 +13,9 @@ class Discogs::ReleaseImporterTest < ActiveSupport::TestCase
 
   test "imports a discogs release into a vinyl record" do
     payload = {
+      "id" => 42,
       "title" => "Discovery",
+      "uri" => "https://www.discogs.com/release/42-Daft-Punk-Discovery",
       "year" => 2001,
       "artists" => [{ "name" => "Daft Punk" }],
       "genres" => ["Electronic"],
@@ -33,6 +35,7 @@ class Discogs::ReleaseImporterTest < ActiveSupport::TestCase
     assert_equal "Electronic", vinyl.genre
     assert_equal ["One More Time", "Aerodynamic"], vinyl.tracks
     assert_equal "https://img.example/discovery.jpg", vinyl.artwork_url
+    assert_equal "https://www.discogs.com/release/42-Daft-Punk-Discovery", vinyl.discogs_url
     assert vinyl.persisted?
   end
 
@@ -55,5 +58,23 @@ class Discogs::ReleaseImporterTest < ActiveSupport::TestCase
     )
 
     assert_equal "https://img.example/discovery-cover.jpg", vinyl.artwork_url
+  end
+
+  test "falls back to generated Discogs release URL when uri is missing" do
+    payload = {
+      "id" => 42,
+      "title" => "Discovery",
+      "year" => 2001,
+      "artists" => [{ "name" => "Daft Punk" }],
+      "genres" => ["Electronic"],
+      "formats" => [{ "name" => "Vinyl" }],
+      "tracklist" => [{ "title" => "One More Time" }]
+    }
+
+    importer = Discogs::ReleaseImporter.new(client: FakeClient.new(payload))
+
+    vinyl = importer.import!(release_id: 42)
+
+    assert_equal "https://www.discogs.com/release/42", vinyl.discogs_url
   end
 end

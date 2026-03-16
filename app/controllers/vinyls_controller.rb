@@ -70,6 +70,6 @@ class VinylsController < ApplicationController
   end
 
   def vinyl_params
-    params.require(:vinyl).permit(:artist, :artwork_url, :format, :genre, :year)
+    params.require(:vinyl).permit(:artist, :artwork_url, :discogs_url, :format, :genre, :year)
   end
 end

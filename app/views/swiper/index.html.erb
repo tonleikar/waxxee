@@ -25,14 +25,16 @@
     data-swipe-key-value="<%= @key %>"
     data-swipe-secret-value="<%= @secret %>"
     data-swipe-vinyls-value="<%= @vinyls.to_json(only: [:id, :artwork_url, :title, :artist, :year, :genre]) %>">
-    <div class="text-center text-light mb-3">
-      <p class="small text-uppercase mb-1 opacity-75">Swiper</p>
-      <h1 class="h3 mb-0"><%= @persona[:title] %></h1>
+    <div class="text-center mt-5">
+      <h1 class="h3"><%= @persona[:title] %></h1>
     </div>
     <template data-swipe-target="template">
       <%= render "swiper/vinyl_card", vinyl: nil %>
     </template>
     <div class="tinder-container" data-swipe-target="vinylWrapper"></div>
+    <div class="position-absolute top-60 start-50 translate-middle">
+      <p class="text-uppercase mb-5 h6 text-center">Swipe right to add, left to dismiss</p>
+    </div>
   <%= render "shared/toast" %>
   </div>
 </div>

@@ -36,7 +36,8 @@ module Discogs
         format: format_name(payload),
         genre: Array(payload["genres"]).join(", "),
         tracks: track_titles(payload),
-        artwork_url: artwork_url(payload, cover_image: cover_image)
+        artwork_url: artwork_url(payload, cover_image: cover_image),
+        discogs_url: discogs_url(payload)
       }
     end
 
@@ -59,6 +60,15 @@ module Discogs
     def artwork_url(payload, cover_image:)
       primary_image = Array(payload["images"]).find { |image| image["type"] == "primary" }
       primary_image&.fetch("uri", nil) || cover_image.presence || payload["thumb"]
+    end
+
+    def discogs_url(payload)
+      payload["uri"].presence || payload["resource_url"].presence || release_fallback_url(payload)
+    end
+
+    def release_fallback_url(payload)
+      release_id = payload["id"].presence
+      "https://www.discogs.com/release/#{release_id}" if release_id
     end
   end
 end
