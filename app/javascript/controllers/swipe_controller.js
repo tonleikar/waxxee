@@ -12,6 +12,8 @@ export default class extends Controller {
     this.threshold = 100
     this.swiping = false
 
+    this.audioPreview = null
+
     this.currentVinyls = []
     this.currentPage = 1
     this.activeVinyl = null
@@ -29,6 +31,8 @@ export default class extends Controller {
   }
 
   async renderCard() {
+    if (this.audioPreview) this.audioPreview.pause()
+
     if (this.currentVinyls.length === 0) {
       this.activeVinyl = null
       this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
@@ -38,7 +42,6 @@ export default class extends Controller {
     const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
     const vinyl = this.currentVinyls.splice(randomIndex, 1)[0]
     this.activeVinyl = vinyl
-
     const cardCopy = this.templateTarget.content.cloneNode(true).querySelector(".vinyl-card")
     cardCopy.dataset.discogsId = vinyl.id
     this.populateCard(cardCopy, vinyl)
@@ -55,8 +58,10 @@ export default class extends Controller {
       sleeve?.classList.add("is-visible")
       sleeve?.classList.add("is-ready")
     }, 100)
-
     this.attachSwipe(card)
+    await this.playMusic(vinyl.title)
+    this.audioPreview?.play()
+
   }
 
   attachSwipe(card) {
@@ -96,6 +101,7 @@ export default class extends Controller {
           card.style.opacity = 0
 
           if (direction === "right") {
+            if (this.audioPreview) this.audioPreview.pause()
             this.saveVinyl(this.activeVinyl)
           }
 
@@ -104,7 +110,12 @@ export default class extends Controller {
             this.renderCard()
           }, 150)
 
-        } else {
+        } else if  (direction === "left") {
+            if (this.audioPreview) {
+            this.audioPreview.pause()
+            this.audioPreview = null
+
+          }
           card.style.transform = ""
         }
       }
@@ -237,5 +248,20 @@ export default class extends Controller {
     if (typeof vinyl.genre === "string" && vinyl.genre.length > 0) return vinyl.genre
 
     return "Unlisted"
+  }
+
+  async playMusic(query) {
+    const searchUrl = `https://api.deezer.com/search?q=${encodeURIComponent(query)}`
+    const data = await fetch(`/swiper/music_preview?query=${encodeURIComponent(searchUrl)}`).then(res => res.json())
+    if (data.previewUrl) {
+      this.audioPreview = new Audio(data.previewUrl)
+    }
+  }
+
+  disconnect() {
+    if (this.audioPreview) {
+      this.audioPreview.pause()
+      this.audioPreview = null
+    }
   }
 }
