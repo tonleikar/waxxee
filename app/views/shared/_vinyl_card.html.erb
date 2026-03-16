@@ -39,6 +39,16 @@
           <dt>Genre</dt>
           <dd><%= vinyl.genre.presence || "Unlisted" %></dd>
         </div>
+        <div>
+          <dt>Links</dt>
+          <dd>
+            <% if vinyl.discogs_url.present? %>
+              <a href="<%= vinyl.discogs_url %>" target="_blank" rel="noopener noreferrer">
+                <%= image_tag("discogs-logo.svg", alt: "Discogs", class: "vinyl-card-logo") %>
+              </a>
+            <% end %>
+          </dd>
+        </div>
       </dl>
 
       <div class="randomizer-sleeve__actions">
