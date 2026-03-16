@@ -66,7 +66,7 @@ export default class extends Controller {
 
   attachSwipe(card) {
     const start = (e) => {
-      if (e.target.closest("button")) return
+      if (e.target.closest("button, a, input, select, textarea, [role='button']")) return
 
       e.preventDefault()
       this.dragging = true
@@ -75,8 +75,8 @@ export default class extends Controller {
     }
 
     const move = (e) => {
-      e.preventDefault()
       if (!this.dragging) return
+      e.preventDefault()
 
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
       const diff = this.currentX - this.startX
@@ -213,6 +213,7 @@ export default class extends Controller {
     const year = card.querySelector('[data-swipe-field="year"]')
     const yearRow = card.querySelector('[data-swipe-field-row="year"]')
     const genre = card.querySelector('[data-swipe-field="genre"]')
+    const youtubeLink = card.querySelector('[data-swipe-field="youtube-link"] a, a[data-swipe-field="youtube-link"], a[href*="youtube.com/results?search_query="]')
 
     if (artwork) {
       artwork.src = vinyl.cover_image || artwork.src
@@ -227,6 +228,10 @@ export default class extends Controller {
       yearRow?.toggleAttribute("hidden", !displayYear)
     }
     if (genre) genre.textContent = this.genreName(vinyl)
+    if (youtubeLink) {
+      const query = [vinyl.title, this.artistName(vinyl)].filter(Boolean).join(" ")
+      youtubeLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+    }
   }
 
   displayYear(year) {
