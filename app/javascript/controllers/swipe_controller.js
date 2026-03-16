@@ -214,6 +214,9 @@ export default class extends Controller {
     const yearRow = card.querySelector('[data-swipe-field-row="year"]')
     const genre = card.querySelector('[data-swipe-field="genre"]')
     const youtubeLink = card.querySelector('[data-swipe-field="youtube-link"] a, a[data-swipe-field="youtube-link"], a[href*="youtube.com/results?search_query="]')
+    const discogsLink = card.querySelector('[data-swipe-field="discogs-link"] a, a[data-swipe-field="discogs-link"], a[href*="discogs.com/release/"]')
+
+    card.dataset.discogsId = vinyl.id || ""
 
     if (artwork) {
       artwork.src = vinyl.cover_image || artwork.src
@@ -231,6 +234,9 @@ export default class extends Controller {
     if (youtubeLink) {
       const query = [vinyl.title, this.artistName(vinyl)].filter(Boolean).join(" ")
       youtubeLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+    }
+    if (discogsLink && vinyl.id) {
+      discogsLink.href = `https://www.discogs.com/release/${encodeURIComponent(vinyl.id)}`
     }
   }
 
