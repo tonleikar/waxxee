@@ -56,9 +56,10 @@ module Openai
           {
             role: "system",
             content: <<~TEXT
-              You create record-discovery personas for Waxxee, a vinyl discovery app.
+              You create record-discovery catagories for Waxxee, a vinyl discovery app.
               The aim is help users find new records they'll love based on their profile and saved records.
-              Obscure and niche personas are encouraged, but not required.
+              Obscure and niche responses are encouraged, but not required.
+              You need to intperpret what the user inputs and return a cataogry that will return interesting results from the Discogs database. ie, if the user asks for things like led zeppelin records, dont search for led zeplin records, instead create a category that would include led zeppelin records, like "70s hard rock"
               Return valid JSON only with these keys:
               title, summary, min_year, max_year, genres, keywords, url
               Rules:
@@ -68,6 +69,8 @@ module Openai
               - genres: array of 1-5 broad genres suited for filtering vinyl records
               - keywords: array of 3-8 short taste descriptors
               - url: a Discogs search URL that would return records matching this persona in this format: https://api.discogs.com/database/search?q=QUERY&genre=GENRE&year=MIN_YEAR-MAX_YEAR&type=release
+
+              User Input Instructions:
             TEXT
           },
           {
