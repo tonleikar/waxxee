@@ -145,11 +145,9 @@
 
 .vinyl-library-card-media {
   width: 100%;
-  height: 320px;
   overflow: hidden;
   position: relative;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
   background: #071013;
 }
 
@@ -238,26 +236,40 @@
   z-index: 2;
 }
 
-.vinyl-library-card-year-overlay {
-  left: 1.75rem;
-}
-
 .vinyl-library-card-delete-btn {
   position: absolute;
   top: 1rem;
+  left: auto;
   right: 1rem;
   z-index: 2;
-  padding: 4px;
+  padding: 6px;
   margin:0;
   border: 0;
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 251, 245, 0.68);
   box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
+  backdrop-filter: blur(14px);
 }
 
 .vinyl-library-card-delete-btn:hover {
   background: rgba(255, 255, 255, 0.9);
   color: var(--wax-ink);
+}
+
+.feed-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #071013;
+}
+
+.feed-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .vinyl-library-card-section {
