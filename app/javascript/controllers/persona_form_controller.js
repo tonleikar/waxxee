@@ -5,12 +5,12 @@ export default class extends Controller {
   static classes = ["open"]
 
   connect() {
-    this.isOpen = false
+    this.isOpen = this.buttonTargets.some((button) => button.getAttribute("aria-expanded") === "true")
     this.closeDelay = 180
-    this.panelTarget.hidden = false
-    this.panelTarget.style.height = "0px"
-    this.panelTarget.style.opacity = "0"
-    this.panelTarget.style.overflow = "hidden"
+    this.panelTarget.hidden = !this.isOpen
+    this.panelTarget.style.height = this.isOpen ? "auto" : "0px"
+    this.panelTarget.style.opacity = this.isOpen ? "1" : "0"
+    this.panelTarget.style.transform = this.isOpen ? "translateY(0)" : "translateY(-8px)"
     this.syncButtons()
   }
 
@@ -35,6 +35,7 @@ export default class extends Controller {
     panel.offsetHeight
     panel.style.height = `${panel.scrollHeight}px`
     panel.style.opacity = "1"
+    panel.style.transform = "translateY(0)"
     this.syncButtons()
 
     this.finishTransition = () => {
@@ -57,6 +58,7 @@ export default class extends Controller {
     this.closeTimer = window.setTimeout(() => {
       panel.style.height = "0px"
       panel.style.opacity = "0"
+      panel.style.transform = "translateY(-8px)"
     }, this.closeDelay)
 
     this.finishTransition = () => {

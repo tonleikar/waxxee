@@ -93,6 +93,55 @@
   transform: scale(0.98);
 }
 
+.welcome-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 2rem 2.2rem;
+  background: rgba(255, 251, 245, 0.92);
+  box-shadow:
+    0 18px 36px rgba(17, 17, 17, 0.07);
+}
+
+.welcome-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(17, 17, 17, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 17, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+.welcome-hero__title {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(2.4rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  margin-bottom: 1rem;
+}
+
+.welcome-hero__subtitle {
+  position: relative;
+  z-index: 1;
+  font-size: 1.08rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(17, 17, 17, 0.58);
+  margin-bottom: 0;
+}
+
+.welcome-hero__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 36rem;
+  color: rgba(17, 17, 17, 0.58);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
 .home-page .home-randomizer-sleeve {
   position: absolute;
   left: 50%;
@@ -259,10 +308,8 @@
 }
 
 .home-persona-builder {
-  margin-bottom: 1.5rem;
-  padding: 1.2rem;
-  background: rgba(255, 251, 245, 0.76);
-  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+  margin-bottom: 0.5rem;
+  padding-top: 1rem;
   transition:
     height 1.15s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.7s ease,
@@ -308,11 +355,121 @@
 }
 
 .home-persona-builder__submit {
-  padding: 0.8rem 1.2rem;
-  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
   background: #111111;
-  color: #fff;
-  font-weight: 400;
+  color: #ffffff;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.persona-accordion {
+  padding: 1rem 1rem 1.25rem;
+  border: 0;
+  border-radius: 0;
+  background: rgba(255, 251, 245, 0.66);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+}
+
+.persona-accordion__trigger {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.persona-accordion__label {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.persona-accordion__trigger::after {
+  content: "+";
+  font-size: 2rem;
+  font-weight: 200;
+  line-height: 1;
+  transition: transform 0.28s ease, opacity 0.22s ease;
+}
+
+.persona-accordion__trigger.is-open::after {
+  content: "-";
+  transform: scale(1.06);
+}
+
+.persona-accordion__panel {
+  padding-top: 1.5rem;
+  transition:
+    height 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.26s ease,
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: height, opacity, transform;
+}
+
+.persona-builder-card {
+  width: 100%;
+  border: 0;
+  background: rgba(255, 251, 245, 0.9);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.07);
+}
+
+.persona-builder-card__body {
+  width: 100%;
+  padding: 1.25rem 1.35rem;
+}
+
+.persona-builder-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.persona-builder-card__copy {
+  min-width: 0;
+}
+
+.persona-builder-card__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.persona-builder-card__text {
+  color: rgba(17, 17, 17, 0.6);
+  font-size: 0.92rem;
+}
+
+.persona-builder-card__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  background: #111111;
+  color: #ffffff;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .persona-card {
@@ -331,20 +488,9 @@
   transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
-.persona-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 251, 245, 0.82);
-  box-shadow: 0 14px 26px rgba(17, 17, 17, 0.08);
-  color: inherit;
-}
-
 .persona-card.is-active {
   background: rgba(235, 225, 209, 0.84);
   box-shadow: 0 12px 24px rgba(17, 17, 17, 0.08);
-}
-
-.persona-card--custom {
-  justify-content: space-between;
 }
 
 .persona-card--custom:active,
@@ -377,10 +523,6 @@
   cursor: pointer;
 }
 
-.persona-card--builder.is-open {
-  background: rgba(235, 225, 209, 0.84);
-  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.08);
-}
 
 .persona-card__thumbnail {
   position: relative;
@@ -457,7 +599,6 @@
 
 .persona-card__body {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
   margin-top: 0;
@@ -465,6 +606,8 @@
 
 .persona-card__body--custom {
   flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
   min-height: 8.6rem;
 }
 
@@ -476,12 +619,22 @@
   color: rgba(17, 17, 17, 0.66);
   font-size: 0.92rem;
   line-height: 1.5;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .persona-card__title {
   font-size: 1.15rem;
   font-weight: 700;
   padding-top: 0.5rem;
+  line-height: 1.25;
+  min-height: calc(1.25em * 2);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .persona-card__meta,
@@ -491,14 +644,24 @@
 }
 
 .persona-card__actions {
-  display: inline-flex;
-  margin-top: 1rem;
+  display: flex;
+  width: 100%;
+  margin-top: auto;
   align-items: center;
   gap: 0.5rem;
+  padding-top: 20px;
 }
 
 .persona-card__actions--builder {
   width: 100%;
+}
+
+.persona-card__action-slot {
+  display: flex;
+}
+
+.persona-card__action-slot:first-child {
+  flex: 1 1 auto;
 }
 
 .persona-card__actions form {
@@ -572,6 +735,23 @@
 
   .persona-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .persona-accordion__trigger {
+    align-items: flex-start;
+  }
+
+  .welcome-hero {
+    padding: 1.4rem 1.3rem 1.55rem;
+  }
+
+  .persona-builder-card__body {
+    padding: 1rem;
+  }
+
+  .persona-builder-card__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .randomizer-stage {
