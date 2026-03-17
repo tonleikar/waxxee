@@ -16,21 +16,35 @@ export default class extends Controller {
     this.playPauseButton = null
 
     this.allPages = null
+    this.totalPages = 1
     this.currentPage = 1
 
     this.currentVinyls = []
     this.activeVinyl = null
-    this.discogsAPI = `${this.personaValue}&per_page=5&page=${this.currentPage}&key=${this.keyValue}&secret=${this.secretValue}`
+    this.discogsAPI = `${this.personaValue}&per_page=10&page=${this.currentPage}&key=${this.keyValue}&secret=${this.secretValue}`
 
     await this.getRecords()
     await this.renderCard()
   }
 
   async getRecords() {
-    const response = await fetch(this.discogsAPI)
-    const data = await response.json()
-    console.log(data)
+    let data = null
+    console.log("Fetching records from:", this.discogsAPI)
+    if (!this.allPages) {
+      const response = await fetch(this.discogsAPI)
+      data = await response.json()
+      this.totalPages = data.pagination?.pages || 1
+      this.allPages = Array.from({ length: this.totalPages }, (_, i) => i + 1).filter((page) => page !== this.currentPage)
+    } else {
+      if (this.allPages.length === 0) {
+        this.allPages = Array.from({ length: this.totalPages }, (_, i) => i + 1)
+      }
 
+      const randomIndex = Math.floor(Math.random() * this.allPages.length)
+      this.currentPage = this.allPages.splice(randomIndex, 1)[0]
+      const response = await fetch(`${this.personaValue}&per_page=5&page=${this.currentPage}&key=${this.keyValue}&secret=${this.secretValue}`)
+      data = await response.json()
+    }
     this.currentVinyls = data.results || []
   }
 
@@ -39,9 +53,8 @@ export default class extends Controller {
 
     if (this.currentVinyls.length === 0) {
       this.activeVinyl = null
-
-      this.getRecords()
-      return
+      await this.getRecords()
+      if (this.currentVinyls.length === 0) return
     }
 
     const randomIndex = Math.floor(Math.random() * this.currentVinyls.length)
@@ -122,7 +135,6 @@ export default class extends Controller {
             if (this.audioPreview) {
             this.audioPreview.pause()
             this.audioPreview = null
-
           }
           card.style.transform = ""
         }
