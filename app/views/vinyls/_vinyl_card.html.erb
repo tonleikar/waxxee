@@ -3,6 +3,7 @@
 <% folders = local_assigns.fetch(:folders, []) %>
 <% compact = local_assigns.fetch(:compact, false) %>
 <% current_folder = local_assigns.fetch(:current_folder, nil) %>
+<% current_folder_vinyl = compact && current_folder ? user_vinyl&.folder_vinyls&.find { |join| join.folder_id == current_folder.id } : nil %>
 <% more_info_id = "vinylMoreInfo-#{vinyl.id}" %>
 <% track_list = Array(vinyl.tracks).reject(&:blank?) %>
 <% info_rows = [
@@ -26,6 +27,25 @@
         method: :delete,
         class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
         form: { data: { turbo_confirm: "Remove #{vinyl.title} from your collection?" } } do %>
+        <%= image_tag "bin-icon.svg", alt: "", class: "vinyl-trash-icon" %>
+      <% end %>
+    <% elsif current_folder_vinyl.present? %>
+      <%= button_to folder_vinyl_path(current_folder_vinyl),
+        method: :delete,
+        class: "btn btn-sm vinyl-trash-btn vinyl-library-card-delete-btn",
+        params: {
+          compact: true,
+          current_folder_id: current_folder.id
+        },
+        form: {
+          data: {
+            controller: "crate-membership",
+            action: "submit->crate-membership#remove",
+            crate_membership_remove_card_value: true,
+            turbo: false,
+            turbo_confirm: "Remove #{vinyl.title} from #{current_folder.name}?"
+          }
+        } do %>
         <%= image_tag "bin-icon.svg", alt: "", class: "vinyl-trash-icon" %>
       <% end %>
     <% end %>

@@ -1,8 +1,8 @@
 <section class="container py-4 vinyl-library-page">
   <div class="mb-4">
     <div>
-      <h1 class="h3 mb-0">Your saved vinyls</h1>
-      <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize them into folders.</p>
+      <h1 class="h3 mb-0">Collection</h1>
+      <p class="text-muted mb-0">These are the records you sent from swiper. Search, sort, and organize your collection into folders.</p>
     </div>
   </div>
 
@@ -12,22 +12,11 @@
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <h2 class="h4 mb-0">Your crates</h2>
+              <h2 class="h4 mb-0">Crates</h2>
             </div>
-
-            <button
-              class="btn btn-outline-dark d-md-none vinyl-folder-toggle"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#vinylCratesList"
-              aria-expanded="false"
-              aria-controls="vinylCratesList"
-            >
-              Show crates
-            </button>
           </div>
 
-          <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form mb-4" do |form| %>
+          <%= form_with model: Folder.new, url: collections_path, local: true, class: "vinyl-folder-create-form" do |form| %>
             <div class="d-flex flex-nowrap gap-2 align-items-stretch">
               <div class="flex-grow-1 vinyl-folder-create-input-wrap">
                 <%= form.text_field :name, class: "form-control", placeholder: "Create a crate", required: true %>
@@ -38,14 +27,31 @@
             </div>
           <% end %>
 
-          <%= render "crates_list", folders: @folders %>
+          <% unless @folders.any? %>
+            <p class="text-muted mb-0 mt-3">No folders yet. Create one here, then add records from the cards.</p>
+          <% end %>
         </div>
+        <button
+          class="btn btn-outline-dark d-md-none vinyl-folder-toggle"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#vinylCratesList"
+          aria-expanded="false"
+          aria-controls="vinylCratesList"
+        >
+          Show crates
+        </button>
       </div>
     </div>
+    <%= render "crates_list", folders: @folders %>
 
     <div class="col-12">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body p-4">
+          <div class="mb-3">
+            <h2 class="h4 mb-0">Records</h2>
+          </div>
+
           <div class="vinyl-library-toolbar">
             <div class="vinyl-library-toolbar-search">
               <%= form_with url: vinyls_path, method: :get, local: true, class: "vinyl-library-search-form" do |form| %>
