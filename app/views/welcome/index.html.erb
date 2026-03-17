@@ -8,7 +8,7 @@
            data-controller="persona-form"
            data-persona-form-open-class="is-open">
     <div class="persona-grid mb-4">
-      <% current_user.personas.each do |persona| %>
+      <% @saved_personas.each do |persona| %>
         <%= render "shared/persona_card",  persona: persona %>
       <% end %>
 

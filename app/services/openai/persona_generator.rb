@@ -101,7 +101,7 @@ module Openai
     def normalize_persona(payload)
       current_year = Time.current.year
       genres = Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).join(" ")
-      image = Unsplash::Photo.random(query: "#{genres} music")
+      image = fetch_persona_image(genres)
       {
         title: payload["title"].to_s.strip.presence || "Untitled Persona",
         summary: payload["summary"].to_s.strip.presence || "A Waxxee persona based on your saved records.",
@@ -110,8 +110,8 @@ module Openai
         genres: Array(payload["genres"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(5),
         keywords: Array(payload["keywords"]).map(&:to_s).map(&:strip).reject(&:blank?).uniq.first(8),
         url: payload["url"].to_s.strip.presence || "https://api.discogs.com/database/search?type=release",
-        image_url: image.urls.small,
-        image_credit: image.user.name
+        image_url: image&.urls&.small,
+        image_credit: image&.user&.name
       }.then do |attributes|
         if attributes[:max_year] < attributes[:min_year]
           attributes[:min_year], attributes[:max_year] = attributes[:max_year], attributes[:min_year]
@@ -119,6 +119,12 @@ module Openai
 
         attributes
       end
+    end
+
+    def fetch_persona_image(genres)
+      Unsplash::Photo.random(query: "#{genres} music")
+    rescue StandardError
+      nil
     end
   end
 end

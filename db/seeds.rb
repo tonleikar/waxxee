@@ -80,20 +80,6 @@ premade = [ {
   max_year: 2025,
   genres: ["Electronic", "Pop", "Rock"],
   url: "https://api.discogs.com/database/search?genre=Electronic&genre=Pop&genre=Rock&year=1983-2025&type=release"
-},
-{
-  title: "throwback",
-  min_year: 1983,
-  max_year: 1989,
-  genres: ["Funk / Soul", "Jazz", "Blues", "Rock"],
-  url: "https://api.discogs.com/database/search?genre=Funk+%2F+Soul&genre=Jazz&genre=Blues&genre=Rock&year=1983-1989&type=release"
-},
-{
-  title: "midnight",
-  min_year: 1990,
-  max_year: 2025,
-  genres: ["Electronic", "Hip Hop", "Funk / Soul"],
-  url: "https://api.discogs.com/database/search?&genre=Electronic&genre=Hip+Hop&genre=Funk+%2F+Soul&decade=1990&type=release"
 }]
 
 premade.each do |premade|
