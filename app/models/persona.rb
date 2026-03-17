@@ -25,4 +25,17 @@ class Persona < ApplicationRecord
   def generated?
     user_id.present?
   end
+
+  def image_url
+    path = self[:image_url]
+    return nil if path.blank?
+
+    normalized_path = path.sub(%r{\A/?app/assets/images/}, "")
+
+    if normalized_path.start_with?('http://', 'https://', '/assets/')
+      normalized_path
+    else
+      ActionController::Base.helpers.asset_path(normalized_path)
+    end
+  end
 end

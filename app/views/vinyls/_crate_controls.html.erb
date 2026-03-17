@@ -3,37 +3,7 @@
 <% frame_id = compact && current_folder ? "vinyl_crate_controls_#{vinyl.id}_folder_#{current_folder.id}" : "vinyl_crate_controls_#{vinyl.id}" %>
 
 <%= turbo_frame_tag frame_id do %>
-  <% if compact %>
-    <div class="vinyl-library-card-section vinyl-folder-membership">
-      <% current_folder_vinyl = user_vinyl&.folder_vinyls&.find { |join| join.folder_id == current_folder&.id } %>
-
-      <% if current_folder_vinyl.present? %>
-        <div class="vinyl-library-card-crate-panel-inner">
-          <div class="vinyl-library-card-crate-row is-active vinyl-library-card-crate-row-compact">
-            <%= button_to folder_vinyl_path(current_folder_vinyl),
-              method: :delete,
-              class: "btn btn-sm vinyl-library-card-crate-action",
-              params: {
-                compact: true,
-                current_folder_id: current_folder.id
-              },
-              form: {
-                data: {
-                  controller: "crate-membership",
-                  action: "submit->crate-membership#remove",
-                  crate_membership_remove_card_value: true,
-                  turbo: false
-                }
-              } do %>
-              -
-            <% end %>
-          </div>
-        </div>
-      <% else %>
-        <span class="text-muted small">Not in any crate yet.</span>
-      <% end %>
-    </div>
-  <% else %>
+  <% unless compact %>
     <% if folders.any? %>
       <div class="vinyl-library-card-section">
         <button

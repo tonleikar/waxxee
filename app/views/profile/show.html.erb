@@ -1,4 +1,4 @@
-<section class="container py-4 profile-page" data-controller="<%= "vinyl-picker" if @own_profile %>">
+<section class="container py-4 profile-page" data-controller="<%= ["profile-layout", ("vinyl-picker" if @own_profile)].compact.join(" ") %>">
   <div class="card profile-hero">
     <div class="card-body p-4">
       <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
@@ -12,7 +12,6 @@
             <h1 class="display-6 mb-1"><%= @user.name.presence || @user.username %></h1>
             <p class="mb-3 text-muted">@<%= @user.username %></p>
             <div class="profile-stat-row">
-              <span class="profile-stat-chip">Favorite genre: <%= @user.favorite_genre.presence || "Unset" %></span>
               <span class="profile-stat-chip"><%= @vinyls.count %> saved records</span>
               <span class="profile-stat-chip"><%= @user.followers.count %> followers</span>
               <span class="profile-stat-chip"><%= @user.following.count %> following</span>
@@ -33,9 +32,9 @@
     </div>
   </div>
 
-  <div class="row g-4 mt-1">
+  <div class="row g-4 mt-1 profile-top-row">
     <div class="col-12 col-lg-5">
-      <div class="card h-100 profile-panel">
+      <div class="card profile-panel" data-profile-layout-target="favoriteCard">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
             <div>
@@ -85,18 +84,96 @@
       </div>
     </div>
 
-    <div class="col-12 col-lg-7">
-      <div class="card profile-panel">
-        <div class="card-body p-4">
-          <p class="profile-kicker mb-3">Collection Preview</p>
-          <div class="row g-3">
-            <% @vinyls.first(3).each do |vinyl| %>
-              <div class="col-6 col-md-4">
-                <article class="profile-vinyl-tile">
-                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-2">
-                  <h3 class="h6 mb-1"><%= vinyl.title %></h3>
-                  <p class="small text-muted mb-0"><%= vinyl.artist %></p>
-                </article>
+    <div class="col-12 col-lg-7 profile-side-column">
+      <div class="d-flex flex-column gap-4 profile-side-stack" data-profile-layout-target="sideStack">
+        <div class="card profile-panel">
+          <div class="card-body p-4">
+            <p class="profile-kicker mb-3">Collection Preview</p>
+            <% preview_vinyls = @vinyls.first(3) %>
+
+            <% if preview_vinyls.any? %>
+              <div
+                id="profileCollectionPreviewCarousel"
+                class="carousel slide d-lg-none"
+                data-bs-ride="carousel"
+                data-bs-interval="3000"
+                data-bs-pause="false"
+              >
+                <div class="carousel-inner">
+                  <% preview_vinyls.each_with_index do |vinyl, index| %>
+                    <div class="carousel-item <%= "active" if index.zero? %>">
+                      <article class="profile-vinyl-tile profile-vinyl-tile-mobile">
+                        <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-2">
+                        <h3 class="h6 mb-1"><%= vinyl.title %></h3>
+                        <p class="small text-muted mb-0"><%= vinyl.artist %></p>
+                      </article>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="row g-3 d-none d-lg-flex">
+                <% preview_vinyls.each do |vinyl| %>
+                  <div class="col-6 col-md-4">
+                    <article class="profile-vinyl-tile">
+                      <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-2">
+                      <h3 class="h6 mb-1"><%= vinyl.title %></h3>
+                      <p class="small text-muted mb-0"><%= vinyl.artist %></p>
+                    </article>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="profile-empty-state">
+                No records in this collection yet.
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="card profile-panel profile-following-panel">
+          <div class="card-body p-4 profile-following-body">
+            <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+              <div>
+                <p class="profile-kicker mb-1">Following</p>
+                <p class="text-muted mb-0 small">People this profile follows.</p>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <% if @own_profile %>
+                  <%= link_to "Find users", users_path, class: "btn btn-outline-dark btn-sm" %>
+                <% end %>
+              </div>
+            </div>
+
+            <% if @following_users.any? %>
+              <div class="row g-4 profile-following-grid">
+                <% @following_users.each do |followed_user| %>
+                  <div class="col-12 col-md-6">
+                    <%= link_to profile_path(followed_user), class: "text-decoration-none text-reset d-block h-100" do %>
+                      <article class="card h-100 profile-follow-card">
+                        <div class="card-body">
+                          <div class="d-flex align-items-center gap-3">
+                            <img
+                              src="<%= followed_user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(followed_user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
+                              alt="<%= followed_user.username %>"
+                              width="56"
+                              height="56"
+                              class="profile-follow-avatar"
+                            >
+                            <div>
+                              <h3 class="h5 mb-0"><%= followed_user.name.presence || followed_user.username %></h3>
+                              <p class="text-muted mb-0">@<%= followed_user.username %></p>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="profile-empty-state">
+                This profile is not following anyone yet.
               </div>
             <% end %>
           </div>
@@ -114,72 +191,25 @@
         </div>
       </div>
 
-      <% if @own_profile %>
-        <%= form_with url: personas_path, method: :post, class: "profile-persona-form mb-4" do |form| %>
-          <div class="row g-3 align-items-end">
-            <div class="col-12 col-lg-9">
-              <%= form.label :prompt, "Create an extra persona from a custom brief", class: "form-label" %>
-              <%= form.text_area :prompt,
-                                 name: "persona[prompt]",
-                                 rows: 3,
-                                 class: "form-control",
-                                 placeholder: "Example: Build me a late-night cosmic jazz persona with 70s and 80s records only." %>
-            </div>
-            <div class="col-12 col-lg-3">
-              <%= form.submit "Create custom persona", class: "btn btn-outline-dark w-100" %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-
       <% if @personas.any? %>
         <div class="row g-4">
           <% @personas.each do |persona| %>
             <div class="col-12 col-xl-6">
               <article class="card h-100 profile-persona-card">
                 <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
-                    <div>
-                      <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-                        <h3 class="h4 mb-0"><%= persona.title %></h3>
-                        <% if persona.primary_profile? %>
-                          <span class="profile-persona-badge">Core persona</span>
-                        <% end %>
-                      </div>
-                      <p class="text-muted mb-0"><%= persona.summary %></p>
-                    </div>
+                  <div class="mb-3">
+                    <h3 class="h4 mb-0"><%= persona.title %></h3>
                   </div>
 
                   <div class="profile-persona-meta mb-3">
-                    <span class="profile-persona-chip"><%= persona.min_year %>-<%= persona.max_year %></span>
+                    <span class="profile-stat-chip"><%= persona.min_year %>-<%= persona.max_year %></span>
                     <% Array(persona.genres).each do |genre| %>
-                      <span class="profile-persona-chip"><%= genre %></span>
+                      <span class="profile-stat-chip"><%= genre %></span>
                     <% end %>
                   </div>
 
-                  <% if Array(persona.keywords).any? %>
-                    <p class="mb-3 small text-muted">
-                      <strong>Keywords:</strong>
-                      <%= Array(persona.keywords).join(" • ") %>
-                    </p>
-                  <% end %>
-
-                  <% if persona.custom_prompt? %>
-                    <p class="mb-3 small text-muted">
-                      <strong>Prompt:</strong>
-                      <%= persona.prompt %>
-                    </p>
-                  <% end %>
-
                   <div class="d-flex flex-wrap gap-2">
-                    <%= link_to "Open in swiper", swiper_index_path(persona_id: persona.id), class: "btn btn-dark btn-sm" %>
-                    <% if @own_profile %>
-                      <%= button_to "Delete",
-                                    persona_path(persona),
-                                    method: :delete,
-                                    class: "btn btn-outline-dark btn-sm",
-                                    form: { data: { turbo_confirm: "Delete this persona?" } } %>
-                    <% end %>
+                    <%= link_to "Open in swiper", swiper_index_path(persona_id: persona.id), class: "btn btn-outline-dark btn-sm" %>
                   </div>
                 </div>
               </article>
@@ -189,54 +219,6 @@
       <% else %>
         <div class="profile-empty-state">
           <%= @own_profile ? "Save records or create a custom persona to build your discovery lanes." : "No taste personas generated yet." %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="card profile-panel mt-4">
-    <div class="card-body p-4">
-      <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-        <div>
-          <p class="profile-kicker mb-1">Following</p>
-          <p class="text-muted mb-0 small">People this profile follows.</p>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <% if @own_profile %>
-            <%= link_to "Find users", users_path, class: "btn btn-outline-dark btn-sm" %>
-          <% end %>
-        </div>
-      </div>
-
-      <% if @following_users.any? %>
-        <div class="row g-4">
-          <% @following_users.each do |followed_user| %>
-            <div class="col-12 col-md-6 col-xl-4">
-              <%= link_to profile_path(followed_user), class: "text-decoration-none text-reset d-block h-100" do %>
-                <article class="card h-100 profile-follow-card">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center gap-3">
-                      <img
-                        src="<%= followed_user.avatar_url.presence || "https://ui-avatars.com/api/?name=#{ERB::Util.url_encode(followed_user.username.to_s)}&background=071013&color=F4F4F4&size=160" %>"
-                        alt="<%= followed_user.username %>"
-                        width="56"
-                        height="56"
-                        class="profile-follow-avatar"
-                      >
-                      <div>
-                        <h3 class="h5 mb-0"><%= followed_user.name.presence || followed_user.username %></h3>
-                        <p class="text-muted mb-0">@<%= followed_user.username %></p>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="profile-empty-state">
-          This profile is not following anyone yet.
         </div>
       <% end %>
     </div>

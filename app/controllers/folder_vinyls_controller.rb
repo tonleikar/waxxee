@@ -63,8 +63,8 @@ class FolderVinylsController < ApplicationController
         locals: { folders: ordered_folders }
       ),
       turbo_stream.replace(
-        "crateModal-#{folder.id}",
-        partial: "vinyls/crate_modal",
+        "crateModalContent-#{folder.id}",
+        partial: "vinyls/crate_modal_content",
         locals: { folder: folder.reload, folders: ordered_folders }
       )
     ]
