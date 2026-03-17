@@ -62,6 +62,7 @@ end
 
 premade = [ {
   title: "grunge",
+  summary: "Raw 90s guitars, heavy hooks, and worn-in distortion pulled from the loud end of alternative rock.",
   min_year: 1988,
   max_year: 1999,
   genres: ["Rock"],
@@ -69,6 +70,7 @@ premade = [ {
 },
 {
   title: "emo",
+  summary: "Big feelings, melodic guitars, and confessional songwriting across late 90s and 2000s rock-pop crossover records.",
   min_year: 1995,
   max_year: 2010,
   genres: ["Rock", "Pop"],
@@ -76,6 +78,7 @@ premade = [ {
 },
 {
   title: "dreamy",
+  summary: "Hazy pop, soft-focus electronics, and floating textures built for atmospheric listening and late-night digging.",
   min_year: 1983,
   max_year: 2025,
   genres: ["Electronic", "Pop", "Rock"],
@@ -84,6 +87,14 @@ premade = [ {
 
 premade.each do |premade|
   p premade
-  new_persona = Persona.create(title: premade[:title], min_year: premade[:min_year], max_year: premade[:max_year], url: premade[:url], genres: premade[:genres], keywords: premade[:genres])
+  new_persona = Persona.create(
+    title: premade[:title],
+    summary: premade[:summary],
+    min_year: premade[:min_year],
+    max_year: premade[:max_year],
+    url: premade[:url],
+    genres: premade[:genres],
+    keywords: premade[:genres]
+  )
   new_persona.save!
 end

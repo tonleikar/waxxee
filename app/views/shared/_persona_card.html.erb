@@ -24,6 +24,7 @@
       <%= button_to image_tag("bin-icon.svg", alt: "Delete", class: "delete-icon"),
                     persona_path(persona),
                     method: :delete,
+                    params: { persona: { return_to: vinyls_path } },
                     class: "persona-card__action persona-card__action--secondary",
                     form: { data: { turbo_confirm: "Delete this saved persona?" } } %>
     </div>

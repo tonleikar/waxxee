@@ -1,59 +1,91 @@
 <%= render "shared/header" %>
 
 <div class="container home-dashboard">
-  <h1 class="main-title">WELCOME BACK <%= current_user.username %>!</h1>
-  <h2 class="home-dashboard__section-title">GO DIGGING...</h2>
+  <section class="welcome-hero mb-5">
+    <h2 class="welcome-hero__title">Welcome back, <%= current_user.username %></h2>
+    <p class="welcome-hero__subtitle">A quieter corner of Waxxee for instinct-led digging, built for following taste trails, shaping personas, and keeping the next record within reach.</p>
+  </section>
 
-  <section class="home-persona-section mb-5"
-           data-controller="persona-form"
-           data-persona-form-open-class="is-open">
-    <div class="persona-grid mb-4">
-      <% @saved_personas.each do |persona| %>
-        <%= render "shared/persona_card",  persona: persona %>
-      <% end %>
-
+  <section class="home-persona-section mb-5">
+    <div class="persona-accordion mb-4"
+         data-controller="persona-form"
+         data-persona-form-open-class="is-open">
       <button type="button"
-              class="persona-card persona-card--builder"
+              class="persona-accordion__trigger"
+              data-persona-form-target="button"
+              data-action="persona-form#toggle"
+              aria-expanded="true">
+        <h3 class="persona-accordion__label mb-0">Seeded Personas</h3>
+      </button>
+
+      <div class="persona-accordion__panel" data-persona-form-target="panel" hidden>
+        <div class="persona-grid">
+          <% @premade_personas.each do |persona| %>
+            <%= render "shared/persona_card", persona: persona %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="persona-accordion"
+         data-controller="persona-form"
+         data-persona-form-open-class="is-open">
+      <button type="button"
+              class="persona-accordion__trigger"
               data-persona-form-target="button"
               data-action="persona-form#toggle"
               aria-expanded="false">
-        <div class="persona-card__thumbnail persona-card__thumbnail--builder">
-          <span class="persona-card__years">Custom</span>
-        </div>
+        <h3 class="persona-accordion__label mb-0">Custom Personas</h3>
+      </button>
 
-        <div class="persona-card__body persona-card__body--builder">
-          <div>
-            <h2 class="persona-card__title mb-1"><%= @persona_builder_label %></h2>
-            <p class="persona-card__meta mb-0">Generate a saved Waxxee persona.</p>
+      <div class="persona-accordion__panel" data-persona-form-target="panel" hidden>
+        <div data-controller="persona-form"
+             data-persona-form-open-class="is-open">
+          <div class="persona-builder-card mb-4">
+            <div class="persona-builder-card__body">
+              <button type="button"
+                      class="persona-builder-card__header"
+                      data-persona-form-target="button"
+                      data-action="persona-form#toggle"
+                      aria-expanded="false">
+                <div class="persona-builder-card__copy">
+                  <h3 class="persona-builder-card__title mb-1"><%= @persona_builder_label %></h3>
+                  <p class="persona-builder-card__text mb-0">Generate a saved Waxxee persona.</p>
+                </div>
+                <span class="persona-builder-card__action">Create</span>
+              </button>
+
+              <div class="home-persona-builder" data-persona-form-target="panel" hidden>
+                <%= form_with url: personas_path, method: :post, class: "home-persona-builder__form" do |form| %>
+                  <%= form.hidden_field :return_to, name: "persona[return_to]", value: request.fullpath %>
+                  <%= form.hidden_field :redirect_to_swiper, name: "persona[redirect_to_swiper]", value: true %>
+
+                  <div class="home-persona-builder__field">
+                    <%= form.label :prompt, "Describe your taste", class: "form-label" %>
+                    <%= form.text_area :prompt,
+                                       name: "persona[prompt]",
+                                       rows: 4,
+                                       class: "form-control home-persona-builder__input",
+                                       data: { persona_form_target: "input" },
+                                       placeholder: "Example: Build me a warm 70s cosmic soul persona with jazzy edges, dub textures, and late-night energy." %>
+                  </div>
+
+                  <div class="home-persona-builder__actions">
+                    <p class="home-persona-builder__hint mb-0">The persona will be saved to your account.</p>
+                    <%= form.submit "Generate and save persona", class: "home-persona-builder__submit" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="persona-grid mb-4">
+            <% @saved_personas.each do |persona| %>
+              <%= render "shared/persona_card",  persona: persona %>
+            <% end %>
           </div>
         </div>
-
-        <div class="persona-card__actions persona-card__actions--builder">
-          <span class="persona-card__action persona-card__action--primary">Create</span>
-        </div>
-      </button>
-    </div>
-
-    <div class="home-persona-builder" data-persona-form-target="panel" hidden>
-      <%= form_with url: personas_path, method: :post, class: "home-persona-builder__form" do |form| %>
-        <%= form.hidden_field :return_to, name: "persona[return_to]", value: request.fullpath %>
-        <%= form.hidden_field :redirect_to_swiper, name: "persona[redirect_to_swiper]", value: true %>
-
-        <div class="home-persona-builder__field">
-          <%= form.label :prompt, "Describe your taste", class: "form-label" %>
-          <%= form.text_area :prompt,
-                             name: "persona[prompt]",
-                             rows: 4,
-                             class: "form-control home-persona-builder__input",
-                             data: { persona_form_target: "input" },
-                             placeholder: "Example: Build me a warm 70s cosmic soul persona with jazzy edges, dub textures, and late-night energy." %>
-        </div>
-
-        <div class="home-persona-builder__actions">
-          <p class="home-persona-builder__hint mb-0">The persona will be saved to your account.</p>
-          <%= form.submit "Generate and save persona", class: "home-persona-builder__submit" %>
-        </div>
-      <% end %>
+      </div>
     </div>
   </section>
   <% if current_user.vinyls.any? %>
