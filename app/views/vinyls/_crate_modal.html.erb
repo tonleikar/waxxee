@@ -1,38 +1,5 @@
 <div class="modal fade vinyl-folder-modal" id="crateModal-<%= folder.id %>" tabindex="-1" aria-labelledby="crateModalLabel-<%= folder.id %>" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-lg-down modal-xl modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content vinyl-folder-modal-content border-0">
-      <div class="modal-header vinyl-folder-modal-header border-0">
-        <div>
-          <h2 class="modal-title h3 mb-1" id="crateModalLabel-<%= folder.id %>"><%= folder.name %></h2>
-          <p class="text-muted mb-0"><%= pluralize(folder.vinyls.count, "record") %></p>
-        </div>
-        <button type="button" class="btn-close vinyl-folder-modal-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <% folder_vinyls = folder.vinyls.order(created_at: :desc) %>
-        <% if folder_vinyls.any? %>
-          <div class="row g-3">
-            <% folder_vinyls.each do |vinyl| %>
-              <% user_vinyl = current_user.user_vinyls.includes(:folders, :folder_vinyls).find_by(vinyl_id: vinyl.id) %>
-              <% vinyl_folder_ids = user_vinyl ? user_vinyl.folders.map(&:id) : [] %>
-
-              <div class="col-12 col-md-6 col-xl-4" data-crate-card>
-                <%= render "vinyls/vinyl_card",
-                  vinyl: vinyl,
-                  user_vinyl: user_vinyl,
-                  vinyl_folder_ids: vinyl_folder_ids,
-                  folders: folders,
-                  compact: true,
-                  current_folder: folder %>
-              </div>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="vinyl-folder-modal-empty">
-            <p class="mb-0 text-muted">This crate is empty.</p>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= render "vinyls/crate_modal_content", folder: folder, folders: folders %>
   </div>
 </div>
