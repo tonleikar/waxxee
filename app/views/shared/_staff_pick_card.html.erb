@@ -1,0 +1,10 @@
+<article class="persona-card persona-card--custom">
+  <div class="persona-card__thumbnail" style="--persona-image: url('<%= persona.image_url or asset_path("default-persona-image.jpg") %>');">
+  </div>
+      <h2 class="persona-card__title mb-1"><%= persona.title %></h2>
+    <div class="persona-card__action-slot">
+      <%= link_to "GO DIGGING",
+                  swiper_index_path(persona_id: persona.id),
+                  class: "persona-card__action persona-card__action--primary" %>
+    </div>
+</article>
