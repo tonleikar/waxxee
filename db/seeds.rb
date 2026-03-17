@@ -61,28 +61,41 @@ User.find_each do |user|
 end
 
 premade = [ {
-  title: "grunge",
-  summary: "Raw 90s guitars, heavy hooks, and worn-in distortion pulled from the loud end of alternative rock.",
+  title: "uk garage",
+  summary: "ukg's signature blend of shuffling beats, soulful vocals, and bass-heavy grooves from the late 90s and early 2000s.",
   min_year: 1988,
   max_year: 1999,
-  genres: ["Rock"],
-  url: "https://api.discogs.com/database/search?q=grunge&genre=Rock&year=1988-1999&type=release"
+  genres: ["Electronic", "Dance", "UK Garage"],
+  image_url: "staff-picks/ukg-persona.jpg",
+  url: "https://api.discogs.com/database/search?style=UK+Garage&type=releaseyear=1996-2022"
 },
 {
-  title: "emo",
-  summary: "Big feelings, melodic guitars, and confessional songwriting across late 90s and 2000s rock-pop crossover records.",
-  min_year: 1995,
-  max_year: 2010,
-  genres: ["Rock", "Pop"],
-  url: "https://api.discogs.com/database/search?q=emo&genre=Rock&genre=Pop&year=1995-2010&type=release"
+  title: "afrobeat",
+  summary: "Rhythmic grooves, vibrant percussion, and infectious energy from the heart of Afrobeat and its global offshoots.",
+  min_year: 1970,
+  max_year: 1989,
+  genres: ["Funk", "Soul", "Afrobeat"],
+  image_url: "staff-picks/afrobeat-persona.jpg",
+  url: "https://api.discogs.com/database/search?style=Afrobeat&genre=Funk+/+Soul&type=releaseyear=1970-1989"
 },
 {
-  title: "dreamy",
-  summary: "Hazy pop, soft-focus electronics, and floating textures built for atmospheric listening and late-night digging.",
-  min_year: 1983,
-  max_year: 2025,
-  genres: ["Electronic", "Pop", "Rock"],
-  url: "https://api.discogs.com/database/search?genre=Electronic&genre=Pop&genre=Rock&year=1983-2025&type=release"
+  title: "post-punk",
+  summary: "Dark, angular, and experimental sounds that defined the post-punk era, blending punk's raw energy with art-rock's creativity.",
+  min_year: 1979,
+  max_year: 1987,
+  genres: ["Post-Punk", "New Wave", "Electronic"],
+  image_url: "staff-picks/punk-persona.jpg",
+  url: "https://api.discogs.com/database/search?style=Post-Punk&genre=Rock&type=releaseyear=1979-1987"
+},
+
+{
+  title: "jazz",
+  summary: "Soulful vocals, lush arrangements, and timeless songwriting across classic and contemporary jazz records.",
+  min_year: 1950,
+  max_year: 1978,
+  genres: ["Jazz"],
+  image_url: "staff-picks/jazz-persona.jpg",
+  url: "https://api.discogs.com/database/search?genre=Jazz&year=1950-1978&type=release"
 }]
 
 premade.each do |premade|
@@ -92,9 +105,11 @@ premade.each do |premade|
     summary: premade[:summary],
     min_year: premade[:min_year],
     max_year: premade[:max_year],
+    image_url: premade[:image_url],
     url: premade[:url],
     genres: premade[:genres],
-    keywords: premade[:genres]
+    keywords: premade[:genres],
+    staff_pick: true
   )
   new_persona.save!
 end
