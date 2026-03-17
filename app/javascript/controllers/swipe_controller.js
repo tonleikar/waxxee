@@ -13,11 +13,14 @@ export default class extends Controller {
     this.swiping = false
 
     this.audioPreview = null
+    this.playPauseButton = null
+
+    this.allPages = null
+    this.currentPage = 1
 
     this.currentVinyls = []
-    this.currentPage = 1
     this.activeVinyl = null
-    this.discogsAPI = `${this.personaValue}&per_page=100&page=1&key=${this.keyValue}&secret=${this.secretValue}`
+    this.discogsAPI = `${this.personaValue}&per_page=5&page=${this.currentPage}&key=${this.keyValue}&secret=${this.secretValue}`
 
     await this.getRecords()
     await this.renderCard()
@@ -26,6 +29,7 @@ export default class extends Controller {
   async getRecords() {
     const response = await fetch(this.discogsAPI)
     const data = await response.json()
+    console.log(data)
 
     this.currentVinyls = data.results || []
   }
@@ -35,7 +39,8 @@ export default class extends Controller {
 
     if (this.currentVinyls.length === 0) {
       this.activeVinyl = null
-      this.vinylWrapperTarget.innerHTML = "<p>No more records</p>"
+
+      this.getRecords()
       return
     }
 
@@ -59,8 +64,11 @@ export default class extends Controller {
       sleeve?.classList.add("is-ready")
     }, 100)
     this.attachSwipe(card)
-    await this.playMusic(vinyl.title)
+    await this.playMusic(vinyl.title, card)
     this.audioPreview?.play()
+    if (this.audioPreview && this.playPauseButton) {
+      this.playPauseButton.innerHTML = "⏸"
+    }
 
   }
 
@@ -261,13 +269,29 @@ export default class extends Controller {
     return "Unlisted"
   }
 
-  async playMusic(query) {
+  async playMusic(query, card) {
     const searchUrl = `https://api.deezer.com/search?q=${encodeURIComponent(query)}`
     const data = await fetch(`/swiper/music_preview?query=${encodeURIComponent(searchUrl)}`).then(res => res.json())
+    this.playPauseButton = card?.querySelector(".randomizer-sleeve__play") || null
     if (data.previewUrl) {
       this.audioPreview = new Audio(data.previewUrl)
+      this.audioPreview.loop = true
+      this.playPauseButton?.classList.remove("d-none")
     }
   }
+
+  playPreview(event) {
+    if (!this.audioPreview) return
+
+    const playButton = event.currentTarget
+    if (this.audioPreview.paused){
+      this.audioPreview.play()
+      playButton.innerHTML = "⏸"
+    }else{
+      this.audioPreview.pause()
+      playButton.innerHTML = "▶"
+    }
+}
 
   disconnect() {
     if (this.audioPreview) {

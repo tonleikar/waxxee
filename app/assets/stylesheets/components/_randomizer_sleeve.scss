@@ -165,11 +165,42 @@
   transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
+.randomizer-sleeve__play {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 251, 245, 0.76);
+  color: rgba(17, 17, 17, 0.72);
+  font-size: .7rem;
+  font-weight: 400;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
 .randomizer-sleeve__flip--back {
+  z-index: 4;
   position: absolute;
   right: 1rem;
   bottom: 1rem;
-  z-index: 4;
+}
+
+.swiper-sleeve.is-flipped .randomizer-sleeve__face--front .randomizer-sleeve__play,
+.home-randomizer-sleeve.is-flipped .randomizer-sleeve__face--front .randomizer-sleeve__play,
+.welcome-vinyl-card.is-flipped .randomizer-sleeve__face--front .randomizer-sleeve__play {
+  pointer-events: none;
+  opacity: 0;
 }
 
 .randomizer-sleeve__close:hover,
