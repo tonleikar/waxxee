@@ -125,7 +125,7 @@ h6,
   padding: 0.48rem 0.8rem;
   font-weight: 400;
   letter-spacing: 0;
-  font-size: 0.92rem;
+  font-size: 0.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -149,8 +149,7 @@ h6,
   color: #ffffff;
 }
 
-.btn-outline-dark,
-.btn-outline-primary {
+.btn-outline-dark, .btn-outline-primary {
   background: rgba(255, 252, 247, 0.55);
   border-color: var(--wax-ink);
   color: #111111;
