@@ -42,7 +42,9 @@
               </div>
 
               <%= link_to profile_path(user), class: "text-decoration-none text-reset d-block" do %>
-                <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-3">
+                <div class="feed-card-media mb-3">
+                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="feed-card-image">
+                </div>
 
                 <h2 class="h5 mb-1"><%= vinyl.title %></h2>
                 <p class="mb-1"><strong>Artist:</strong> <%= vinyl.artist %></p>
