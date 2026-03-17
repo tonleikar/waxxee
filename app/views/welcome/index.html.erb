@@ -48,10 +48,7 @@
                       data-persona-form-target="button"
                       data-action="persona-form#toggle"
                       aria-expanded="false">
-                <div class="persona-builder-card__copy">
-                  <h3 class="persona-builder-card__title mb-1">Define a new persona</h3>
-                </div>
-                <span class="persona-builder-card__action">Create</span>
+                <span class="persona-builder-card__action">Define a new persona</span>
               </button>
 
               <div class="home-persona-builder" data-persona-form-target="panel" hidden>
@@ -60,13 +57,12 @@
                   <%= form.hidden_field :redirect_to_swiper, name: "persona[redirect_to_swiper]", value: true %>
 
                   <div class="home-persona-builder__field">
-                    <%= form.label :prompt, "Describe in casual language what you want to dig for", class: "form-label" %>
                     <%= form.text_area :prompt,
                                        name: "persona[prompt]",
-                                       rows: 4,
+                                       rows: 1,
                                        class: "form-control home-persona-builder__input",
                                        data: { persona_form_target: "input" },
-                                       placeholder: "Enter your greatest desires" %>
+                                       placeholder: "Describe in casual language what you want to dig for" %>
                   </div>
 
                   <div class="home-persona-builder__actions">
@@ -86,7 +82,4 @@
       </div>
     </div>
   </section>
-  <% if current_user.vinyls.any? %>
-    <%= render "shared/recent_finds" %>
-  <% end %>
 </div>
