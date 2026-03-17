@@ -9,7 +9,7 @@
 #   end
 #
 require 'open-uri'
-require 'JSON'
+require 'json'
 
 url = "https://api.discogs.com/users/samsamhailey/collection/folders/0/releases?page=1&per_page=100"
 
