@@ -5,7 +5,7 @@
       <p class="text-muted mb-0">Recent saves from the people you follow.</p>
     </div>
 
-    <%= link_to "Find users", users_path, class: "btn btn-outline-dark" %>
+    <%= link_to "Find users", users_path, class: "btn btn-secondary" %>
   </div>
 
   <% if @feed_items.any? %>
@@ -62,7 +62,7 @@
     <div class="border rounded p-4 text-center text-muted">
       <p class="mb-2">Your feed is empty.</p>
       <p class="mb-3">Follow users to see the records they save to their collection.</p>
-      <%= link_to "Search users", users_path, class: "btn btn-outline-dark" %>
+      <%= link_to "Search users", users_path, class: "btn btn-secondary" %>
     </div>
   <% end %>
 </section>

@@ -6,7 +6,7 @@
           <p class="profile-kicker mb-1">Settings</p>
           <h1 class="h2 mb-0">Edit Profile</h1>
         </div>
-        <%= link_to "Back", profile_path(@user), class: "btn btn-outline-dark" %>
+        <%= link_to "Back", profile_path(@user), class: "btn btn-secondary" %>
       </div>
 
       <div class="row g-4">
@@ -74,7 +74,7 @@
                 </div>
                 <%= button_tag "Regenerate",
                   type: "button",
-                  class: "btn btn-outline-dark align-self-start",
+                  class: "btn btn-secondary align-self-start",
                   data: { action: "click->profile-avatar#regenerate" } %>
                 <div>
                   <%= avatar_form.label :avatar_file, "Upload image", class: "form-label" %>
@@ -83,7 +83,7 @@
                     class: "form-control",
                     data: { profile_avatar_target: "fileInput", action: "change->profile-avatar#uploadPreview" } %>
                 </div>
-                <%= avatar_form.submit "Save profile picture", class: "btn btn-dark", data: { profile_avatar_target: "saveButton" } %>
+                <%= avatar_form.submit "Save profile picture", class: "btn btn-primary", data: { profile_avatar_target: "saveButton" } %>
               <% end %>
 
               <% if @user.avatar_url.present? %>
