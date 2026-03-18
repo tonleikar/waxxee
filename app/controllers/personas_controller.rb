@@ -1,6 +1,6 @@
 class PersonasController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_return_path, only: [:create, :destroy]
+  before_action :set_return_path, only: %i[create destroy]
 
   def create
     persona = PersonaUpdater.new(
@@ -8,7 +8,7 @@ class PersonasController < ApplicationController
       prompt: persona_params[:prompt],
       primary_profile: primary_profile_request?
     ).call
-
+    puts "Creating Persona #{params}"
     redirect_to next_path_for(persona), notice: persona_notice
   rescue StandardError => e
     redirect_to @return_path, alert: "Could not generate persona: #{e.message}"
