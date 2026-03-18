@@ -19,6 +19,13 @@
   gap: 1rem;
 }
 
+.vinyl-library-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 auto;
+}
+
 .vinyl-library-search-form {
   gap: 0.75rem;
   width: 100%;
@@ -36,6 +43,10 @@
   display: grid;
   grid-template-columns: auto auto;
   gap: 0.75rem;
+}
+
+.vinyl-library-toolbar-sort {
+  flex: 0 0 auto;
 }
 
 .vinyl-library-sort-form {
@@ -87,18 +98,27 @@
 }
 
 @media (max-width: 767.98px) {
-  .vinyl-library-toolbar,
-  .vinyl-library-search-form {
+  .vinyl-library-toolbar {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .vinyl-library-sort-select {
+  .vinyl-library-toolbar-controls {
     width: 100%;
   }
 
+  .vinyl-library-search-actions,
+  .vinyl-library-toolbar-sort {
+    min-width: 0;
+  }
+
   .vinyl-library-search-actions {
-    grid-template-columns: 1fr;
+    flex: 1 1 auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vinyl-library-toolbar-sort {
+    flex: 0 0 auto;
   }
 
   #vinylCratesList.show {
