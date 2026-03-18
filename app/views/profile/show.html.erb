@@ -21,11 +21,11 @@
 
         <% if @own_profile %>
           <div class="d-flex flex-wrap gap-2 profile-actions">
-            <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-dark profile-edit-button" %>
+            <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-primary profile-edit-button" %>
             <%= link_to "Log out",
                         destroy_user_session_path,
                         data: { turbo_method: :delete },
-                        class: "btn btn-outline-dark profile-logout-button" %>
+                        class: "btn btn-secondary profile-logout-button" %>
           </div>
         <% end %>
       </div>
@@ -45,7 +45,7 @@
             <% if @own_profile %>
               <button
                 type="button"
-                class="btn btn-outline-dark"
+                class="btn btn-secondary"
                 data-bs-toggle="offcanvas"
                 data-bs-target="#favoriteVinylPicker"
                 aria-controls="favoriteVinylPicker"
@@ -140,7 +140,7 @@
               </div>
               <div class="d-flex align-items-center gap-2">
                 <% if @own_profile %>
-                  <%= link_to "Find users", users_path, class: "btn btn-outline-dark btn-sm" %>
+                  <%= link_to "Find users", users_path, class: "btn btn-secondary" %>
                 <% end %>
               </div>
             </div>
@@ -209,7 +209,7 @@
                   </div>
 
                   <div class="d-flex flex-wrap gap-2">
-                    <%= link_to "Open in swiper", swiper_index_path(persona_id: persona.id), class: "btn btn-outline-dark btn-sm" %>
+                    <%= link_to "Open in swiper", swiper_index_path(persona_id: persona.id), class: "btn btn-secondary" %>
                   </div>
                 </div>
               </article>

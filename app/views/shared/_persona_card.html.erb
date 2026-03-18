@@ -18,14 +18,14 @@
     <div class="persona-card__action-slot">
       <%= link_to "Explore",
                   swiper_index_path(persona_id: persona.id),
-                  class: "persona-card__action persona-card__action--primary" %>
+                  class: "btn btn-primary w-100" %>
     </div>
     <div class="persona-card__action-slot">
       <%= button_to image_tag("bin-icon.svg", alt: "Delete", class: "delete-icon"),
                     persona_path(persona),
                     method: :delete,
                     params: { persona: { return_to: vinyls_path } },
-                    class: "persona-card__action persona-card__action--secondary",
+                    class: "btn btn-secondary",
                     form: { data: { turbo_confirm: "Delete this saved persona?" } } %>
     </div>
   </div>

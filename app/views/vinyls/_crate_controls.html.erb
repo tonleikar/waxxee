@@ -27,12 +27,10 @@
               <% in_crate = folder_vinyl.present? %>
 
               <div class="vinyl-library-card-crate-row <%= "is-active" if in_crate %>">
-                <span><%= folder.name %></span>
-
                 <% if in_crate %>
                   <%= button_to folder_vinyl_path(folder_vinyl),
                     method: :delete,
-                    class: "btn btn-sm vinyl-library-card-crate-action",
+                    class: "btn btn-tertiary btn-tertiary--with-icon vinyl-library-card-crate-action",
                     form: {
                       data: {
                         controller: "crate-membership",
@@ -40,13 +38,17 @@
                         turbo: false
                       }
                     } do %>
-                    -
+                    <span class="btn-tertiary__label"><%= folder.name %></span>
+                    <span class="btn-tertiary__icon" aria-hidden="true">-</span>
                   <% end %>
                 <% else %>
                   <%= form_with url: folder_vinyls_path, method: :post, local: true, class: "vinyl-library-card-crate-form" do |form| %>
                     <%= form.hidden_field :vinyl_id, name: "folder_vinyl[vinyl_id]", value: vinyl.id %>
                     <%= form.hidden_field :folder_id, name: "folder_vinyl[folder_id]", value: folder.id %>
-                    <%= form.submit "+", class: "btn btn-sm vinyl-library-card-crate-action" %>
+                    <%= form.button type: :submit, class: "btn btn-tertiary btn-tertiary--with-icon vinyl-library-card-crate-action" do %>
+                      <span class="btn-tertiary__label"><%= folder.name %></span>
+                      <span class="btn-tertiary__icon" aria-hidden="true">+</span>
+                    <% end %>
                   <% end %>
                 <% end %>
               </div>

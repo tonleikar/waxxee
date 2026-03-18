@@ -22,7 +22,7 @@
                 <%= form.text_field :name, class: "form-control", placeholder: "Create a crate", required: true %>
               </div>
               <div class="flex-shrink-0">
-                <%= form.submit "Add crate", class: "btn btn-outline-dark" %>
+                <%= form.submit "Add crate", class: "btn btn-secondary" %>
               </div>
             </div>
           <% end %>
@@ -32,7 +32,7 @@
           <% end %>
         </div>
         <button
-          class="btn btn-outline-dark d-md-none vinyl-folder-toggle"
+          class="btn btn-secondary d-md-none vinyl-folder-toggle"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#vinylCratesList"
@@ -58,15 +58,12 @@
                 <%= form.hidden_field :sort, value: @sort %>
 
                 <div class="vinyl-library-search-input-wrapper">
-                  <span class="vinyl-library-search-icon" aria-hidden="true">
-                    <i class="fas fa-search"></i>
-                  </span>
                   <%= form.text_field :query, value: @query, placeholder: "Search title, artist, or genre", class: "form-control vinyl-library-search-input" %>
                 </div>
 
                 <div class="vinyl-library-search-actions">
-                  <%= form.submit "Search", class: "btn btn-dark w-100" %>
-                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-outline-dark w-100", id: "clear-search-btn" %>
+                  <%= form.submit "Search", class: "btn btn-primary w-100" %>
+                  <%= link_to "Clear", vinyls_path(sort: @sort), class: "btn btn-secondary w-100", id: "clear-search-btn" %>
                 </div>
               <% end %>
             </div>
@@ -74,23 +71,21 @@
             <div class="vinyl-library-toolbar-sort">
               <%= form_with url: vinyls_path, method: :get, local: true, html: { class: "vinyl-library-sort-form" } do |form| %>
                 <%= form.hidden_field :query, value: @query %>
-                <div class="vinyl-library-sort-shell">
-                  <span class="vinyl-library-sort-icon" aria-hidden="true">
+                <% sort_options = [
+                  ["Recently added", "recent"],
+                  ["Title Z-A", "title_desc"],
+                  ["Title A-Z", "title_asc"],
+                  ["Artist A-Z", "artist_asc"],
+                  ["Artist Z-A", "artist_desc"],
+                  ["Year newest", "year_desc"],
+                  ["Year oldest", "year_asc"]
+                ] %>
+                <div class="btn btn-tertiary btn-tertiary--with-icon vinyl-library-sort-shell">
+                  <span class="btn-tertiary__icon vinyl-library-sort-icon" aria-hidden="true">
                     <i class="fas fa-sort"></i>
                   </span>
                   <%= form.select :sort,
-                    options_for_select(
-                      [
-                        ["Recently added", "recent"],
-                        ["Title Z-A", "title_desc"],
-                        ["Title A-Z", "title_asc"],
-                        ["Artist A-Z", "artist_asc"],
-                        ["Artist Z-A", "artist_desc"],
-                        ["Year newest", "year_desc"],
-                        ["Year oldest", "year_asc"]
-                      ],
-                      @sort
-                    ),
+                    options_for_select(sort_options, @sort),
                     {},
                     class: "form-select vinyl-library-sort-select",
                     onchange: "this.form.requestSubmit()" %>

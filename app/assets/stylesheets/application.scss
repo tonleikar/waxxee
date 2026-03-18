@@ -121,11 +121,11 @@ h6,
 
 .btn {
   border-width: 1px;
-  min-height: 38px;
-  padding: 0.48rem 0.8rem;
+  min-height: 40px;
+  padding: 0.55rem 1rem;
   font-weight: 400;
-  letter-spacing: 0;
-  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -135,60 +135,75 @@ h6,
   transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
   font-family: "Syne", sans-serif;
   text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.btn-dark,
 .btn-primary {
   background: var(--wax-ink);
   border-color: var(--wax-ink);
   color: #ffffff;
 }
 
-.btn-dark:hover,
 .btn-primary:hover {
   background: #242424;
   border-color: #242424;
   color: #ffffff;
 }
 
-.btn-outline-dark,
-.btn-outline-primary {
-  background: rgba(255, 252, 247, 0.55);
-  border-color: var(--wax-ink);
-  color: #111111;
-}
-
-.btn-outline-dark:hover,
-.btn-outline-primary:hover {
-  background: rgba(17, 17, 17, 0.08);
-  border-color: var(--wax-ink);
-  color: #111111;
-}
-
-.btn-light,
 .btn-secondary {
-  background: rgba(255, 252, 247, 0.86);
-  border-color: rgba(17, 17, 17, 0.14);
-  color: #111111;
-}
-
-.btn-light:hover,
-.btn-secondary:hover {
-  background: rgba(255, 252, 247, 1);
-  border-color: rgba(17, 17, 17, 0.22);
-  color: #111111;
-}
-
-.btn-outline-light {
   background: transparent;
-  border-color: rgba(17, 17, 17, 0.18);
+  border-color: var(--wax-ink);
   color: #111111;
 }
 
-.btn-outline-light:hover {
+.btn-secondary:hover {
   background: rgba(17, 17, 17, 0.08);
-  border-color: rgba(17, 17, 17, 0.22);
+  border-color: var(--wax-ink);
   color: #111111;
+}
+
+.btn-tertiary {
+  min-height: 40px;
+  padding: 0.55rem 1rem;
+  background: transparent;
+  border-color: var(--wax-ink);
+  color: #111111;
+  font-family: "Syne", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn-tertiary:hover {
+  background: rgba(17, 17, 17, 0.08);
+  border-color: var(--wax-ink);
+  color: #111111;
+}
+
+.btn-tertiary--with-icon {
+  justify-content: space-between;
+}
+
+.btn-tertiary__label,
+.btn-tertiary__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-tertiary__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-tertiary__icon {
+  flex: 0 0 auto;
+  font-family: "Syne", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1;
 }
 
 .btn:focus,
@@ -204,19 +219,40 @@ h6,
   opacity: 0.62;
 }
 
-.btn-sm {
-  min-height: 30px;
-  padding: 0.32rem 0.6rem;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  font-family: "Syne", sans-serif;
-}
-
 .form-control,
 .form-select {
+  min-height: 40px;
+  padding: 0.55rem 1rem;
   border: 1px solid var(--wax-border);
   background: rgba(255, 252, 247, 0.82);
   color: var(--wax-ink);
+  font-family: var(--bs-body-font-family);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+.form-control:focus,
+.form-control:focus-visible,
+.form-select:focus,
+.form-select:focus-visible {
+  border-color: var(--wax-ink);
+  box-shadow: none;
+  outline: none;
+}
+
+textarea.form-control {
+  min-height: 40px;
+  resize: vertical;
+}
+
+select.form-select {
+  padding-right: 2.5rem;
+}
+
+input[type="file"].form-control {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
 }
 
 @keyframes auth-ticker-scroll {

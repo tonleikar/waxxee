@@ -1,14 +1,29 @@
 <section class="container py-4">
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center gap-3 mb-4">
-    <div class="d-flex align-items-center gap-3">
+  <div class="mb-4">
+    <div>
       <h1 class="h3 mb-0">Users</h1>
-      <%= link_to "Back to feed", followers_path, class: "btn btn-outline-dark" %>
+      <p class="text-muted mb-0">Find people to follow and explore their taste.</p>
     </div>
+  </div>
 
-    <%= form_with url: users_path, method: :get, local: true, class: "d-flex gap-2 flex-grow-1 justify-content-end ms-md-3" do |form| %>
-      <%= form.text_field :query, value: @query, placeholder: "Search username or email", class: "form-control flex-grow-1", style: "max-width: 28rem;" %>
-      <%= form.submit "Search", class: "btn btn-primary" %>
-    <% end %>
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <div class="users-toolbar">
+        <div class="users-toolbar-back">
+          <%= link_to "Back to feed", followers_path, class: "btn btn-secondary" %>
+        </div>
+
+        <%= form_with url: users_path, method: :get, local: true, class: "vinyl-library-search-form users-search-form" do |form| %>
+          <div class="vinyl-library-search-input-wrapper">
+            <%= form.text_field :query, value: @query, placeholder: "Search username or email", class: "form-control vinyl-library-search-input" %>
+          </div>
+
+          <div class="vinyl-library-search-actions">
+            <%= form.submit "Search", class: "btn btn-primary w-100" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <% if @users.any? %>
@@ -38,14 +53,27 @@
                   </div>
                 </div>
 
-                <% if follow %>
-                  <div class="d-flex flex-column align-items-stretch gap-2">
-                    <span class="btn btn-outline-dark disabled" aria-disabled="true">Following</span>
-                    <%= button_to "Unfollow", follower_path(follow), method: :delete, class: "btn btn-dark w-100" %>
-                  </div>
-                <% else %>
-                  <%= button_to "Follow", followers_path(followed_id: user.id), method: :post, class: "btn btn-dark" %>
-                <% end %>
+                <div class="users-follow-toggle">
+                  <% if follow %>
+                    <%= button_to follower_path(follow),
+                      method: :delete,
+                      class: "btn btn-secondary follow-toggle follow-toggle--following",
+                      aria: { label: "Unfollow #{user.username}" } do %>
+                      <span class="follow-toggle__icon" aria-hidden="true">
+                        <%= image_tag "nav/profile.svg", alt: "", class: "follow-toggle__image" %>
+                      </span>
+                    <% end %>
+                  <% else %>
+                    <%= button_to followers_path(followed_id: user.id),
+                      method: :post,
+                      class: "btn btn-primary follow-toggle",
+                      aria: { label: "Follow #{user.username}" } do %>
+                      <span class="follow-toggle__icon" aria-hidden="true">
+                        <%= image_tag "nav/profile.svg", alt: "", class: "follow-toggle__image" %>
+                      </span>
+                    <% end %>
+                  <% end %>
+                </div>
               </div>
 
               <%= link_to profile_path(user), class: "text-decoration-none text-reset d-block" do %>
