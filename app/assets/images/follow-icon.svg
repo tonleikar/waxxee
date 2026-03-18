@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="layer" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 128.75 128.75">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        fill: #f2f2f2;
+      }
+
+      .st0, .st2 {
+        stroke-width: 2px;
+      }
+
+      .st0, .st2, .st3 {
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .st2, .st3 {
+        fill: none;
+      }
+
+      .st3 {
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <g id="profile">
+    <circle class="st0" cx="64.37" cy="62.25" r="59.13"/>
+    <circle class="st0" cx="64.37" cy="53.54" r="24.86"/>
+    <path class="st0" d="M28.68,96.77c8.79-6.16,21.53-10.04,35.7-10.04s26.91,3.87,35.7,10.04"/>
+  </g>
+  <g>
+    <path class="st1" d="M100.08,126.85c-12.81,0-23.23-10.42-23.23-23.23s10.42-23.23,23.23-23.23,23.23,10.42,23.23,23.23-10.42,23.23-23.23,23.23Z"/>
+    <path class="st1" d="M100.08,81.88c12,0,21.73,9.73,21.73,21.73s-9.73,21.73-21.73,21.73-21.73-9.73-21.73-21.73,9.73-21.73,21.73-21.73M100.08,78.88c-13.64,0-24.73,11.09-24.73,24.73s11.09,24.73,24.73,24.73,24.73-11.09,24.73-24.73-11.09-24.73-24.73-24.73h0Z"/>
+    <circle class="st2" cx="100.08" cy="103.61" r="21.73"/>
+  </g>
+  <line class="st3" x1="100.08" y1="93.52" x2="100.08" y2="113.7"/>
+  <line class="st3" x1="89.99" y1="103.61" x2="110.16" y2="103.61"/>
+</svg>
