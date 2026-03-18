@@ -60,18 +60,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_150453) do
     t.index ["user_id"], name: "index_personas_on_user_id"
   end
 
-  create_table "swipe_pools", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "next_page", default: 1, null: false
-    t.string "persona_signature", null: false
-    t.json "remaining_payloads", default: [], null: false
-    t.json "seen_keys", default: [], null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["user_id", "persona_signature"], name: "index_swipe_pools_on_user_id_and_persona_signature", unique: true
-    t.index ["user_id"], name: "index_swipe_pools_on_user_id"
-  end
-
   create_table "user_vinyls", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -120,7 +108,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_150453) do
   add_foreign_key "followers", "users", column: "followed_id"
   add_foreign_key "followers", "users", column: "follower_id"
   add_foreign_key "personas", "users"
-  add_foreign_key "swipe_pools", "users"
   add_foreign_key "user_vinyls", "users"
   add_foreign_key "user_vinyls", "vinyls"
   add_foreign_key "users", "vinyls", column: "favorite_vinyl_id"
