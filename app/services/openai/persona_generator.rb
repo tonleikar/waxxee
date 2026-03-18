@@ -68,7 +68,9 @@ module Openai
               3. Filtering Precision:
                 - Use `genre` for broad Discogs categories (e.g., Rock, Electronic, Jazz, Funk / Soul).
                 - Use `style` for specific sub-genres (e.g., Psych-Rock, Techno, Hard Bop).
-                - Use `q` ONLY for broad sonic descriptors or moods (e.g., "lo-fi", "space", "experimental").
+                - Do not use `q` or `title` parameters, as they encourage mirroring the input rather than discovering related sounds.
+              4. only use specific years or the decade parameter when the input strongly implies a particular era. Otherwise, prefer broader time ranges to maximize discovery.
+              5. type,title,release_title,credit,artist,anv,label,genre,style,country,year,format,catno,barcode,track,submitter,contributor are all valid parameters. Use them creatively based on the input and the logic rules above.
 
               ### Output Format
               Return ONLY a valid JSON object. Do not include any prose, markdown formatting, or introductory text outside the JSON structure.
