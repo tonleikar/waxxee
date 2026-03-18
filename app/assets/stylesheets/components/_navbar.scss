@@ -12,14 +12,16 @@
   border-top: 1px solid rgba(17, 17, 17, 0.14);
   z-index: 1000;
   padding-block: 8px;
+  overflow: hidden;
 }
 
 .nav-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 48px;
+  border-radius: 2px;
   text-decoration: none;
   transition: background-color 0.18s ease, transform 0.18s ease;
 }
@@ -62,5 +64,6 @@
   .nav-icon {
     width: 72px;
     height: 72px;
+    border-radius: 2px;
   }
 }
