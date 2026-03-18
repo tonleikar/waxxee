@@ -93,17 +93,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_150453) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
-    t.text "spotify_access_token"
-    t.string "spotify_product"
-    t.text "spotify_refresh_token"
-    t.datetime "spotify_token_expires_at"
-    t.string "spotify_user_id"
     t.datetime "updated_at", null: false
     t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["favorite_vinyl_id"], name: "index_users_on_favorite_vinyl_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["spotify_user_id"], name: "index_users_on_spotify_user_id"
     t.index ["username"], name: "index_users_on_username"
   end
 
