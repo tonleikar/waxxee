@@ -30,6 +30,13 @@ body {
   color: var(--wax-ink);
 }
 
+a,
+a:visited,
+a:hover,
+a:active {
+  color: inherit;
+}
+
 h1,
 h2,
 h3,
