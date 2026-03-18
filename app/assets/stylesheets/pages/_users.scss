@@ -20,26 +20,37 @@
   margin: 0;
 }
 
-.follow-toggle {
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
-  min-height: 40px;
+.follow-btn {
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+  min-height: 50px;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--wax-ink) !important;
-  box-shadow: none !important;
+  color: var(--wax-ink);
+  box-shadow: none;
+  appearance: none;
+  border-radius: 0;
 }
 
-.follow-toggle:hover {
+.follow-btn:hover {
   background: transparent;
-  color: var(--wax-ink) !important;
+  color: var(--wax-ink);
 }
 
-.follow-toggle--following {
-  background: transparent;
-  color: var(--wax-ink) !important;
+.follow-btn:focus {
+  outline: none;
+}
+
+.follow-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.follow-btn--following .follow-toggle__heart {
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .follow-toggle__icon {
@@ -50,14 +61,13 @@
   justify-content: center;
 }
 
-.follow-toggle__image {
-  width: 30px;
-  height: 30px;
+.follow-toggle__heart {
+  width: 50%;
+  height: 50%;
   display: block;
-}
-
-.follow-toggle--following .follow-toggle__image {
-  opacity: 0.45;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
 }
 
 @media (max-width: 767.98px) {
