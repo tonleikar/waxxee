@@ -301,9 +301,12 @@
   border-radius: 0;
   background: transparent;
   color: var(--wax-ink);
+  font-family: "Syne", sans-serif;
+  line-height: 1.1;
   font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   box-shadow: none !important;
 }
 
@@ -387,7 +390,7 @@
 
 .vinyl-library-card-crate-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.65rem;
 }
 
@@ -410,6 +413,7 @@
 
 .vinyl-library-card-crate-row form {
   margin: 0;
+  width: 100%;
 }
 
 .vinyl-library-card-crate-action {
