@@ -129,7 +129,7 @@ export default class extends Controller {
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
       const diff = this.currentX - this.startX
 
-      card.style.transform = `translateX(${diff}px) rotate(${diff * -0.01}deg)`
+      card.style.transform = `translateX(${diff}px) rotate(${diff * 0.01}deg)`
     }
 
     const end = () => {
@@ -148,7 +148,7 @@ export default class extends Controller {
         const bg = this.element.closest(".circles-bg")
         if (bg) this.spinBackground(bg)
 
-        card.style.transform = `translateX(${diff > 0 ? 1000 : -1000}px) rotate(${diff *  -0.1}deg)`
+        card.style.transform = `translateX(${diff > 0 ? 1000 : -1000}px) rotate(${diff * 0.1}deg)`
 
         if (direction === "right") {
           if (this.audioPreview) this.audioPreview.pause()
