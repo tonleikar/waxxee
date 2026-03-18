@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["vinylWrapper", "template"]
 
   async connect() {
-    this.lockPageScroll()
+    // this.lockPageScroll()
 
     this.index = 0
     this.startX = 0
@@ -29,30 +29,30 @@ export default class extends Controller {
     await this.renderCard()
   }
 
-  lockPageScroll() {
-    this.scrollY = window.scrollY || window.pageYOffset || 0
-    this.previousHtmlOverflow = document.documentElement.style.overflow
-    this.previousBodyOverflow = document.body.style.overflow
-    this.previousBodyPosition = document.body.style.position
-    this.previousBodyTop = document.body.style.top
-    this.previousBodyWidth = document.body.style.width
+  // lockPageScroll() {
+  //   this.scrollY = window.scrollY || window.pageYOffset || 0
+  //   this.previousHtmlOverflow = document.documentElement.style.overflow
+  //   this.previousBodyOverflow = document.body.style.overflow
+  //   this.previousBodyPosition = document.body.style.position
+  //   this.previousBodyTop = document.body.style.top
+  //   this.previousBodyWidth = document.body.style.width
 
-    document.documentElement.style.overflow = "hidden"
-    document.body.style.overflow = "hidden"
-    document.body.style.position = "fixed"
-    document.body.style.top = `-${this.scrollY}px`
-    document.body.style.width = "100%"
-  }
+  //   document.documentElement.style.overflow = "hidden"
+  //   document.body.style.overflow = "hidden"
+  //   document.body.style.position = "fixed"
+  //   document.body.style.top = `-${this.scrollY}px`
+  //   document.body.style.width = "100%"
+  // }
 
-  unlockPageScroll() {
-    document.documentElement.style.overflow = this.previousHtmlOverflow || ""
-    document.body.style.overflow = this.previousBodyOverflow || ""
-    document.body.style.position = this.previousBodyPosition || ""
-    document.body.style.top = this.previousBodyTop || ""
-    document.body.style.width = this.previousBodyWidth || ""
+  // unlockPageScroll() {
+  //   document.documentElement.style.overflow = this.previousHtmlOverflow || ""
+  //   document.body.style.overflow = this.previousBodyOverflow || ""
+  //   document.body.style.position = this.previousBodyPosition || ""
+  //   document.body.style.top = this.previousBodyTop || ""
+  //   document.body.style.width = this.previousBodyWidth || ""
 
-    window.scrollTo(0, this.scrollY || 0)
-  }
+  //   window.scrollTo(0, this.scrollY || 0)
+  // }
 
   async getRecords() {
     let data = null
@@ -114,17 +114,17 @@ export default class extends Controller {
 
   attachSwipe(card) {
     const start = (e) => {
+      e.preventDefault()
       if (e.target.closest("button, a, input, select, textarea, [role='button']")) return
 
-      e.preventDefault()
       this.dragging = true
       this.startX = e.touches ? e.touches[0].clientX : e.clientX
       this.currentX = this.startX
     }
 
     const move = (e) => {
-      if (!this.dragging) return
       e.preventDefault()
+      if (!this.dragging) return
 
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
       const diff = this.currentX - this.startX
@@ -134,49 +134,50 @@ export default class extends Controller {
 
     const end = () => {
       if (!this.dragging) return
+      this.dragging = false;
 
       const diff = this.currentX - this.startX
 
-      if (Math.abs(diff) > 25) {
-        if (Math.abs(diff) > this.threshold) {
-          const direction = diff > 0 ? "right" : "left"
+      if (Math.abs(diff) > this.threshold) {
+        console.log("Swiped", diff > 0 ? "right" : "left", "with diff:", diff)
+        const direction = diff > 0 ? "right" : "left"
 
-          const bg = this.element.closest(".circles-bg")
-          if (bg) this.spinBackground(bg)
+        const bg = this.element.closest(".circles-bg")
+        if (bg) this.spinBackground(bg)
 
-          card.style.transform = `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
+        card.style.transform = `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
 
-          card.style.opacity = 0
+        // card.style.opacity = 0
 
-          if (direction === "right") {
-            if (this.audioPreview) this.audioPreview.pause()
-            this.saveVinyl(this.activeVinyl)
-          }
-
-          setTimeout(() => {
-            this.index++
-            this.renderCard()
-          }, 150)
-
-        } else if  (direction === "left") {
-            if (this.audioPreview) {
-            this.audioPreview.pause()
-            this.audioPreview = null
-          }
-          card.style.transform = ""
+        if (direction === "right") {
+          if (this.audioPreview) this.audioPreview.pause()
+          this.saveVinyl(this.activeVinyl)
         }
-      }
 
-      this.dragging = false
+        setTimeout(() => {
+          this.index++
+          this.renderCard()
+        }, 150)
+
+      } else if  (direction === "left") {
+          if (this.audioPreview) {
+          this.audioPreview.pause()
+          this.audioPreview = null
+        }
+        card.style.transform = ""
+      } else {
+        card.style.transform = "";
+      }
+      // this.currentX = 0;
     }
 
-    card.addEventListener("mousedown", start)
-    card.addEventListener("mousemove", move)
-    card.addEventListener("mouseup", end)
+    card.addEventListener("pointerdown", start)
+    card.addEventListener("pointermove", move)
+    card.addEventListener("pointerup", end)
 
-    card.addEventListener("touchstart", start)
-    card.addEventListener("touchmove", move)
-    card.addEventListener("touchend", end)
+    // card.addEventListener("touchstart", start)
+    // card.addEventListener("touchmove", move)
+    // card.addEventListener("touchend", end)
   }
 
   flipToBack(event) {
@@ -338,6 +339,6 @@ export default class extends Controller {
       this.audioPreview = null
     }
 
-    this.unlockPageScroll()
+    // this.unlockPageScroll()
   }
 }
