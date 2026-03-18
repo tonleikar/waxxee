@@ -11,7 +11,7 @@ export default class extends Controller {
     this.startX = 0
     this.currentX = 0
     this.dragging = false
-    this.threshold = 100
+    this.threshold = window.innerWidth * 0.3
     this.swiping = false
 
     this.audioPreview = null
@@ -125,29 +125,30 @@ export default class extends Controller {
     const move = (e) => {
       e.preventDefault()
       if (!this.dragging) return
-
+      card.classList.remove("vinyl-card-animation")
       this.currentX = e.touches ? e.touches[0].clientX : e.clientX
       const diff = this.currentX - this.startX
 
-      card.style.transform = `translateX(${diff}px) rotate(${diff * -0.01}deg)`
+      card.style.transform = `translateX(${diff}px) rotate(${diff * 0.01}deg)`
     }
 
     const end = () => {
       if (!this.dragging) return
       this.dragging = false;
+      card.classList.add("vinyl-card-animation")
 
       const diff = this.currentX - this.startX
 
+      let direction = null
+
       if (Math.abs(diff) > this.threshold) {
         console.log("Swiped", diff > 0 ? "right" : "left", "with diff:", diff)
-        const direction = diff > 0 ? "right" : "left"
+        direction = diff > 0 ? "right" : "left"
 
         const bg = this.element.closest(".circles-bg")
         if (bg) this.spinBackground(bg)
 
-        card.style.transform = `translateX(${diff > 0 ? 600 : -600}px) rotate(${diff * 0.1}deg)`
-
-        // card.style.opacity = 0
+        card.style.transform = `translateX(${diff > 0 ? 1000 : -1000}px) rotate(${diff * 0.1}deg)`
 
         if (direction === "right") {
           if (this.audioPreview) this.audioPreview.pause()
@@ -164,11 +165,10 @@ export default class extends Controller {
           this.audioPreview.pause()
           this.audioPreview = null
         }
-        card.style.transform = ""
+        card.style.transform = `translateX(0px) rotate(0deg)`
       } else {
-        card.style.transform = "";
+        card.style.transform =`translateX(0px) rotate(0deg)`;
       }
-      // this.currentX = 0;
     }
 
     card.addEventListener("pointerdown", start)

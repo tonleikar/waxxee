@@ -63,9 +63,13 @@
   position: relative;
   margin: auto;
   opacity: 0;
-  transition: transform 0.5s ease, opacity 0.3s ease-out;
   z-index: 1;
 }
+
+.vinyl-card-animation {
+  transition: opacity 0.36s ease, transform 0.5s ease;
+}
+
 
 .vinyl-card-logo {
   width: 3rem;
@@ -74,13 +78,6 @@
 }
 .vinyl-card.active {
   opacity: 1;
-}
-
-.swiper-sleeve {
-  opacity: 0;
-  pointer-events: auto;
-  transform: none;
-  transition: opacity 0.28s ease;
 }
 
 .swiper-sleeve.is-visible {
