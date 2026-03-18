@@ -122,6 +122,13 @@
               <%= form.submit "Save profile", class: "btn btn-primary px-4" %>
             </div>
           <% end %>
+
+          <div class="mt-4 pt-4 border-top">
+            <%= link_to "Log out",
+                        destroy_user_session_path,
+                        data: { turbo_method: :delete },
+                        class: "btn btn-secondary profile-logout-button" %>
+          </div>
         </div>
       </div>
     </div>

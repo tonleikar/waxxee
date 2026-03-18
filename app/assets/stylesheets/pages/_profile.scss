@@ -351,6 +351,18 @@
 }
 
 @media (max-width: 991px) {
+  .profile-identity {
+    align-items: flex-start !important;
+  }
+
+  .profile-avatar-filter-group {
+    flex-direction: column;
+  }
+
+  .profile-avatar-filter {
+    width: 100%;
+  }
+
   .profile-following-body {
     display: flex;
     flex-direction: column;
