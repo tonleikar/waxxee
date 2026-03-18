@@ -20,9 +20,9 @@
         </div>
 
         <% if @own_profile %>
-          <div class="d-flex flex-wrap gap-2 profile-actions">
-            <%= link_to "Edit Profile", edit_profile_path(@user), class: "btn btn-secondary profile-edit-button" %>
-          </div>
+          <%= link_to edit_profile_path(@user), class: "profile-settings-button", "aria-label": "Edit profile settings" do %>
+            <%= image_tag "cog.svg", alt: "", aria: { hidden: true }, class: "profile-settings-icon" %>
+          <% end %>
         <% end %>
       </div>
     </div>

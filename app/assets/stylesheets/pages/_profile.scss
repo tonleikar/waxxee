@@ -33,6 +33,32 @@
   background: rgba(255, 251, 245, 0.78);
 }
 
+.profile-settings-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: rgba(255, 251, 245, 0.88);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.profile-settings-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 251, 245, 1);
+  box-shadow: 0 14px 28px rgba(17, 17, 17, 0.12);
+}
+
+.profile-settings-icon {
+  width: 80%;
+  height: 80%;
+}
+
 .profile-avatar {
   width: 112px;
   height: 112px;
