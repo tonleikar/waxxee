@@ -31,11 +31,12 @@
   color: var(--wax-ink);
   box-shadow: none;
   appearance: none;
-  border-radius: 0;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
 }
 
 .follow-btn:hover {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.08);
   color: var(--wax-ink);
 }
 
@@ -48,12 +49,7 @@
   outline-offset: 2px;
 }
 
-.follow-btn--following .follow-toggle__heart {
-  fill: currentColor;
-  stroke: currentColor;
-}
-
-.follow-toggle__icon {
+.follow-toggle__following-icon-wrap {
   display: inline-flex;
   width: 100%;
   height: 100%;
@@ -61,13 +57,9 @@
   justify-content: center;
 }
 
-.follow-toggle__heart {
-  width: 50%;
-  height: 50%;
+.follow-toggle__following-icon {
+  height: 80%;
   display: block;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
 }
 
 @media (max-width: 767.98px) {
