@@ -703,6 +703,11 @@
     gap: 0.35rem;
   }
 
+  .home-persona-builder__input {
+    height: calc(1.5em * 2 + 1.5rem + 2px);
+    min-height: calc(1.5em * 2 + 1.5rem + 2px);
+  }
+
   .home-persona-builder__actions {
     flex-direction: column;
     align-items: stretch;
