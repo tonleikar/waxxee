@@ -62,7 +62,20 @@
   display: block;
 }
 
+.users-vinyl-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
 @media (max-width: 767.98px) {
+  .users-page::before {
+    content: "";
+    display: block;
+    height: 24px;
+  }
+
   .users-toolbar {
     flex-direction: column;
     align-items: stretch;

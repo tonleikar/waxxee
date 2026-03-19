@@ -297,6 +297,12 @@ input[type="file"].form-control {
     bottom: 0.75rem;
   }
 
+  .feed-page::before {
+    content: "";
+    display: block;
+    height: 24px;
+  }
+
   .app-shell-auth {
     padding-top: 5.5rem;
     padding-bottom: 5.5rem;
