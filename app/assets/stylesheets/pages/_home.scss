@@ -618,6 +618,12 @@
     padding-bottom: 1.5rem;
   }
 
+  .home-dashboard::before {
+    content: "";
+    display: block;
+    height: 24px;
+  }
+
   .home-dashboard--public {
     gap: 1.75rem;
   }
@@ -661,6 +667,10 @@
 
   .welcome-hero {
     padding: 1.4rem 1.3rem 1.55rem;
+  }
+
+  .welcome-hero__subtitle {
+    width: 100%;
   }
 
   .persona-builder-card__body {

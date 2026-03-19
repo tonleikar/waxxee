@@ -1,4 +1,4 @@
-<section class="container py-4">
+<section class="container py-4 users-page">
   <div class="mb-4">
     <div>
       <h1 class="h3 mb-0">Users</h1>
@@ -78,7 +78,7 @@
 
               <%= link_to profile_path(user), class: "text-decoration-none text-reset d-block" do %>
                 <% if vinyl.present? %>
-                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="img-fluid rounded mb-3">
+                  <img src="<%= vinyl.artwork_url %>" alt="<%= vinyl.title %>" class="users-vinyl-image rounded mb-3">
 
                   <h3 class="h5 mb-1"><%= vinyl.title %></h3>
                   <p class="mb-1"><strong>Artist:</strong> <%= vinyl.artist %></p>
