@@ -3,6 +3,10 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  validates :name, presence: true
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
+
   belongs_to :favorite_vinyl, class_name: "Vinyl", optional: true
   has_many :user_vinyls
   has_many :vinyls, through: :user_vinyls

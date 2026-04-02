@@ -21,7 +21,8 @@
     <meta name="apple-mobile-web-app-title" content="Waxxee">
   </head>
   <body class="<%= 'is-auth-page' if devise_controller? %> <%= 'is-signed-in' if user_signed_in? %>">
-    <% show_auth_ticker = devise_controller? && controller_name == "sessions" && action_name == "new" %>
+    <% auth_form_controller = ["sessions", "registrations"].include?(controller_name) %>
+    <% show_auth_ticker = devise_controller? && auth_form_controller && ["new", "create"].include?(action_name) %>
 
     <% if show_auth_ticker %>
       <div class="auth-ticker auth-ticker-top" aria-hidden="true">
