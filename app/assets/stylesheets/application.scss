@@ -13,6 +13,7 @@
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 :root {
@@ -25,9 +26,11 @@ html, body {
 }
 
 body {
-  padding-bottom: 112px;
+  min-height: 100dvh;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
   background: var(--wax-cream);
   color: var(--wax-ink);
+  overscroll-behavior-y: none;
 }
 
 button,
